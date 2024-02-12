@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.successorator;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -12,12 +11,11 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
-
 public class MainActivity extends AppCompatActivity {
 
     private Date date;
     private Calendar cal;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
+
     }
 
     public void incrementCurrentDate(View view){
@@ -40,4 +39,6 @@ public class MainActivity extends AppCompatActivity {
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
     }
+
+
 }
