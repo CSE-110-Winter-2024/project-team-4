@@ -15,7 +15,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_task_button" />
+        app:layout_constraintTop_toBottomOf="@+id/add_task_button"
+        tools:listitem="@layout/list_task_item" />
 
     <Button
         android:id="@+id/add_task_button"

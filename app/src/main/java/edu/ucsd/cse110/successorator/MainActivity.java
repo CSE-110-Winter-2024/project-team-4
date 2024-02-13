@@ -40,17 +40,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Nullable
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = .inflate(inflater, container, false);
-
-        view.addTaskButton.setOnClickListener(v -> {
-            var dialogFragment = AddTaskDialogFragment.newInstance();
-            dialogFragment.show(getParentFragmentManager(), "CreateCardDialogFragment");
-        });
-
-        return view.getRoot();
-    }
+//    @Nullable
+//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        this.view = .inflate(inflater, container, false);
+//
+//        view.addTaskButton.setOnClickListener(v -> {
+//            var dialogFragment = AddTaskDialogFragment.newInstance();
+//            dialogFragment.show(getParentFragmentManager(), "CreateCardDialogFragment");
+//        });
+//
+//        return view.getRoot();
+//    }
 
     public void incrementCurrentDate(View view){
         cal.add(cal.DATE, 1);

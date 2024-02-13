@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,13 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
+import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
 
 public class AddTaskDialogFragment extends DialogFragment {
 
     private edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateCardBinding view;
     private MainViewModel activityModel;
 
-    AddTaskDialogFragment()
+    public AddTaskDialogFragment()
     {
 
     }
@@ -66,5 +71,8 @@ public class AddTaskDialogFragment extends DialogFragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
     }
+
+
+
 
 }

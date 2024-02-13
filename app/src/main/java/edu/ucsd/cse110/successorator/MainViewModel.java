@@ -57,9 +57,9 @@ public class MainViewModel extends ViewModel {
         taskRepository.prepend(task);
     }
 
-//    public void remove(int id) {
-//        taskRepository.remove(id);
-//    }
+    public void remove(int id) {
+        taskRepository.remove(id);
+    }
 
 
 }
