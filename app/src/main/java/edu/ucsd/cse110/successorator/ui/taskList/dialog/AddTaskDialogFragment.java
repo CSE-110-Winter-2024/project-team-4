@@ -58,13 +58,9 @@ public class AddTaskDialogFragment extends DialogFragment {
         var name = view.taskInput.getText().toString();
         if(!name.equals(""))
         {
-            System.out.println("started");
             var task = new Task(null, name, false, -1);
-            System.out.println("task created");
-            activityModel.prepend(task);
-            System.out.println("prepend");
+            activityModel.append(task);
             dialog.dismiss();
-            System.out.println("finished");
         }
 
     }

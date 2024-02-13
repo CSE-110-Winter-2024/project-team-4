@@ -53,6 +53,10 @@ public class MainViewModel extends ViewModel {
         return orderedTasks;
     }
 
+    public void append(Task task) {
+        taskRepository.append(task);
+    }
+
     public void prepend(Task task) {
         taskRepository.prepend(task);
     }

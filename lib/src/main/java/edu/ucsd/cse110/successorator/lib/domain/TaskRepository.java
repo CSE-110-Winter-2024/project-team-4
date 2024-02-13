@@ -34,6 +34,12 @@ public class TaskRepository {
         dataSource.removeTask(id);
     }
 
+    public void append(Task task) {
+        dataSource.putTask(
+                task.withSortOrder(dataSource.getMaxSortOrder() + 1)
+        );
+    }
+
     public void prepend(Task task) {
         System.out.println("TaskRepository.java: prepend");
         dataSource.shiftSortOrders(0, dataSource.getMaxSortOrder(), 1);
