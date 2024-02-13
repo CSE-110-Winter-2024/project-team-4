@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import edu.ucsd.cse110.successorator.MainActivity;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
@@ -61,6 +62,8 @@ public class AddTaskDialogFragment extends DialogFragment {
             var task = new Task(null, name, false, -1);
             activityModel.append(task);
             dialog.dismiss();
+            ((MainActivity)getActivity()).swapFragments();
+
         }
 
     }

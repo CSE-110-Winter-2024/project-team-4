@@ -15,13 +15,21 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateCardBinding;
+import edu.ucsd.cse110.successorator.databinding.FragmentNoTasksBinding;
+import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
+import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddTaskDialogFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private Date date;
     private Calendar cal;
 
-    private FragmentDialogCreateCardBinding view;
+//    private FragmentDialogCreateCardBinding view;
+private FragmentNoTasksBinding view;
+
+
+
 
 
     @Override
@@ -39,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         dateTextView.setText(dateFormat.toString());
 
     }
+
 
 //    @Nullable
 //    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,6 +67,15 @@ public class MainActivity extends AppCompatActivity {
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
     }
+
+    public void swapFragments() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance())
+                .commit();
+
+    }
+
 
 
 }

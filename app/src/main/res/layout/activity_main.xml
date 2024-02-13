@@ -7,6 +7,28 @@
     android:layout_height="match_parent"
     tools:ignore="ExtraText">
 
+    <!--        app:layout_constraintBottom_toTopOf="@+id/task_list"--><![CDATA[
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    ]]>
+
+<!--    <Button-->
+<!--        android:id="@+id/add_task_button"-->
+<!--        android:layout_width="54dp"-->
+<!--        android:layout_height="48dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:layout_marginBottom="683dp"-->
+<!--        android:text="+"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/fragmentContainerView"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
+
     <TextView
         android:id="@+id/date_box"
         android:layout_width="246dp"
@@ -25,7 +47,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment"
+        android:name="edu.ucsd.cse110.successorator.ui.noTasksList.NoTasksFragment"
         android:layout_width="392dp"
         android:layout_height="675dp"
         android:layout_marginStart="50dp"
@@ -38,18 +60,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.077"
-        tools:layout="@layout/fragment_task_list" />
+        tools:layout="@layout/fragment_no_tasks" />
 
-    <TextView
-        android:id="@+id/initial_text_box"
-        android:layout_width="314dp"
-        android:layout_height="95dp"
-        android:text="@string/InitialText"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--    <androidx.fragment.app.FragmentContainerView-->
+<!--        android:id="@+id/fragmentContainerView"-->
+<!--        android:name="edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment"-->
+<!--        android:layout_width="392dp"-->
+<!--        android:layout_height="675dp"-->
+<!--        android:layout_marginStart="50dp"-->
+<!--        android:layout_marginTop="100dp"-->
+<!--        android:layout_marginEnd="411dp"-->
+<!--        android:layout_marginBottom="731dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.076"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.077"-->
+<!--        tools:layout="@layout/fragment_task_list" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/initial_text_box"-->
+<!--        android:layout_width="314dp"-->
+<!--        android:layout_height="95dp"-->
+<!--        android:text="@string/InitialText"-->
+<!--        android:textSize="25sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <Button
         android:id="@+id/button"
