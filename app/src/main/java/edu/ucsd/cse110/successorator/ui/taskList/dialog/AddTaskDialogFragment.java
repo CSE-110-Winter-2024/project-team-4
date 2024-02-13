@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
 
@@ -53,10 +54,17 @@ public class AddTaskDialogFragment extends DialogFragment {
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         var name = view.taskInput.getText().toString();
-        var task = new Task(null, name, false, -1);
-        activityModel.prepend(task);
+        if(!name.equals(""))
+        {
+            System.out.println("started");
+            var task = new Task(null, name, false, -1);
+            System.out.println("task created");
+            activityModel.prepend(task);
+            System.out.println("prepend");
+            dialog.dismiss();
+            System.out.println("finished");
+        }
 
-        dialog.dismiss();
     }
 
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
