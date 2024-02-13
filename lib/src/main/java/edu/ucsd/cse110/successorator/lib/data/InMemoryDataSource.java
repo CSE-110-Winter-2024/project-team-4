@@ -22,8 +22,6 @@ public class InMemoryDataSource {
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = Integer.MIN_VALUE;
 
-//    private int minSortOrder = Integer.MAX_VALUE;
-//    private int maxSortOrder = Integer.MIN_VALUE;
 
     private final Map<Integer, Task> tasks
             = new HashMap<>();
@@ -36,12 +34,12 @@ public class InMemoryDataSource {
     }
 
     public final static List<Task> DEFAULT_TASKS = List.of(
-            new Task(0, "SRP", false, 0),
-            new Task(1, "OCP", false, 1),
-            new Task(2, "LSP", false, 2),
-            new Task(3, "ISP", false,3),
-            new Task(4, "DIP", false, 4),
-            new Task(5, "LKP", false, 5)
+//            new Task(0, "SRP", false, 0),
+//            new Task(1, "OCP", false, 1),
+//            new Task(2, "LSP", false, 2),
+//            new Task(3, "ISP", false,3),
+//            new Task(4, "DIP", false, 4),
+//            new Task(5, "LKP", false, 5)
     );
 
     public static InMemoryDataSource fromDefault() {
@@ -80,17 +78,27 @@ public class InMemoryDataSource {
     }
 
     public void putTask(Task task) {
+        System.out.println("InMemoryDataSource: begin putTask");
         var fixedTask = preInsert(task);
+        System.out.println("tasks.size(): " + tasks.size());
+        if (tasks.size() == 0) {
+            fixedTask = fixedTask.withSortOrder(0);
+        }
+        System.out.println("fixedTask sortOrder: " + fixedTask.sortOrder());
+
 
         tasks.put(fixedTask.id(), fixedTask);
-//        postInsert();
+        postInsert();
         assertSortOrderConstraints();
+        System.out.println("InMemoryDataSource: after assertSortOrderConstraints();");
 
         if (taskSubjects.containsKey(fixedTask.id())) {
             taskSubjects.get(fixedTask.id()).setValue(fixedTask);
         }
         allTasksSubject.setValue(getTasks());
+        System.out.println("InMemoryDataSource: end putTask");
     }
+
 
     public void putTasks(List<Task> tasksList) {
         var fixedTasks = tasksList.stream()
@@ -98,8 +106,8 @@ public class InMemoryDataSource {
                 .collect(Collectors.toList());
 
         fixedTasks.forEach(task -> tasks.put(task.id(), task));
-//        postInsert();
-//        assertSortOrderConstraints();
+        postInsert();
+        assertSortOrderConstraints();
 
         fixedTasks.forEach(task -> {
             if (taskSubjects.containsKey(task.id())) {
@@ -127,8 +135,17 @@ public class InMemoryDataSource {
                 .filter(task -> task.sortOrder() >= from && task.sortOrder() <= to)
                 .map(task -> task.withSortOrder(task.sortOrder() + by))
                 .collect(Collectors.toList());
+        System.out.println("InMemoryDataSource: shiftSortOrders taskList");
+        System.out.println(taskList);
 
         putTasks(taskList);
+
+        var sortOrders = tasks.values().stream()
+                .map(Task::sortOrder)
+                .collect(Collectors.toList());
+
+        System.out.println("InMemoryDataSource: shiftSortOrders sortOrders");
+        System.out.println(sortOrders);
     }
 
     /**
@@ -154,18 +171,18 @@ public class InMemoryDataSource {
      * Private utility method to maintain state of the fake DB: ensures that the
      * min and max sort orders are up to date after an insert.
      */
-//    private void postInsert() {
-//        // Keep the min and max sort orders up to date.
-//        minSortOrder = tasks.values().stream()
-//                .map(task::sortOrder)
-//                .min(Integer::compareTo)
-//                .orElse(Integer.MAX_VALUE);
-//
-//        maxSortOrder = tasks.values().stream()
-//                .map(Task::sortOrder)
-//                .max(Integer::compareTo)
-//                .orElse(Integer.MIN_VALUE);
-//    }
+    private void postInsert() {
+        // Keep the min and max sort orders up to date.
+        minSortOrder = tasks.values().stream()
+                .map(Task::sortOrder)
+                .min(Integer::compareTo)
+                .orElse(Integer.MAX_VALUE);
+
+        maxSortOrder = tasks.values().stream()
+                .map(Task::sortOrder)
+                .max(Integer::compareTo)
+                .orElse(Integer.MIN_VALUE);
+    }
 
     /**
      * Safety checks to ensure the sort order constraints are maintained.
@@ -175,16 +192,21 @@ public class InMemoryDataSource {
      * write incorrect code by accident!
      */
     private void assertSortOrderConstraints() {
+        System.out.println("InMemoryDataSource: assertSortOrderConstraints");
 
         var sortOrders = tasks.values().stream()
                 .map(Task::sortOrder)
                 .collect(Collectors.toList());
+        System.out.println("InMemoryDataSource: after var sortOrders");
 
         assert sortOrders.stream().allMatch(i -> i >= 0);
+        System.out.println(sortOrders);
+        System.out.println("InMemoryDataSource: after sortOrders.stream()");
 
         assert sortOrders.size() == sortOrders.stream().distinct().count();
 
         assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
         assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
+
     }
 }

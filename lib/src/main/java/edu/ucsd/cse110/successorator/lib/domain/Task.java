@@ -50,7 +50,7 @@ public class Task implements Serializable {
     }
 
     public Task withSortOrder(int sortOrder) {
-        Task newTask =  new Task(id, this.name, this.complete, this.sortOrder);
+        Task newTask =  new Task(id, this.name, this.complete, sortOrder);
         return newTask;
     }
 
