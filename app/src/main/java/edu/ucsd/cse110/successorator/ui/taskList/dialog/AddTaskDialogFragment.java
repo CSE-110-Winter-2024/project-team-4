@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -49,6 +50,7 @@ public class AddTaskDialogFragment extends DialogFragment {
                 .setMessage("Please provide the new task name.")
                 .setView(view.getRoot())
                 .setPositiveButton("Create", this::onPositiveButtonClick)
+//                .setPositiveButtonIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_checkmark))
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
 
