@@ -1,16 +1,24 @@
 package edu.ucsd.cse110.successorator;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateCardBinding;
+import edu.ucsd.cse110.successorator.databinding.FragmentNoTasksBinding;
+import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
+import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
+import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddTaskDialogFragment;
 
 import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
 
@@ -20,6 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
     private Date date;
     private Calendar cal;
+
+//    private FragmentDialogCreateCardBinding view;
+private FragmentNoTasksBinding view;
+
+
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +49,21 @@ public class MainActivity extends AppCompatActivity {
 
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
+
     }
+
+
+//    @Nullable
+//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        this.view = .inflate(inflater, container, false);
+//
+//        view.addTaskButton.setOnClickListener(v -> {
+//            var dialogFragment = AddTaskDialogFragment.newInstance();
+//            dialogFragment.show(getParentFragmentManager(), "CreateCardDialogFragment");
+//        });
+//
+//        return view.getRoot();
+//    }
 
     public void incrementCurrentDate(View view){
         CalendarUpdate calupdate = new CalendarUpdate();
@@ -43,4 +72,15 @@ public class MainActivity extends AppCompatActivity {
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
     }
+
+    public void swapFragments() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, TaskListFragment.newInstance())
+                .commit();
+
+    }
+
+
+
 }
