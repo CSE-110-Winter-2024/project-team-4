@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.successorator.ui.taskList.dialog;
 
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -16,10 +18,12 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
 
 import edu.ucsd.cse110.successorator.MainActivity;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.R;
+import edu.ucsd.cse110.successorator.data.db.TaskDatabase;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
 
@@ -64,6 +68,7 @@ public class AddTaskDialogFragment extends DialogFragment {
             var task = new Task(null, name, false, -1);
             activityModel.append(task);
             dialog.dismiss();
+
             ((MainActivity)getActivity()).swapFragments();
 
         }

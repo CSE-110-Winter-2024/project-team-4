@@ -9,11 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.ucsd.cse110.successorator.data.db.TaskDatabase;
 import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateCardBinding;
 import edu.ucsd.cse110.successorator.databinding.FragmentNoTasksBinding;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
@@ -33,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
 private FragmentNoTasksBinding view;
 
 
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +43,28 @@ private FragmentNoTasksBinding view;
         //setContentView(view.getRoot());
 
         setContentView(R.layout.activity_main);
+
+        //CalendarUpdate calupdate = new CalendarUpdate();
         cal = Calendar.getInstance();
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
 
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
+
+        var database = Room.databaseBuilder(
+                getApplicationContext(),
+                TaskDatabase.class,
+                "task-database"
+        ).allowMainThreadQueries().build();
+
+        var sharedPreferences = getSharedPreferences("successorator", MODE_PRIVATE);
+        //var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
+
+        //isFirstRun &&
+        if(database.taskDao().count() != 0) {
+            swapFragments();  //HOW TO CALL GETACTIVITY() FROM APPLICATION? HERE
+            //sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
+        }
 
     }
 
