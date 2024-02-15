@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,20 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //            assert id != null;
 //            onDeleteClick.accept(id);
 //        });
+
+        binding.taskNameText.setOnClickListener(v -> {
+            if (task.complete()) {
+                task.setComplete(false);
+                System.out.println("MARKED AS COMPLETE");
+                // CITATION: https://www.codingdemos.com/android-strikethrough-text/
+                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {
+                task.setComplete(true);
+                System.out.println("MARKED AS INCOMPLETE");
+                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            }
+        });
+
 
         return binding.getRoot();
     }

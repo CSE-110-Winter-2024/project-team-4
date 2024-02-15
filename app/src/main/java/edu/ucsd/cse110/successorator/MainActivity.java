@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,6 +81,35 @@ private FragmentNoTasksBinding view;
                 .commit();
 
     }
+
+    /*
+    TextView mText;
+//    Button mStrikeText;
+//    Button mButtonText;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mText = findViewById(R.id.task_name_text);
+//        mStrikeText = findViewById(R.id.btnStrikeText);
+//        mButtonText = findViewById(R.id.btnText);
+        mText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mText.getPaint().isStrikeThruText()) {
+                    mText.setPaintFlags(mText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//                    mButtonText.setPaintFlags(mButtonText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    mText.setPaintFlags(mText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+//                    mButtonText.setPaintFlags(mButtonText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                }
+            }
+        });
+    }
+
+     */
 
 
 

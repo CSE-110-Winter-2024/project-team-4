@@ -11,7 +11,7 @@ public class Task implements Serializable {
 
     private final @Nullable Integer id;
     private final @NonNull String name;
-    private final boolean complete;
+    private boolean complete;
 
     private int sortOrder;
 
@@ -67,4 +67,6 @@ public class Task implements Serializable {
     public int hashCode() {
         return Objects.hash(id, name, complete, sortOrder);
     }
+
+    public void setComplete(boolean val) { this.complete = val; }
 }
