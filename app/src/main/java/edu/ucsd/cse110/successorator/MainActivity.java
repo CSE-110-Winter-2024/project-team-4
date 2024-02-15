@@ -20,6 +20,10 @@ import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
 import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddTaskDialogFragment;
 
+import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
+
+import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
+
 public class MainActivity extends AppCompatActivity {
 
     private Date date;
@@ -62,7 +66,8 @@ private FragmentNoTasksBinding view;
 //    }
 
     public void incrementCurrentDate(View view){
-        cal.add(cal.DATE, 1);
+        CalendarUpdate calupdate = new CalendarUpdate();
+        cal = calupdate.incrementDateBy1(cal);
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
