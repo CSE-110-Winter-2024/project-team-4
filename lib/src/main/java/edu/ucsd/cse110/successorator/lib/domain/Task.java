@@ -11,7 +11,7 @@ public class Task implements Serializable {
 
     private final @Nullable Integer id;
     private final @NonNull String name;
-    private final boolean complete;
+    private boolean complete;
 
     private int sortOrder;
 
@@ -21,6 +21,11 @@ public class Task implements Serializable {
         this.name = name;
         this.complete = complete;
         this.sortOrder = sortOrder;
+    }
+
+    public void setComplete(boolean val)
+    {
+        this.complete = val;
     }
 
     public @Nullable Integer id()

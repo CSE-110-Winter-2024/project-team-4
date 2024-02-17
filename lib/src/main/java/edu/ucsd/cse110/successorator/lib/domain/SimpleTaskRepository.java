@@ -44,6 +44,9 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
         dataSource.putTask(
                 task.withSortOrder(dataSource.getMaxSortOrder() + 1)
         );
+//        dataSource.putTask(
+//                task.withSortOrder(dataSource.getMaxCompleteSortOrder() + 1)
+//        );
     }
 
     @Override
@@ -53,5 +56,11 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
         dataSource.putTask(
                 task.withSortOrder(dataSource.getMinSortOrder() - 1)
         );
+    }
+
+    @Override
+    public void setComplete(int id, boolean status) {
+        dataSource.setComplete(id, status);
+
     }
 }

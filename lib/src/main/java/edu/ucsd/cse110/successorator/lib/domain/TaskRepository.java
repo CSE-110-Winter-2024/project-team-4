@@ -18,4 +18,6 @@ public interface TaskRepository {
     void append(Task task);
 
     void prepend(Task task);
+
+    void setComplete(int id, boolean status);
 }

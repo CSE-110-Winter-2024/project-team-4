@@ -22,6 +22,8 @@ public class InMemoryDataSource {
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = Integer.MIN_VALUE;
 
+//    private int maxCompleteSortOrder = 0;
+
 
     private final Map<Integer, Task> tasks
             = new HashMap<>();
@@ -76,6 +78,8 @@ public class InMemoryDataSource {
     public int getMaxSortOrder() {
         return maxSortOrder;
     }
+
+//    public int getMaxCompleteSortOrder() {return maxCompleteSortOrder;}
 
     public void putTask(Task task) {
         System.out.println("InMemoryDataSource: begin putTask");
@@ -146,6 +150,12 @@ public class InMemoryDataSource {
 
         System.out.println("InMemoryDataSource: shiftSortOrders sortOrders");
         System.out.println(sortOrders);
+    }
+
+    public void setComplete(int id, boolean status)
+    {
+        var task = tasks.get(id);
+        task.setComplete(status);
     }
 
     /**

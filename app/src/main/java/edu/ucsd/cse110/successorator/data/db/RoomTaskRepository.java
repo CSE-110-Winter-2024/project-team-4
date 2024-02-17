@@ -27,6 +27,7 @@ public class RoomTaskRepository implements TaskRepository {
 
     @Override
     public Subject<List<Task>> findAll(){
+        System.out.println("room task repo find all");
         var entitiesLiveData = taskDao.findAllAsLiveData();
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
@@ -63,4 +64,7 @@ public class RoomTaskRepository implements TaskRepository {
     public void remove(int id){
         taskDao.delete(id);
     }
+
+    @Override
+    public void setComplete(int id, boolean status) {taskDao.setComplete(id, status);}
 }
