@@ -67,4 +67,9 @@ public class RoomTaskRepository implements TaskRepository {
 
     @Override
     public void setComplete(int id, boolean status) {taskDao.setComplete(id, status);}
+
+
+    public void removeCompleted(){
+        taskDao.deleteCompleted();
+    }
 }

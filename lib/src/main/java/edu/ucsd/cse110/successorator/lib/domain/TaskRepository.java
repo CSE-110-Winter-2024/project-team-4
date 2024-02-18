@@ -20,4 +20,7 @@ public interface TaskRepository {
     void prepend(Task task);
 
     void setComplete(int id, boolean status);
+
+    void removeCompleted();
+
 }

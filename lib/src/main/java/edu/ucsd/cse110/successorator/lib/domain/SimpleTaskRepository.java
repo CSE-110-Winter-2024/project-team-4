@@ -63,4 +63,8 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
         dataSource.setComplete(id, status);
 
     }
+
+    public void removeCompleted(){
+        dataSource.removeCompleted();
+    }
 }

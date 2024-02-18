@@ -81,6 +81,7 @@ public class AddTaskDialogFragment extends DialogFragment {
 
     }
 
+
     private void onNegativeButtonClick(DialogInterface dialog, int which) {
         dialog.cancel();
     }
@@ -92,6 +93,7 @@ public class AddTaskDialogFragment extends DialogFragment {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
+
     }
 
 

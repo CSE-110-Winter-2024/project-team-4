@@ -158,6 +158,14 @@ public class InMemoryDataSource {
         task.setComplete(status);
     }
 
+    public void removeCompleted(){
+        for(Task task : tasks.values()){
+            if(task.complete()){
+                removeTask(task.id());
+            }
+        }
+    }
+
     /**
      * Private utility method to maintain state of the fake DB: ensures that new
      * tasks inserted have an id, and updates the nextId if necessary.

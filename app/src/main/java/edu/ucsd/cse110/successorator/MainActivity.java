@@ -1,12 +1,9 @@
 package edu.ucsd.cse110.successorator;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -16,15 +13,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.ucsd.cse110.successorator.data.db.TaskDatabase;
-import edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateCardBinding;
 import edu.ucsd.cse110.successorator.databinding.FragmentNoTasksBinding;
-import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
-import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddTaskDialogFragment;
 
 import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
-
-import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
