@@ -14,6 +14,7 @@ import java.util.Date;
 
 import edu.ucsd.cse110.successorator.data.db.TaskDatabase;
 import edu.ucsd.cse110.successorator.databinding.FragmentNoTasksBinding;
+import edu.ucsd.cse110.successorator.ui.noTasksList.NoTasksFragment;
 import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
 
 import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
@@ -83,6 +84,20 @@ private FragmentNoTasksBinding view;
 
         MainViewModel activityModel = ModelFetch.getModel();
         activityModel.removeCompleted();
+
+        var database = Room.databaseBuilder(
+                getApplicationContext(),
+                TaskDatabase.class,
+                "task-database"
+        ).allowMainThreadQueries().build();
+
+        var sharedPreferences = getSharedPreferences("successorator", MODE_PRIVATE);
+        //var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
+
+        //isFirstRun &&
+        if(database.taskDao().count() == 0) {
+            swapFragmentstoNoTasks();
+        }
     }
 
     public void swapFragments() {
@@ -91,6 +106,13 @@ private FragmentNoTasksBinding view;
                 .replace(R.id.fragmentContainerView, TaskListFragment.newInstance())
                 .commit();
 
+    }
+
+    public void swapFragmentstoNoTasks() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, NoTasksFragment.newInstance())
+                .commit();
     }
 
 
