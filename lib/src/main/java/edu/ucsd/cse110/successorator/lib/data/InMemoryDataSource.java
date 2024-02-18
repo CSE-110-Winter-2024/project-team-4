@@ -2,8 +2,10 @@ package edu.ucsd.cse110.successorator.lib.data;
 
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Task;
@@ -29,10 +31,27 @@ public class InMemoryDataSource {
             = new HashMap<>();
     private final Map<Integer, MutableSubject<Task>> taskSubjects
             = new HashMap<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InMemoryDataSource that = (InMemoryDataSource) o;
+        return nextId == that.nextId && minSortOrder == that.minSortOrder && maxSortOrder == that.maxSortOrder
+                && Objects.equals(tasks, that.tasks) && Objects.equals(taskSubjects, that.taskSubjects)
+                && Objects.equals(allTasksSubject, that.allTasksSubject);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nextId, minSortOrder, maxSortOrder, tasks, taskSubjects, allTasksSubject);
+    }
+
     private final MutableSubject<List<Task>> allTasksSubject
             = new SimpleSubject<>();
 
     public InMemoryDataSource() {
+
     }
 
     public final static List<Task> DEFAULT_TASKS = List.of(
@@ -159,11 +178,16 @@ public class InMemoryDataSource {
     }
 
     public void removeCompleted(){
-        for(Task task : tasks.values()){
+        Map<Integer, Task> newTasks = new HashMap<Integer, Task>(tasks);
+
+        for(Task task : newTasks.values()){
             if(task.complete()){
                 removeTask(task.id());
             }
         }
+
+
+
     }
 
     /**

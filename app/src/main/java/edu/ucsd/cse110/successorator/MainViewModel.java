@@ -72,7 +72,9 @@ public class MainViewModel extends ViewModel {
         taskRepository.removeCompleted();
     }
 
-
+    public int getCount() {
+        return orderedTasks.getValue().size();
+    }
 
 
 
