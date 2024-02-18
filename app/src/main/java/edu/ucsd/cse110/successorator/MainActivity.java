@@ -17,6 +17,7 @@ import edu.ucsd.cse110.successorator.databinding.FragmentNoTasksBinding;
 import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
 
 import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
+import edu.ucsd.cse110.successorator.ui.taskList.dialog.ModelFetch;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,6 +80,9 @@ private FragmentNoTasksBinding view;
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
+
+        MainViewModel activityModel = ModelFetch.getModel();
+        activityModel.removeCompleted();
     }
 
     public void swapFragments() {

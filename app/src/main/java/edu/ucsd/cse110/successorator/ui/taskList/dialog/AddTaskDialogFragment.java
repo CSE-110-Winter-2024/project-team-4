@@ -94,6 +94,8 @@ public class AddTaskDialogFragment extends DialogFragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
 
+        ModelFetch.setModel(activityModel);
+
     }
 
 

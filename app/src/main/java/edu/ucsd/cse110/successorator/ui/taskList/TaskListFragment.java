@@ -22,6 +22,7 @@ import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import edu.ucsd.cse110.successorator.lib.domain.TaskRepository;
 import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddTaskDialogFragment;
+import edu.ucsd.cse110.successorator.ui.taskList.dialog.ModelFetch;
 
 public class TaskListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -49,6 +50,8 @@ public class TaskListFragment extends Fragment {
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel::remove, activityModel);
+
+        ModelFetch.setModel(activityModel);
 
         // Initialize the Adapter (with an empty list for now)
         activityModel.getOrderedTasks().observe(tasks -> {
