@@ -5,6 +5,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 
 @Entity(tableName = "tasks")
@@ -22,6 +25,9 @@ public class TaskEntity {
     @ColumnInfo(name = "sort_order")
     public int sortOrder;
 
+    @ColumnInfo(name = "date")
+    public String date;
+
     TaskEntity(@NonNull String name, @NonNull boolean complete, @NonNull int sortOrder){
         this.name = name;
         this.complete = complete;
@@ -35,6 +41,9 @@ public class TaskEntity {
     }
 
     public @NonNull Task toTask(){
-        return new Task(id, name, complete, sortOrder);
+        Calendar cal = Calendar.getInstance();
+        var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
+        date = dateFormat.toString();
+        return new Task(id, name, complete, sortOrder, date);
     }
 }

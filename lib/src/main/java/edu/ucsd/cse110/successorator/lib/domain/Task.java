@@ -3,6 +3,8 @@ package edu.ucsd.cse110.successorator.lib.domain;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
@@ -15,12 +17,15 @@ public class Task implements Serializable {
 
     private int sortOrder;
 
-    public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder)
+    private String date;
+
+    public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder, String date)
     {
         this.id = id;
         this.name = name;
         this.complete = complete;
         this.sortOrder = sortOrder;
+        this.date = date;
     }
 
     public void setComplete(boolean val)
@@ -50,12 +55,12 @@ public class Task implements Serializable {
 
     public Task withId(int id)
     {
-        Task newTask = new Task(id, this.name, this.complete, this.sortOrder);
+        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date);
         return newTask;
     }
 
     public Task withSortOrder(int sortOrder) {
-        Task newTask =  new Task(id, this.name, this.complete, sortOrder);
+        Task newTask =  new Task(id, this.name, this.complete, sortOrder, this.date);
         return newTask;
     }
 
@@ -65,11 +70,11 @@ public class Task implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return sortOrder == task.sortOrder && complete == task.complete && Objects.equals(id, task.id) && Objects.equals(name, task.name);
+        return complete == task.complete && sortOrder == task.sortOrder && Objects.equals(id, task.id) && Objects.equals(name, task.name) && Objects.equals(date, task.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, complete, sortOrder);
+        return Objects.hash(id, name, complete, sortOrder, date);
     }
 }

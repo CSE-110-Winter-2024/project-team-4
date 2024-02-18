@@ -29,7 +29,7 @@ import edu.ucsd.cse110.successorator.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private Date date;
-    private Calendar cal;
+    //private Calendar cal;
 
 //    private FragmentDialogCreateCardBinding view;
 private FragmentNoTasksBinding view;
@@ -44,8 +44,7 @@ private FragmentNoTasksBinding view;
 
         setContentView(R.layout.activity_main);
 
-        //CalendarUpdate calupdate = new CalendarUpdate();
-        cal = Calendar.getInstance();
+        Calendar cal = CalendarUpdate.getCal();
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
 
         TextView dateTextView = findViewById(R.id.date_box);
@@ -69,6 +68,7 @@ private FragmentNoTasksBinding view;
     }
 
 
+
 //    @Nullable
 //    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        this.view = .inflate(inflater, container, false);
@@ -82,8 +82,8 @@ private FragmentNoTasksBinding view;
 //    }
 
     public void incrementCurrentDate(View view){
-        CalendarUpdate calupdate = new CalendarUpdate();
-        cal = calupdate.incrementDateBy1(cal);
+        CalendarUpdate.incrementDateBy1();
+        Calendar cal = CalendarUpdate.getCal();
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(dateFormat.toString());
