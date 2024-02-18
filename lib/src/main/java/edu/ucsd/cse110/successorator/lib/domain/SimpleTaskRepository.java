@@ -45,8 +45,10 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
                 task.withSortOrder(dataSource.getMaxSortOrder() + 1)
         );
 //        dataSource.putTask(
-//                task.withSortOrder(dataSource.getMaxCompleteSortOrder() + 1)
+//                task.withSortOrder(dataSource.getCompleteSortOrder())
 //        );
+
+
     }
 
     @Override
@@ -60,7 +62,51 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
 
     @Override
     public void setComplete(int id, boolean status) {
+        System.out.println("STR IN SET COMPLETE METHOD");
         dataSource.setComplete(id, status);
+        var task = dataSource.getTask(id);
 
+        // if we mark task as complete
+        if(status)
+        {
+            // check if uncompleted tasks are after this task
+            if(task.sortOrder() != dataSource.getCompleteSortOrder())
+            {
+                System.out.println("getcomplete: " + dataSource.getCompleteSortOrder());
+                // if there are uncompleted tasks after this task, decrease their sort orders by 1
+                dataSource.shiftSortOrders(task.sortOrder()+1, dataSource.getCompleteSortOrder(), -1);
+                dataSource.putTask(
+                        task.withSortOrder(dataSource.getCompleteSortOrder() + 1)
+                );
+            }
+
+            else
+            {
+                dataSource.putTask(
+                        task.withSortOrder(dataSource.getCompleteSortOrder() + 1)
+                );
+            }
+        }
+
+        // if we mark as incomplete
+        else
+        {
+            if(task.sortOrder() != dataSource.getMinSortOrder())
+            {
+                dataSource.shiftSortOrders(0, task.sortOrder(), 1);
+                dataSource.putTask(
+                        task.withSortOrder(1)
+                );
+
+            }
+
+            else
+            {
+                dataSource.putTask(
+                        task.withSortOrder(1)
+                );
+            }
+
+        }
     }
 }

@@ -25,7 +25,9 @@ public class Task implements Serializable {
 
     public void setComplete(boolean val)
     {
+        System.out.println("TASK.JAVA SETCOMPLETE");
         this.complete = val;
+
     }
 
     public @Nullable Integer id()

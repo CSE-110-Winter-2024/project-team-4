@@ -50,6 +50,8 @@ public class TaskListFragment extends Fragment {
         this.activityModel = modelProvider.get(MainViewModel.class);
         this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel::remove, activityModel);
 
+
+
         // Initialize the Adapter (with an empty list for now)
         activityModel.getOrderedTasks().observe(tasks -> {
             if (tasks == null) return;

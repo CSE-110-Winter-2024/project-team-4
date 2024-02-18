@@ -42,26 +42,27 @@ public interface TaskDao {
     @Query("SELECT MAX(sort_order) FROM tasks")
     int getMaxSortOrder();
 
-//    @Query("SELECT MAX(sort_order) FROM tasks WHERE complete = false")
-//    int getMaxCompleteSortOrder();
+    @Query("SELECT MAX(sort_order) FROM tasks WHERE complete = false")
+    int getCompleteSortOrder();
 
     @Query("UPDATE tasks SET sort_order = sort_order + :by " +
             "WHERE sort_order >= :from AND sort_order <= :to")
     void shiftSortOrders(int from, int to, int by);
 
-    @Query("UPDATE tasks SET complete = :status " +
-            "WHERE id = :id ")
+    @Query("UPDATE tasks SET complete = :status " + "WHERE id = :id ")
     void setComplete(int id, boolean status);
+
 
     @Transaction
     default int append(TaskEntity taskEntity){
-        var maxSortOrder = getMaxSortOrder();
+//        var maxSortOrder = getMaxSortOrder();
+        var completeSortOrder = getCompleteSortOrder();
         var newTask = new TaskEntity(
-                taskEntity.name, taskEntity.complete, maxSortOrder + 1
+                taskEntity.name, taskEntity.complete, completeSortOrder
         );
-//        var maxCompleteSortOrder = getMaxCompleteSortOrder();
+//        var completeSortOrder = getCompleteSortOrder();
 //        var newTask = new TaskEntity(
-//                taskEntity.name, taskEntity.complete, maxCompleteSortOrder + 1
+//                taskEntity.name, taskEntity.complete, completeSortOrder
 //        );
         return Math.toIntExact(insert(newTask));
     }
@@ -75,6 +76,16 @@ public interface TaskDao {
         return Math.toIntExact(insert(newTask));
     }
 
+
     @Query("DELETE FROM tasks WHERE id = :id")
     void delete(int id);
+
+//    @Transaction
+//    default int moveTaskTop(Integer id)
+//    {
+//        TaskEntity task = find(id);
+//        task.sortOrder = getMinSortOrder() - 1;
+//        delete(id);
+//        return Math.toIntExact(insert(task));
+//    }
 }

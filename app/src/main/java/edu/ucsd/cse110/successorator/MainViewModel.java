@@ -68,7 +68,34 @@ public class MainViewModel extends ViewModel {
         taskRepository.remove(id);
     }
 
-    public void setComplete(int id, boolean status) {taskRepository.setComplete(id, status);}
+
+    public void setComplete(int id, boolean status) {
+        System.out.println("MVM SETCOMPLETE");
+        taskRepository.setComplete(id, status);
+
+    }
+
+//    public void moveTaskTop()
+//    {
+//        var tasks = this.getOrderedTasks().getValue();
+//        var currSortOrder = 0;
+//
+//        for(Task t: tasks)
+//        {
+//            if(t.sortOrder() == -1)
+//            {
+//                currSortOrder++;
+//                continue;
+//            }
+//
+//            currSortOrder = t.sortOrder();
+//
+//            if(t.complete())
+//            {
+//                break;
+//            }
+//        }
+//    }
 
 
 }

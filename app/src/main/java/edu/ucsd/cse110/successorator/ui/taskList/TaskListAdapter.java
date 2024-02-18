@@ -70,6 +70,12 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //            onDeleteClick.accept(id);
 //        });
 
+        if (task.complete()) {
+            binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+
         binding.taskNameText.setOnClickListener(v -> {
             if (!task.complete()) {
                 task.setComplete(true);
