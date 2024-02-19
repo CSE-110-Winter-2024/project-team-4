@@ -112,4 +112,25 @@ public class MainViewModelTest {
         assertArrayEquals(tas.toArray(), model.getOrderedTasks().getValue().toArray());
 
     }
+
+    @Test
+    public void setComplete(){
+        Task task = new Task(1, "name",false, 1, "date");
+        Task task2 = new Task(2, "name",false, 2, "date");
+
+        List<Task> tasks = List.of(task, task2);
+        InMemoryDataSource inmd = new InMemoryDataSource();
+        inmd.putTasks(tasks);
+
+        var dataSource = new SimpleTaskRepository(inmd);
+        var model = new MainViewModel(dataSource);
+
+        model.setComplete(1, true);
+
+        Task task3 = new Task(1, "name",true, 1, "date");
+        Task task4 = new Task(2, "name",false, 2, "date");
+
+        List<Task> tas = List.of(task3, task4);
+        assertArrayEquals(tas.toArray(), model.getOrderedTasks().getValue().toArray());
+    }
 }
