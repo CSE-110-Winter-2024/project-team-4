@@ -33,9 +33,6 @@ private FragmentNoTasksBinding view;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //var view = ActivityMainBinding.inflate(getLayoutInflater(), null, false);
-        //view.placeholderText.setText(R.string.hello_world);
-        //setContentView(view.getRoot());
 
         setContentView(R.layout.activity_main);
 
@@ -54,29 +51,14 @@ private FragmentNoTasksBinding view;
         ).allowMainThreadQueries().build();
 
         var sharedPreferences = getSharedPreferences("successorator", MODE_PRIVATE);
-        //var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
         //isFirstRun &&
         if(database.taskDao().count() != 0) {
             swapFragments();  //HOW TO CALL GETACTIVITY() FROM APPLICATION? HERE
-            //sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
         }
 
     }
 
-
-
-//    @Nullable
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        this.view = .inflate(inflater, container, false);
-//
-//        view.addTaskButton.setOnClickListener(v -> {
-//            var dialogFragment = AddTaskDialogFragment.newInstance();
-//            dialogFragment.show(getParentFragmentManager(), "CreateCardDialogFragment");
-//        });
-//
-//        return view.getRoot();
-//    }
 
     public void incrementCurrentDate(View view){
         CalendarUpdate.incrementDateBy1();
@@ -97,9 +79,7 @@ private FragmentNoTasksBinding view;
         ).allowMainThreadQueries().build();
 
         var sharedPreferences = getSharedPreferences("successorator", MODE_PRIVATE);
-        //var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
-        //isFirstRun &&
         if(database.taskDao().count() == 0) {
             swapFragmentstoNoTasks();
         }

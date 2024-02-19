@@ -35,22 +35,6 @@ public class SuccessoratorApplication extends Application {
 
         this.taskRepository = new RoomTaskRepository(database.taskDao());
 
-    /*
-        var sharedPreferences = getSharedPreferences("successorator", MODE_PRIVATE);
-        //var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
-
-        //isFirstRun &&
-        if(database.taskDao().count() != 0) {
-            ((MainActivity)getActivity()).swapFragments();  //HOW TO CALL GETACTIVITY() FROM APPLICATION? HERE
-
-            //sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
-        }
-        
-     */
-
-
-//        this.dataSource = InMemoryDataSource.fromDefault();
-//        this.taskRepository = new SimpleTaskRepository(dataSource);
     }
 
     public TaskRepository getTaskRepository() {

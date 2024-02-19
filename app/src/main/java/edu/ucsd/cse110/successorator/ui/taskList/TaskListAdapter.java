@@ -63,12 +63,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         // Populate the view with the flashcard's data.
         binding.taskNameText.setText(task.name());
 
-//
-//        binding.cardDeleteButton.setOnClickListener(v -> {
-//            var id = flashcard.id();
-//            assert id != null;
-//            onDeleteClick.accept(id);
-//        });
 
         if(task.complete()){
             binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

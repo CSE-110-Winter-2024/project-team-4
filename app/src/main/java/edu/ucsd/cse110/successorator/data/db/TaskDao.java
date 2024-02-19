@@ -42,8 +42,6 @@ public interface TaskDao {
     @Query("SELECT MAX(sort_order) FROM tasks")
     int getMaxSortOrder();
 
-//    @Query("SELECT MAX(sort_order) FROM tasks WHERE complete = false")
-//    int getMaxCompleteSortOrder();
 
     @Query("UPDATE tasks SET sort_order = sort_order + :by " +
             "WHERE sort_order >= :from AND sort_order <= :to")
@@ -59,10 +57,7 @@ public interface TaskDao {
         var newTask = new TaskEntity(
                 taskEntity.name, taskEntity.complete, maxSortOrder + 1
         );
-//        var maxCompleteSortOrder = getMaxCompleteSortOrder();
-//        var newTask = new TaskEntity(
-//                taskEntity.name, taskEntity.complete, maxCompleteSortOrder + 1
-//        );
+
         return Math.toIntExact(insert(newTask));
     }
 
