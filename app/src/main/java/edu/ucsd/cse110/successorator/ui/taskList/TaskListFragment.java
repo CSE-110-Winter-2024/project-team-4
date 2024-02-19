@@ -75,21 +75,6 @@ public class TaskListFragment extends Fragment {
             dialogFragment.show(getParentFragmentManager(), "AddTaskDialogFragment");
         });
 
-//        view.taskNameText.setOnClickListener(v -> {
-//            if (task.complete()) {
-//                task.setComplete(false);
-//                System.out.println("MARKED AS COMPLETE");
-//                // CITATION: https://www.codingdemos.com/android-strikethrough-text/
-//                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-//
-//
-//            } else {
-//                task.setComplete(true);
-//                System.out.println("MARKED AS INCOMPLETE");
-//                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-//            }
-//        });
-
         return view.getRoot();
     }
 
