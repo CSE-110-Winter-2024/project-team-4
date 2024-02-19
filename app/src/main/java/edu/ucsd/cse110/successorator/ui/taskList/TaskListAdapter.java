@@ -5,8 +5,10 @@ import android.content.Context;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +22,15 @@ import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.databinding.ListTaskItemBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
+import edu.ucsd.cse110.successorator.lib.domain.TaskRepository;
 
 
 public class TaskListAdapter extends ArrayAdapter<Task> {
     Consumer<Integer> onDeleteClick;
+    MainViewModel activityModel;
 
-    public TaskListAdapter(Context context, List<Task> tasks, Consumer<Integer> onDeleteClick) {
+
+    public TaskListAdapter(Context context, List<Task> tasks, Consumer<Integer> onDeleteClick, MainViewModel activityModel) {
         // This sets a bunch of stuff internally, which we can access
         // with getContext() and getItem() for example.
         //
@@ -33,6 +38,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         // or it will crash!
         super(context, 0, new ArrayList<>(tasks));
         this.onDeleteClick = onDeleteClick;
+        this.activityModel = activityModel;
+
     }
 
     @NonNull
@@ -62,6 +69,31 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //            assert id != null;
 //            onDeleteClick.accept(id);
 //        });
+
+        if(task.complete()){
+            binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+
+        if(!task.complete()){
+            binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+
+        binding.taskNameText.setOnClickListener(v -> {
+            if (!task.complete()) {
+                task.setComplete(true);
+                activityModel.setComplete(task.id(), true);
+                System.out.println("MARKED AS COMPLETE");
+                // CITATION: https://www.codingdemos.com/android-strikethrough-text/
+                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+
+            } else {
+                task.setComplete(false);
+                activityModel.setComplete(task.id(), false);
+                System.out.println("MARKED AS INCOMPLETE");
+                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            }
+        });
 
         return binding.getRoot();
     }

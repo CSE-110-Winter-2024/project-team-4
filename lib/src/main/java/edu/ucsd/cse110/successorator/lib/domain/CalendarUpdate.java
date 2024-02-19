@@ -4,8 +4,18 @@ import java.util.Calendar;
 
 public class CalendarUpdate {
 
-    public Calendar incrementDateBy1(Calendar cal){
+     private static Calendar cal = Calendar.getInstance();
+
+    public static void incrementDateBy1(){
         cal.add(Calendar.DATE, 1);
+    }
+
+    public static Calendar getCal(){
         return cal;
     }
+
+    public static void resetCal(){
+        cal = Calendar.getInstance();
+    }
+
 }

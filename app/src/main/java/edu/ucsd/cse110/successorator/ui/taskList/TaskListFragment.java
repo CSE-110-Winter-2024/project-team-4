@@ -2,6 +2,7 @@ package edu.ucsd.cse110.successorator.ui.taskList;
 
 
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,9 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
+import edu.ucsd.cse110.successorator.lib.domain.TaskRepository;
 import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddTaskDialogFragment;
+import edu.ucsd.cse110.successorator.ui.taskList.dialog.ModelFetch;
 
 public class TaskListFragment extends Fragment {
     private MainViewModel activityModel;
@@ -46,7 +49,9 @@ public class TaskListFragment extends Fragment {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
-        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel::remove);
+        this.adapter = new TaskListAdapter(requireContext(), List.of(), activityModel::remove, activityModel);
+
+        ModelFetch.setModel(activityModel);
 
         // Initialize the Adapter (with an empty list for now)
         activityModel.getOrderedTasks().observe(tasks -> {
@@ -69,6 +74,21 @@ public class TaskListFragment extends Fragment {
             var dialogFragment = AddTaskDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "AddTaskDialogFragment");
         });
+
+//        view.taskNameText.setOnClickListener(v -> {
+//            if (task.complete()) {
+//                task.setComplete(false);
+//                System.out.println("MARKED AS COMPLETE");
+//                // CITATION: https://www.codingdemos.com/android-strikethrough-text/
+//                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//
+//
+//            } else {
+//                task.setComplete(true);
+//                System.out.println("MARKED AS INCOMPLETE");
+//                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+//            }
+//        });
 
         return view.getRoot();
     }

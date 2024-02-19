@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,9 +41,11 @@ public class MainViewModel extends ViewModel {
         taskRepository.findAll().observe(tasks -> {
             if (tasks == null) return;
 
-            var newOrderedTasks = tasks.stream()
-                    .sorted(Comparator.comparingInt(Task::sortOrder))
-                    .collect(Collectors.toList());
+//            var newOrderedTasks = tasks.stream()
+//                    .sorted(Comparator.comparingInt(Task::sortOrder))
+//                    .sorted(Comparator.comparing(Task::complete))
+//                    .collect(Collectors.toList());
+            var newOrderedTasks = new ArrayList<>(tasks);
             orderedTasks.setValue(newOrderedTasks);
         });
 
@@ -64,6 +67,18 @@ public class MainViewModel extends ViewModel {
     public void remove(int id) {
         taskRepository.remove(id);
     }
+
+    public void removeCompleted(){
+        taskRepository.removeCompleted();
+    }
+
+    public int getCount() {
+        return orderedTasks.getValue().size();
+    }
+
+
+
+    public void setComplete(int id, boolean status) {taskRepository.setComplete(id, status);}
 
 
 }
