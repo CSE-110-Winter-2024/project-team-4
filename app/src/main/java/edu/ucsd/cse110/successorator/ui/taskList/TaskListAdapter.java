@@ -80,6 +80,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             if (!task.complete()) {
                 task.setComplete(true);
                 activityModel.setComplete(task.id(), true);
+                activityModel.remove(task.id());
+                activityModel.prepend(task);
                 System.out.println("MARKED AS COMPLETE");
                 // CITATION: https://www.codingdemos.com/android-strikethrough-text/
                 binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -88,6 +90,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             } else {
                 task.setComplete(false);
                 activityModel.setComplete(task.id(), false);
+                activityModel.remove(task.id());
+                activityModel.prepend(task);
                 System.out.println("MARKED AS INCOMPLETE");
                 binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }

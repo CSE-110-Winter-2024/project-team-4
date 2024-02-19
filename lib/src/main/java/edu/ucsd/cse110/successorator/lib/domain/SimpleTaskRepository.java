@@ -41,6 +41,7 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
 
     @Override
     public void append(Task task) {
+        System.out.println("TaskRepository.java: append");
         dataSource.putTask(
                 task.withSortOrder(dataSource.getMaxSortOrder() + 1)
         );
@@ -59,6 +60,7 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
                 task.withSortOrder(dataSource.getMinSortOrder() - 1)
         );
     }
+
 
     @Override
     public void setComplete(int id, boolean status) {

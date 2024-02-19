@@ -72,7 +72,6 @@ public class MainViewModel extends ViewModel {
     public void setComplete(int id, boolean status) {
         System.out.println("MVM SETCOMPLETE");
         taskRepository.setComplete(id, status);
-
     }
 
 //    public void moveTaskTop()
