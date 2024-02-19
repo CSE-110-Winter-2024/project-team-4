@@ -11,6 +11,7 @@ import androidx.room.Room;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import edu.ucsd.cse110.successorator.data.db.TaskDatabase;
 import edu.ucsd.cse110.successorator.databinding.FragmentNoTasksBinding;
@@ -39,10 +40,12 @@ private FragmentNoTasksBinding view;
         setContentView(R.layout.activity_main);
 
         Calendar cal = CalendarUpdate.getCal();
+        SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
+        String formattedDate = customFormat.format(cal.getTime());
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
 
         TextView dateTextView = findViewById(R.id.date_box);
-        dateTextView.setText(dateFormat.toString());
+        dateTextView.setText(formattedDate);
 
         var database = Room.databaseBuilder(
                 getApplicationContext(),
@@ -78,9 +81,11 @@ private FragmentNoTasksBinding view;
     public void incrementCurrentDate(View view){
         CalendarUpdate.incrementDateBy1();
         Calendar cal = CalendarUpdate.getCal();
+        SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
+        String formattedDate = customFormat.format(cal.getTime());
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         TextView dateTextView = findViewById(R.id.date_box);
-        dateTextView.setText(dateFormat.toString());
+        dateTextView.setText(formattedDate);
 
         MainViewModel activityModel = ModelFetch.getModel();
         activityModel.removeCompleted();

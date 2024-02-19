@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import edu.ucsd.cse110.successorator.MainActivity;
@@ -57,7 +58,7 @@ public class AddTaskDialogFragment extends DialogFragment {
                 .setTitle("New Task")
                 .setMessage("Please provide the new task name.")
                 .setView(view.getRoot())
-                .setPositiveButton("Create", this::onPositiveButtonClick)
+                .setPositiveButton("Checkmark", this::onPositiveButtonClick)
 //                .setPositiveButtonIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_checkmark))
                 .setNegativeButton("Cancel", this::onNegativeButtonClick)
                 .create();
@@ -70,8 +71,10 @@ public class AddTaskDialogFragment extends DialogFragment {
         if(!name.equals(""))
         {
             Calendar cal = CalendarUpdate.getCal();
+            SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
+            String formattedDate = customFormat.format(cal.getTime());
             var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-            var task = new Task(null, name, false, -1, dateFormat.toString());
+            var task = new Task(null, name, false, -1, formattedDate);
             activityModel.append(task);
             dialog.dismiss();
 
