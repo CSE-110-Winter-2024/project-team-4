@@ -18,6 +18,24 @@
         app:layout_constraintTop_toBottomOf="@+id/add_task_button"
         tools:listitem="@layout/list_task_item" />
 
+    <ImageButton
+        android:layout_width="53dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="A tiny Android icon"
+        android:src="@drawable/ic_dropdown_arrow"
+        app:layout_constraintBottom_toTopOf="@+id/task_list"
+        app:layout_constraintEnd_toStartOf="@+id/add_task_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/task_list"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:tint="#4359CC" />
+
     <Button
         android:id="@+id/add_task_button"
         android:layout_width="54dp"

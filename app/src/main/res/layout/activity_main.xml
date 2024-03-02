@@ -5,23 +5,27 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="ExtraText">
+    tools:ignore="ExtraText"><![CDATA[
 
-    <![CDATA[
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
+
+
+
+
+
     ]]>
-
-
-
 
     <TextView
         android:id="@+id/date_box"
-        android:layout_width="274dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="64dp"
+        android:layout_width="186dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="110dp"
         android:layout_marginBottom="190dp"
         android:text="TextView"
@@ -29,7 +33,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/initial_text_box"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.226"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
