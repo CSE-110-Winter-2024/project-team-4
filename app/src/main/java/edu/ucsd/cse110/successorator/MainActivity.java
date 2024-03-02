@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,14 +41,6 @@ private FragmentNoTasksBinding view;
 
         setContentView(R.layout.activity_main);
 
-        Calendar cal = CalendarUpdate.getCal();
-        SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
-        String formattedDate = customFormat.format(cal.getTime());
-        var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-
-        TextView dateTextView = findViewById(R.id.date_box);
-        dateTextView.setText(formattedDate);
-
         var database = Room.databaseBuilder(
                 getApplicationContext(),
                 TaskDatabase.class,
@@ -60,6 +54,73 @@ private FragmentNoTasksBinding view;
         if(database.taskDao().count() != 0) {
             swapFragments();  //HOW TO CALL GETACTIVITY() FROM APPLICATION? HERE
             //sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
+        }
+
+//        Thread t = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    while (!isInterrupted()) {
+//                        Thread.sleep(1000);
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                TextView tdate = (TextView) findViewById(R.id.date_box);
+//                                long date = System.currentTimeMillis();
+//                                SimpleDateFormat sdf = new SimpleDateFormat("EEEE, M/d");
+//                                String dateString = sdf.format(date);
+//                                tdate.setText(dateString);
+//                            }
+//                        });
+//                    }
+//                } catch (InterruptedException e) {
+//                }
+//            }
+//        };
+//        t.start();
+
+        CalendarUpdate.initializeCal();
+        Calendar cal = CalendarUpdate.getCal();
+        SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
+        String formattedDate = customFormat.format(cal.getTime());
+        var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
+
+        TextView dateTextView = findViewById(R.id.date_box);
+        dateTextView.setText(formattedDate);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CalendarUpdate.initializeCal();
+        //Calendar cal = CalendarUpdate.getCal();
+
+        TextView tdate = (TextView) findViewById(R.id.date_box);
+        String currentDate = (String)tdate.getText();
+        long date = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, M/d");
+        String dateString = sdf.format(date);
+        tdate.setText(dateString);
+
+
+        if(!currentDate.equals(dateString)){
+            MainViewModel activityModel = ModelFetch.getModel();
+            activityModel.removeCompleted();
+
+            var database = Room.databaseBuilder(
+                    getApplicationContext(),
+                    TaskDatabase.class,
+                    "task-database"
+            ).allowMainThreadQueries().build();
+
+            var sharedPreferences = getSharedPreferences("successorator", MODE_PRIVATE);
+            //var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
+
+            //isFirstRun &&
+            if(database.taskDao().count() == 0) {
+                swapFragmentstoNoTasks();
+            }
         }
 
     }
@@ -82,6 +143,7 @@ private FragmentNoTasksBinding view;
         CalendarUpdate.incrementDateBy1();
         Calendar cal = CalendarUpdate.getCal();
         SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
+
         String formattedDate = customFormat.format(cal.getTime());
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         TextView dateTextView = findViewById(R.id.date_box);
