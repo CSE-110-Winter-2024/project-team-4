@@ -68,8 +68,33 @@ public class RoomTaskRepository implements TaskRepository {
     @Override
     public void setComplete(int id, boolean status) {taskDao.setComplete(id, status);}
 
+    @Override
+    public void setType(int id, String type) {taskDao.setType(id, type);}
+
 
     public void removeCompleted(){
         taskDao.deleteCompleted();
+        taskDao.moveTomorrowTasksToToday();
+    }
+
+    public Subject<List<Task>> filterTomorrowTasks(){
+        var entitiesLiveData = taskDao.getTomorrowTasks();
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
+    }
+
+    public Subject<List<Task>> filterTodayTasks(){
+        var entitiesLiveData = taskDao.getTodayTasks();
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
+
     }
 }

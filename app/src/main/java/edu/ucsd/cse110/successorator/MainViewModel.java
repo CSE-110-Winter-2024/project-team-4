@@ -76,9 +76,29 @@ public class MainViewModel extends ViewModel {
         return orderedTasks.getValue().size();
     }
 
+    public void getTomorrowTasks() {
+        taskRepository.filterTomorrowTasks().observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
+        });
+    }
+
+    public void getTodayTasks() {
+        taskRepository.filterTodayTasks().observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
+        });
+    }
+
 
 
     public void setComplete(int id, boolean status) {taskRepository.setComplete(id, status);}
+
+    public void setType(int id, String type) {taskRepository.setType(id, type);}
 
 
 }

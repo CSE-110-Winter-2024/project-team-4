@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -74,11 +75,20 @@ public class AddTaskDialogFragment extends DialogFragment {
             SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
             String formattedDate = customFormat.format(cal.getTime());
             var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-            var task = new Task(null, name, false, -1, formattedDate);
+            MainActivity mainActivity = (MainActivity) getActivity();
+            var task = new Task(null, name, false, -1, formattedDate, mainActivity.getSpinnerStatus());
             activityModel.append(task);
             dialog.dismiss();
 
             ((MainActivity)getActivity()).swapFragments();
+
+            MainViewModel model = ModelFetch.getModel();
+            if(mainActivity.getSpinnerStatus().equals("Today")){
+                model.getTodayTasks();
+            }
+            else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
+                model.getTomorrowTasks();
+            }
 
         }
 

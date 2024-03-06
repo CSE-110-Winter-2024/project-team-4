@@ -17,9 +17,9 @@ public class MainViewModelTest {
 
     @Test
     public void append() {
-        Task task = new Task(1, "name",false, 1, "date");
-        Task task2 = new Task(2, "name",false, 2, "date");
-        Task task3 = new Task(3,"name",false, 3, "date");
+        Task task = new Task(1, "name",false, 1, "date", "Today");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today");
 
         List<Task> tasks = List.of(task, task2);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -37,12 +37,12 @@ public class MainViewModelTest {
 
     @Test
     public void prepend() {
-        Task task = new Task(1, "name",false, 1, "date");
-        Task task2 = new Task(2, "name",false, 2, "date");
-        Task task3 = new Task(3,"name",false, 3, "date");
+        Task task = new Task(1, "name",false, 1, "date", "Today");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today");
 
-        Task task4 = new Task(2, "name",false, 1, "date");
-        Task task5 = new Task(3,"name",false, 2, "date");
+        Task task4 = new Task(2, "name",false, 1, "date", "Today");
+        Task task5 = new Task(3,"name",false, 2, "date", "Today");
 
         List<Task> tasks = List.of(task4, task5);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -60,12 +60,12 @@ public class MainViewModelTest {
 
     @Test
     public void remove() {
-        Task task = new Task(1, "name",false, 1, "date");
-        Task task2 = new Task(2, "name",false, 2, "date");
-        Task task3 = new Task(3,"name",false, 3, "date");
+        Task task = new Task(1, "name",false, 1, "date", "Today");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today");
 
-        Task task4 = new Task(2, "name",false, 1, "date");
-        Task task5 = new Task(3,"name",false, 2, "date");
+        Task task4 = new Task(2, "name",false, 1, "date", "Today");
+        Task task5 = new Task(3,"name",false, 2, "date", "Today");
 
         List<Task> tasks = List.of(task, task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -91,11 +91,17 @@ public class MainViewModelTest {
 
     @Test
     public void removeCompleted() {
-        Task task = new Task(1, "name",false, 1, "date");
-        Task task2 = new Task(2, "name",true, 2, "date");
-        Task task3 = new Task(3,"name",false, 3, "date");
+        Task task = new Task(1, "name",false, 1, "date", "Today");
+        Task task2 = new Task(2, "name",true, 2, "date", "Today");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today");
 
-        Task task4 = new Task(3,"name",false, 2, "date");
+        Task task4 = new Task(3,"name",false, 2, "date", "Today");
+
+
+
+
+
+
 
 
         List<Task> tasks = List.of(task, task2, task3);
@@ -114,8 +120,8 @@ public class MainViewModelTest {
 
     @Test
     public void setComplete(){
-        Task task2 = new Task(2, "name",false, 2, "date");
-        Task task3 = new Task(3,"name",false, 3, "date");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today");
 
         List<Task> tasks = List.of(task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -126,32 +132,12 @@ public class MainViewModelTest {
 
         model.setComplete(2, true);
 
-        Task task5 = new Task(2, "name",true, 2, "date");
-        Task task6 = new Task(3,"name",false, 3, "date");
+        Task task5 = new Task(2, "name",true, 2, "date", "Today");
+        Task task6 = new Task(3,"name",false, 3, "date", "Today");
 
         List<Task> taskss = List.of(task5, task6);
 
         assertArrayEquals(taskss.toArray(), model.getOrderedTasks().getValue().toArray());
     }
 
-    @Test
-    public void setComplete(){
-        Task task = new Task(1, "name",false, 1, "date");
-        Task task2 = new Task(2, "name",false, 2, "date");
-
-        List<Task> tasks = List.of(task, task2);
-        InMemoryDataSource inmd = new InMemoryDataSource();
-        inmd.putTasks(tasks);
-
-        var dataSource = new SimpleTaskRepository(inmd);
-        var model = new MainViewModel(dataSource);
-
-        model.setComplete(1, true);
-
-        Task task3 = new Task(1, "name",true, 1, "date");
-        Task task4 = new Task(2, "name",false, 2, "date");
-
-        List<Task> tas = List.of(task3, task4);
-        assertArrayEquals(tas.toArray(), model.getOrderedTasks().getValue().toArray());
-    }
 }

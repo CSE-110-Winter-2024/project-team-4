@@ -64,7 +64,20 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
 
     }
 
+    @Override
+    public void setType(int id, String type) {
+        dataSource.setType(id, type);
+    }
+
     public void removeCompleted(){
         dataSource.removeCompleted();
+    }
+
+    public Subject<List<Task>> filterTomorrowTasks(){
+        return dataSource.filterTomorrowTasks();
+    }
+
+    public Subject<List<Task>> filterTodayTasks(){
+        return dataSource.filterTodayTasks();
     }
 }
