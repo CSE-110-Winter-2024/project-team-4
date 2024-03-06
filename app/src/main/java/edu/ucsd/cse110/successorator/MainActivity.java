@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapter);
+        spinner.setSelection(1);
 
     }
 
@@ -152,6 +153,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(formattedDate);
+
+        Spinner spin = findViewById(R.id.fromspin);
+        if(spin.getSelectedItemPosition() == 2){
+            Calendar cala = (Calendar) CalendarUpdate.getCal().clone();
+            cala.add(Calendar.DATE, 1);
+            TextView dateTextViewa = findViewById(R.id.date_box);
+            SimpleDateFormat customFormats = new SimpleDateFormat("EEEE, M/d");
+            String dateStringa = customFormats.format(cala.getTime());
+            dateTextViewa.setText(dateStringa);
+        }
 
         MainViewModel activityModel = ModelFetch.getModel();
         activityModel.removeCompleted();
@@ -168,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             swapFragmentstoNoTasks();
         }
     }
+
 
     public void swapFragments() {
         getSupportFragmentManager()
@@ -189,15 +201,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selectedItem = parent.getItemAtPosition(position).toString();
         System.out.println("MainActivity onItemSelected");
+        int previous = 1;
 
         switch (selectedItem) {
             case "Today":
                 // Do something for Today
                 System.out.println("Today");
+
+                Spinner spinner = findViewById(R.id.fromspin);
+                Calendar cal = (Calendar) CalendarUpdate.getCal().clone();
+                TextView dateTextView = findViewById(R.id.date_box);
+                SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
+                String dateString = customFormat.format(cal.getTime());
+                dateTextView.setText(dateString);
+
                 break;
             case "Tomorrow":
                 // Do something for Tomorrow
                 System.out.println("Tomorrow");
+                Spinner spin = findViewById(R.id.fromspin);
+                Calendar cala = (Calendar) CalendarUpdate.getCal().clone();
+                cala.add(Calendar.DATE, 1);
+                TextView dateTextViewa = findViewById(R.id.date_box);
+                SimpleDateFormat customFormats = new SimpleDateFormat("EEEE, M/d");
+                String dateStringa = customFormats.format(cala.getTime());
+                dateTextViewa.setText(dateStringa);
+
                 break;
             case "Recurring":
                 // Do something for Recurring
