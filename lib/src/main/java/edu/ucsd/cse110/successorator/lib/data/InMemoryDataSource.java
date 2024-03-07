@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
@@ -160,23 +161,61 @@ public class InMemoryDataSource {
         System.out.println(sortOrders);
     }
 
+
+
     public void setComplete(int id, boolean status)
     {
         var task = tasks.get(id);
         task.setComplete(status);
     }
 
+    public void setType(int id, String type){
+        var task = tasks.get(id);
+        task.setType(type);
+    }
+
     public void removeCompleted(){
         Map<Integer, Task> newTasks = new HashMap<Integer, Task>(tasks);
 
         for(Task task : newTasks.values()){
-            if(task.complete()){
+            if(task.complete() && task.type().equals("Today")){
                 removeTask(task.id());
+                continue;
+            }
+
+            if(task.type().equals("Tomorrow")){
+                setType(task.id(), "Today");
+            }
+            //else to just switch task type to today from tmmr
+        }
+    }
+
+    public Subject<List<Task>> filterTomorrowTasks(){
+        List<Task> allTasks = getTasks();
+        List<Task> tomorrowTasks = new ArrayList<Task>();
+        for(Task task : allTasks){
+            if(task.type().equals("Tomorrow")){
+                tomorrowTasks.add(task);
             }
         }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(tomorrowTasks);
+        return somethingElse;
+    }
 
-
-
+    public Subject<List<Task>> filterTodayTasks(){
+        List<Task> allTasks = getTasks();
+        List<Task> todayTasks = new ArrayList<Task>();
+        for(Task task : allTasks){
+            if(task.type().equals("Today")){
+                todayTasks.add(task);
+            }
+        }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(todayTasks);
+        return somethingElse;
     }
 
     /**

@@ -21,6 +21,12 @@ public interface TaskRepository {
 
     void setComplete(int id, boolean status);
 
+    void setType(int id, String type);
+
     void removeCompleted();
+
+    Subject<List<Task>>  filterTomorrowTasks();
+
+    Subject<List<Task>> filterTodayTasks();
 
 }

@@ -28,14 +28,18 @@ public class TaskEntity {
     @ColumnInfo(name = "date")
     public String date;
 
-    TaskEntity(@NonNull String name, @NonNull boolean complete, @NonNull int sortOrder){
+    @ColumnInfo(name = "type")
+            public String type;
+
+    TaskEntity(@NonNull String name, @NonNull boolean complete, @NonNull int sortOrder, @NonNull String type){
         this.name = name;
         this.complete = complete;
         this.sortOrder = sortOrder;
+        this.type = type;
     }
 
     public static TaskEntity fromTask(@NonNull Task task){
-        var taskEntity = new TaskEntity(task.name(), task.complete(), task.sortOrder());
+        var taskEntity = new TaskEntity(task.name(), task.complete(), task.sortOrder(), task.type());
         taskEntity.id = task.id();
         return taskEntity;
     }
@@ -44,6 +48,8 @@ public class TaskEntity {
         Calendar cal = Calendar.getInstance();
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         date = dateFormat.toString();
-        return new Task(id, name, complete, sortOrder, date);
+        return new Task(id, name, complete, sortOrder, date, type);
     }
+
+
 }

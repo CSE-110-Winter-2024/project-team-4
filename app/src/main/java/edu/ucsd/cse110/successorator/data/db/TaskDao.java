@@ -51,11 +51,21 @@ public interface TaskDao {
             "WHERE id = :id ")
     void setComplete(int id, boolean status);
 
+    @Query("UPDATE tasks SET type = :type " +
+            "WHERE id = :id ")
+    void setType(int id, String type);
+
+    @Query("SELECT * FROM tasks WHERE type = 'Tomorrow'")
+    LiveData<List<TaskEntity>> getTomorrowTasks();
+
+    @Query("SELECT * FROM tasks WHERE type = 'Today'")
+    LiveData<List<TaskEntity>> getTodayTasks();
+
     @Transaction
     default int append(TaskEntity taskEntity){
         var maxSortOrder = getMaxSortOrder();
         var newTask = new TaskEntity(
-                taskEntity.name, taskEntity.complete, maxSortOrder + 1
+                taskEntity.name, taskEntity.complete, maxSortOrder + 1, taskEntity.type
         );
 
         return Math.toIntExact(insert(newTask));
@@ -65,7 +75,7 @@ public interface TaskDao {
     default int prepend(TaskEntity taskEntity){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newTask = new TaskEntity(
-                taskEntity.name, taskEntity.complete, getMinSortOrder() - 1
+                taskEntity.name, taskEntity.complete, getMinSortOrder() - 1, taskEntity.type
         );
         return Math.toIntExact(insert(newTask));
     }
@@ -73,6 +83,9 @@ public interface TaskDao {
     @Query("DELETE FROM tasks WHERE id = :id")
     void delete(int id);
 
-    @Query("DELETE FROM tasks WHERE complete = true")
+    @Query("DELETE FROM tasks WHERE complete = true AND type = 'Today'")
     void deleteCompleted();
+
+    @Query("UPDATE tasks SET type = 'Today' WHERE type = 'Tomorrow'")
+    void moveTomorrowTasksToToday();
 }

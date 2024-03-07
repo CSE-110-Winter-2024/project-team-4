@@ -19,18 +19,25 @@ public class Task implements Serializable {
 
     private String date;
 
-    public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder, String date)
+    private String type;
+
+    public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder, String date, @NonNull String type)
     {
         this.id = id;
         this.name = name;
         this.complete = complete;
         this.sortOrder = sortOrder;
         this.date = date;
+        this.type = type;
     }
 
     public void setComplete(boolean val)
     {
         this.complete = val;
+    }
+
+    public void setType(String type){
+        this.type = type;
     }
 
     public @Nullable Integer id()
@@ -53,14 +60,21 @@ public class Task implements Serializable {
         return sortOrder;
     }
 
+    public @NonNull String type(){return this.type;}
+
     public Task withId(int id)
     {
-        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date);
+        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, this.type);
         return newTask;
     }
 
     public Task withSortOrder(int sortOrder) {
-        Task newTask =  new Task(id, this.name, this.complete, sortOrder, this.date);
+        Task newTask =  new Task(id, this.name, this.complete, sortOrder, this.date, this.type);
+        return newTask;
+    }
+
+    public Task withType(String type){
+        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, type);
         return newTask;
     }
 
@@ -70,11 +84,12 @@ public class Task implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return complete == task.complete && sortOrder == task.sortOrder && Objects.equals(id, task.id) && Objects.equals(name, task.name) && Objects.equals(date, task.date);
+        return complete == task.complete && sortOrder == task.sortOrder && Objects.equals(id, task.id)
+                && Objects.equals(name, task.name) && Objects.equals(date, task.date) && Objects.equals(type, task.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, complete, sortOrder, date);
+        return Objects.hash(id, name, complete, sortOrder, date, type);
     }
 }

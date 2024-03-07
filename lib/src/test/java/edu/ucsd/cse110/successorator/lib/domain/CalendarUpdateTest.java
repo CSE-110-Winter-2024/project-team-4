@@ -12,10 +12,10 @@ public class CalendarUpdateTest {
     @Test
     public void incrementDateBy1() {
 
+        CalendarUpdate.resetCal();
         CalendarUpdate.incrementDateBy1();
         Calendar cal = CalendarUpdate.getCal();
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-        CalendarUpdate.resetCal();
 
         Calendar cal2 = Calendar.getInstance();
         cal2.add(Calendar.DATE, 1);
