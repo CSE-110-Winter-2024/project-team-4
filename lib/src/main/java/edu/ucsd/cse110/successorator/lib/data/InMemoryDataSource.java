@@ -180,10 +180,11 @@ public class InMemoryDataSource {
         for(Task task : newTasks.values()){
             if(task.complete() && task.type().equals("Today")){
                 removeTask(task.id());
+                continue;
             }
 
             if(task.type().equals("Tomorrow")){
-                task.setType("Today");
+                setType(task.id(), "Today");
             }
             //else to just switch task type to today from tmmr
         }

@@ -99,11 +99,6 @@ public class MainViewModelTest {
 
 
 
-
-
-
-
-
         List<Task> tasks = List.of(task, task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
         inmd.putTasks(tasks);
@@ -116,6 +111,7 @@ public class MainViewModelTest {
 
         List<Task> tas = List.of(task, task4);
         assertArrayEquals(tas.toArray(), model.getOrderedTasks().getValue().toArray());
+
     }
 
     @Test
@@ -139,5 +135,67 @@ public class MainViewModelTest {
 
         assertArrayEquals(taskss.toArray(), model.getOrderedTasks().getValue().toArray());
     }
+
+    @Test
+    public void getTodayTasks(){
+        Task task = new Task(1, "name",false, 1, "date", "Today");
+        Task task2 = new Task(2, "name",false, 2, "date", "Tomorrow");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today");
+
+        List<Task> tasks = List.of(task, task2, task3);
+        InMemoryDataSource inmd = new InMemoryDataSource();
+        inmd.putTasks(tasks);
+
+        var dataSource = new SimpleTaskRepository(inmd);
+        var model = new MainViewModel(dataSource);
+
+        model.getTodayTasks();
+        assertEquals(2, model.getCount());
+
+        List<Task> taskss = List.of(task, task3);
+        assertArrayEquals(taskss.toArray(), model.getOrderedTasks().getValue().toArray());
+    }
+
+    @Test
+    public void getTomorrowTasks(){
+        Task task = new Task(1, "name",false, 1, "date", "Today");
+        Task task2 = new Task(2, "name",false, 2, "date", "Tomorrow");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today");
+
+        List<Task> tasks = List.of(task, task2, task3);
+        InMemoryDataSource inmd = new InMemoryDataSource();
+        inmd.putTasks(tasks);
+
+        var dataSource = new SimpleTaskRepository(inmd);
+        var model = new MainViewModel(dataSource);
+
+        model.getTomorrowTasks();
+        assertEquals(1, model.getCount());
+
+        List<Task> taskss = List.of(task2);
+        assertArrayEquals(taskss.toArray(), model.getOrderedTasks().getValue().toArray());
+    }
+
+    @Test
+    public void moveOver() {
+        Task task = new Task(1, "name",false, 1, "date", "Today");
+        Task task2 = new Task(2, "name",true, 2, "date", "Today");
+        Task task3 = new Task(3,"name",false, 3, "date", "Tomorrow");
+
+        Task task4 = new Task(3,"name",false, 2, "date", "Today");
+
+        List<Task> tasks = List.of(task, task2, task3);
+        InMemoryDataSource inmd = new InMemoryDataSource();
+        inmd.putTasks(tasks);
+
+        var dataSource = new SimpleTaskRepository(inmd);
+        var model = new MainViewModel(dataSource);
+
+        model.removeCompleted();
+        List<Task> tas = List.of(task, task4);
+        model.getTodayTasks();
+        assertArrayEquals(tas.toArray(), model.getOrderedTasks().getValue().toArray());
+    }
+
 
 }
