@@ -137,13 +137,19 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(which == 0){
-
+                            activityModel.setType(task.id(), "Today");
+                            task.setType("Today");
+                            activityModel.remove(task.id());
+                            activityModel.prepend(task);
                         }
                         else if(which == 1){
-
+                            activityModel.setType(task.id(), "Tomorrow");
+                            task.setType("Tomorrow");
+                            activityModel.remove(task.id());
+                            activityModel.prepend(task);
                         }
                         else if(which == 2){
-                            //nothing
+                            activityModel.remove(task.id());
                         }
                         else if(which == 3){
                             activityModel.setType(task.id(), "Today");
