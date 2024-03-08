@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.ui.taskList;
 
+import android.app.AlertDialog;
 import android.content.Context;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import edu.ucsd.cse110.successorator.MainActivity;
 import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,22 +76,28 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         }
 
         binding.taskNameText.setOnClickListener(v -> {
-            if (!task.complete()) {
-                task.setComplete(true);
-                activityModel.setComplete(task.id(), true);
-                activityModel.remove(task.id());
-                activityModel.prepend(task);
-                System.out.println("MARKED AS COMPLETE");
-                // CITATION: https://www.codingdemos.com/android-strikethrough-text/
-                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            MainActivity mainActivity = (MainActivity) getContext();
+            String spinnerStatus = mainActivity.getSpinnerStatus();
 
-                MainActivity mainActivity = (MainActivity) getContext();
-                String spinnerStatus = mainActivity.getSpinnerStatus();
-                if(spinnerStatus.equals("Today")){
-                    activityModel.getTodayTasks();
-                }
-                else if (spinnerStatus.equals("Tomorrow")){
-                    activityModel.getTomorrowTasks();
+
+            if (!task.complete()) {
+
+                if(spinnerStatus.equals("Today") || spinnerStatus.equals("Tomorrow")){
+                    task.setComplete(true);
+                    activityModel.setComplete(task.id(), true);
+                    activityModel.remove(task.id());
+                    activityModel.prepend(task);
+                    System.out.println("MARKED AS COMPLETE");
+                    // CITATION: https://www.codingdemos.com/android-strikethrough-text/
+                    binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+
+                    if(spinnerStatus.equals("Today")){
+                        activityModel.getTodayTasks();
+                    }
+                    else if (spinnerStatus.equals("Tomorrow")){
+                        activityModel.getTomorrowTasks();
+                    }
                 }
 
             } else {
@@ -100,8 +108,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 System.out.println("MARKED AS INCOMPLETE");
                 binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
-                MainActivity mainActivity = (MainActivity) getContext();
-                String spinnerStatus = mainActivity.getSpinnerStatus();
                 if(spinnerStatus.equals("Today")){
                     activityModel.getTodayTasks();
                 }
@@ -111,6 +117,48 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             }
 
 
+        });
+
+        binding.taskNameText.setOnLongClickListener(new View.OnLongClickListener() {
+            MainActivity mainActivity = (MainActivity) getContext();
+            String spinnerStatus = mainActivity.getSpinnerStatus();
+            @Override
+            public boolean onLongClick(View v) {
+                if(spinnerStatus.equals("Pending")){
+                    showOptionsDialog(task);
+                }
+                return true;
+            }
+
+            private void showOptionsDialog(Task task) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Options");
+                builder.setItems(new CharSequence[]{"Move to Today", "Move to Tomorrow", "Delete", "Finish"}, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(which == 0){
+
+                        }
+                        else if(which == 1){
+
+                        }
+                        else if(which == 2){
+                            //nothing
+                        }
+                        else if(which == 3){
+                            activityModel.setType(task.id(), "Today");
+                            task.setComplete(true);
+                            task.setType("Today");
+                            activityModel.setComplete(task.id(), true);
+                            activityModel.remove(task.id());
+                            activityModel.prepend(task);
+                            System.out.println("MARKED AS COMPLETE");
+                            binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        }
+                    }
+                });
+                builder.create().show();
+            }
         });
 
         return binding.getRoot();

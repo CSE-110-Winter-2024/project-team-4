@@ -48,11 +48,11 @@ public interface TaskDao {
     void shiftSortOrders(int from, int to, int by);
 
     @Query("UPDATE tasks SET complete = :status " +
-            "WHERE id = :id ")
+            "WHERE id = :id")
     void setComplete(int id, boolean status);
 
     @Query("UPDATE tasks SET type = :type " +
-            "WHERE id = :id ")
+            "WHERE id = :id")
     void setType(int id, String type);
 
     @Query("SELECT * FROM tasks WHERE type = 'Tomorrow'")
