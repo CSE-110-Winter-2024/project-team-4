@@ -218,6 +218,20 @@ public class InMemoryDataSource {
         return somethingElse;
     }
 
+    public Subject<List<Task>> filterPendingTasks(){
+        List<Task> allTasks = getTasks();
+        List<Task> pendingTasks = new ArrayList<Task>();
+        for(Task task : allTasks){
+            if(task.type().equals("Pending")){
+                pendingTasks.add(task);
+            }
+        }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(pendingTasks);
+        return somethingElse;
+    }
+
     /**
      * Private utility method to maintain state of the fake DB: ensures that new
      * tasks inserted have an id, and updates the nextId if necessary.

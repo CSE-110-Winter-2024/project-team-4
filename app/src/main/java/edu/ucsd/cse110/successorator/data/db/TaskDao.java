@@ -61,6 +61,9 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks WHERE type = 'Today'")
     LiveData<List<TaskEntity>> getTodayTasks();
 
+    @Query("SELECT * FROM tasks WHERE type = 'Pending'")
+    LiveData<List<TaskEntity>> getPendingTasks();
+
     @Transaction
     default int append(TaskEntity taskEntity){
         var maxSortOrder = getMaxSortOrder();

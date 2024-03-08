@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 else if(status.equals("Tomorrow")){
                                     model.getTomorrowTasks();
                                 }
+                                else if(status.equals("Pending")){
+                                    model.getPendingTasks();
+                                }
                             }
                         });
                     }
@@ -257,6 +260,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 System.out.println("Pending");
                 TextView dateTextViewb = findViewById(R.id.date_box);
                 dateTextViewb.setVisibility(View.INVISIBLE);
+
+                MainViewModel modelb = ModelFetch.getModel();
+                modelb.getPendingTasks();
                 break;
         }
     }

@@ -80,4 +80,8 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
     public Subject<List<Task>> filterTodayTasks(){
         return dataSource.filterTodayTasks();
     }
+
+    public Subject<List<Task>> filterPendingTasks(){
+        return dataSource.filterPendingTasks();
+    }
 }
