@@ -70,4 +70,22 @@ public class TaskTest {
         assertNotEquals(task2, task3);
     }
 
+    @Test
+    public void setComplete(){
+        Task task = new Task(1, "name", false, 1, "date", "Today");
+        Task expected = new Task(1, "name", true, 1, "date", "Today");
+        task.setComplete(true);
+        assertEquals(expected, task);
+    }
+
+    @Test
+    public void setType(){
+        Task task = new Task(1, "name", false, 1, "date", "Pending");
+        Task expected = new Task(1, "name", false, 1, "date", "Tomorrow");
+        task.setType("Tomorrow");
+        assertEquals(expected, task);
+    }
+
+
+
 }
