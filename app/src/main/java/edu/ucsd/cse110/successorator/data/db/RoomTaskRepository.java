@@ -100,20 +100,20 @@ public class RoomTaskRepository implements TaskRepository {
     }
 
 
-    public void generateNextRecurringTask(Task originalTask) {
+    public void t(Task originalTask) {
         long interval = originalTask.recurringInterval();
         long currentTime = System.currentTimeMillis();
-        long nextDueDate = originalTask.startDate() + interval;
+        long nextTaskDate = originalTask.startDate() + interval;
 
-        if (nextDueDate <= currentTime + TimeUnit.DAYS.toMillis(2)) {
+        if (nextTaskDate <= currentTime + TimeUnit.DAYS.toMillis(2)) {
             // Create a new instance of the task with the adjusted due date
             TaskEntity recurringTask = new TaskEntity(
                     originalTask.name(),
                     originalTask.complete(),
                     originalTask.sortOrder(),
                     originalTask.type(),
-                    nextDueDate,
-                    originalTask.recurringInterval()
+                    originalTask.recurringInterval(),
+                    nextTaskDate
             );
 
             // Store the recurring task in the database
