@@ -14,7 +14,8 @@ import edu.ucsd.cse110.successorator.databinding.FragmentNoTasksBinding;
 import edu.ucsd.cse110.successorator.databinding.FragmentTaskListBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import edu.ucsd.cse110.successorator.ui.taskList.TaskListFragment;
-import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddTaskDialogFragment;
+//import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddTaskDialogFragment;
+import edu.ucsd.cse110.successorator.ui.taskList.dialog.AddRecurringTaskDialogFragment;
 import edu.ucsd.cse110.successorator.ui.taskList.dialog.ModelFetch;
 
 public class NoTasksFragment extends Fragment{
@@ -56,7 +57,7 @@ public class NoTasksFragment extends Fragment{
         this.view = FragmentNoTasksBinding.inflate(inflater, container, false);
 
         view.addTaskButton.setOnClickListener(v -> {
-            var dialogFragment = AddTaskDialogFragment.newInstance();
+            var dialogFragment = AddRecurringTaskDialogFragment.newInstance();
             dialogFragment.show(getParentFragmentManager(), "AddTaskDialogFragment");
         });
 
