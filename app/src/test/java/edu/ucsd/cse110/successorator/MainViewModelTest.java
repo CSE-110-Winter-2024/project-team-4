@@ -197,5 +197,47 @@ public class MainViewModelTest {
         assertArrayEquals(tas.toArray(), model.getOrderedTasks().getValue().toArray());
     }
 
+    @Test
+    public void getPendingTasks() {
+        Task task = new Task(1, "name",false, 1, "date", "Pending");
+        Task task2 = new Task(2, "name",false, 2, "date", "Tomorrow");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today");
+
+        List<Task> tasks = List.of(task, task2, task3);
+        InMemoryDataSource inmd = new InMemoryDataSource();
+        inmd.putTasks(tasks);
+
+        var dataSource = new SimpleTaskRepository(inmd);
+        var model = new MainViewModel(dataSource);
+
+        model.getPendingTasks();
+        assertEquals(1, model.getCount());
+
+        List<Task> taskss = List.of(task);
+        assertArrayEquals(taskss.toArray(), model.getOrderedTasks().getValue().toArray());
+    }
+
+    @Test
+    public void setType() {
+        Task task2 = new Task(2, "name",false, 2, "date", "Today");
+        Task task3 = new Task(3,"name",false, 3, "date", "Pending");
+
+        List<Task> tasks = List.of(task2, task3);
+        InMemoryDataSource inmd = new InMemoryDataSource();
+        inmd.putTasks(tasks);
+
+        var dataSource = new SimpleTaskRepository(inmd);
+        var model = new MainViewModel(dataSource);
+
+        model.setType(3, "Today");
+
+        Task task5 = new Task(2, "name",false, 2, "date", "Today");
+        Task task6 = new Task(3,"name",false, 3, "date", "Today");
+
+        List<Task> taskss = List.of(task5, task6);
+
+        assertArrayEquals(taskss.toArray(), model.getOrderedTasks().getValue().toArray());
+    }
+
 
 }

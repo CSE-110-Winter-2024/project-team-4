@@ -89,6 +89,9 @@ public class AddTaskDialogFragment extends DialogFragment {
             else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
                 model.getTomorrowTasks();
             }
+            else if(mainActivity.getSpinnerStatus().equals("Pending")){
+                //model.getTomorrowTasks();
+            }
 
         }
 

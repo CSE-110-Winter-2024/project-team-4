@@ -97,4 +97,14 @@ public class RoomTaskRepository implements TaskRepository {
         return new LiveDataSubjectAdapter<>(tasksLiveData);
 
     }
+
+    public Subject<List<Task>> filterPendingTasks(){
+        var entitiesLiveData = taskDao.getPendingTasks();
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
+    }
 }

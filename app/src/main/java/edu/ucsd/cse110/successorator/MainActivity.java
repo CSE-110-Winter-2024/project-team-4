@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 else if(status.equals("Tomorrow")){
                                     model.getTomorrowTasks();
                                 }
+                                else if(status.equals("Pending")){
+                                    model.getPendingTasks();
+                                }
                             }
                         });
                     }
@@ -222,10 +225,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case "Today":
                 // Do something for Today
                 System.out.println("Today");
-
+                TextView dateTextView = findViewById(R.id.date_box);
+                dateTextView.setVisibility(View.VISIBLE);
                 Spinner spinner = findViewById(R.id.fromspin);
                 Calendar cal = (Calendar) CalendarUpdate.getCal().clone();
-                TextView dateTextView = findViewById(R.id.date_box);
                 SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
                 String dateString = customFormat.format(cal.getTime());
                 dateTextView.setText(dateString);
@@ -235,11 +238,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
             case "Tomorrow":
                 // Do something for Tomorrow
+                TextView dateTextViewa = findViewById(R.id.date_box);
+                dateTextViewa.setVisibility(View.VISIBLE);
                 System.out.println("Tomorrow");
                 Spinner spin = findViewById(R.id.fromspin);
                 Calendar cala = (Calendar) CalendarUpdate.getCal().clone();
                 cala.add(Calendar.DATE, 1);
-                TextView dateTextViewa = findViewById(R.id.date_box);
                 SimpleDateFormat customFormats = new SimpleDateFormat("EEEE, M/d");
                 String dateStringa = customFormats.format(cala.getTime());
                 dateTextViewa.setText(dateStringa);
@@ -254,6 +258,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case "Pending":
                 // Do something for Pending
                 System.out.println("Pending");
+                TextView dateTextViewb = findViewById(R.id.date_box);
+                dateTextViewb.setVisibility(View.INVISIBLE);
+
+                MainViewModel modelb = ModelFetch.getModel();
+                modelb.getPendingTasks();
                 break;
         }
     }
