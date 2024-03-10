@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Task;
@@ -97,4 +98,32 @@ public class RoomTaskRepository implements TaskRepository {
         return new LiveDataSubjectAdapter<>(tasksLiveData);
 
     }
+
+
+    public void generateNextRecurringTask(Task originalTask) {
+        long interval = originalTask.recurringInterval();
+        long currentTime = System.currentTimeMillis();
+        long nextDueDate = originalTask.startDate() + interval;
+
+        if (nextDueDate <= currentTime + TimeUnit.DAYS.toMillis(2)) {
+            // Create a new instance of the task with the adjusted due date
+            TaskEntity recurringTask = new TaskEntity(
+                    originalTask.name(),
+                    originalTask.complete(),
+                    originalTask.sortOrder(),
+                    originalTask.type(),
+                    nextDueDate,
+                    originalTask.recurringInterval()
+            );
+
+            // Store the recurring task in the database
+            taskDao.append(recurringTask);
+
+            // Calculate the due date for the next recurring task
+//            nextDueDate += interval;
+        }
+    }
+
+
+
 }

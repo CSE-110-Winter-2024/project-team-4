@@ -29,17 +29,26 @@ public class TaskEntity {
     public String date;
 
     @ColumnInfo(name = "type")
-            public String type;
+    public String type;
 
-    TaskEntity(@NonNull String name, @NonNull boolean complete, @NonNull int sortOrder, @NonNull String type){
+    @ColumnInfo(name = "recurring_interval")
+    public long recurringInterval; // Interval in milliseconds
+
+    @ColumnInfo(name = "start_date")
+    public long startDate; // Interval in milliseconds
+
+
+    TaskEntity(@NonNull String name, @NonNull boolean complete, @NonNull int sortOrder, @NonNull String type, long recurringInterval, long startDate){
         this.name = name;
         this.complete = complete;
         this.sortOrder = sortOrder;
         this.type = type;
+        this.recurringInterval = recurringInterval;
+        this.startDate = startDate;
     }
 
     public static TaskEntity fromTask(@NonNull Task task){
-        var taskEntity = new TaskEntity(task.name(), task.complete(), task.sortOrder(), task.type());
+        var taskEntity = new TaskEntity(task.name(), task.complete(), task.sortOrder(), task.type(), task.recurringInterval(), task.startDate());
         taskEntity.id = task.id();
         return taskEntity;
     }
@@ -48,7 +57,7 @@ public class TaskEntity {
         Calendar cal = Calendar.getInstance();
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         date = dateFormat.toString();
-        return new Task(id, name, complete, sortOrder, date, type);
+        return new Task(id, name, complete, sortOrder, date, type, recurringInterval, startDate);
     }
 
 

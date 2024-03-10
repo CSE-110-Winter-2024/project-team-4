@@ -24,6 +24,7 @@ import androidx.room.Room;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import edu.ucsd.cse110.successorator.MainActivity;
 import edu.ucsd.cse110.successorator.MainViewModel;
@@ -76,7 +77,7 @@ public class AddTaskDialogFragment extends DialogFragment {
             String formattedDate = customFormat.format(cal.getTime());
             var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
             MainActivity mainActivity = (MainActivity) getActivity();
-            var task = new Task(null, name, false, -1, formattedDate, mainActivity.getSpinnerStatus());
+            var task = new Task(null, name, false, -1, formattedDate, mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1),cal.getTimeInMillis());
             activityModel.append(task);
             dialog.dismiss();
 
