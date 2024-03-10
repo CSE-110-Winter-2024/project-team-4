@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +25,7 @@ import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 
 public class AddRecurringTaskDialogFragment extends DialogFragment {
-    private edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateCardBinding view;
+    private edu.ucsd.cse110.successorator.databinding.FragmentDialogRecurringMenuBinding view;
     private MainViewModel activityModel;
 
     public AddRecurringTaskDialogFragment()
@@ -41,25 +43,33 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.view = edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateCardBinding.inflate(getLayoutInflater());
+        this.view = edu.ucsd.cse110.successorator.databinding.FragmentDialogRecurringMenuBinding.inflate(getLayoutInflater());
         String[] choices = {"one time", "daily", "weekly", "monthly", "yearly"};
 //        final EditText input = (EditText) view.findViewById(R.id.input);
 
         return new AlertDialog.Builder(getActivity())
 //                .setView(view.getRoot())
-                .setView(view.)
+                .setView(view.getRoot())
                 .setPositiveButton("Save", this::onPositiveButtonClick)
 //                .setPositiveButtonIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_checkmark))
 
-                .setSingleChoiceItems(choices, 0, (dialog, which) -> {
-                })
+//                .setSingleChoiceItems(choices, 0, (dialog, which) -> {
+//                })
                 .create();
 
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which) {
         Log.d("AddRecurringTaskDialogFragment", "This is a debug message");
-        var name = view.taskInput.getText().toString();
+        var name = view.recurringInput.getText().toString();
+
+        // Retrieving dialog's selection for recurrence
+        View selectedRecurrence = view.recurrenceOptions.findViewById(view.recurrenceOptions.getCheckedRadioButtonId());
+        int radioIndex = view.recurrenceOptions.indexOfChild(selectedRecurrence);
+        RadioButton recurrence = (RadioButton) view.recurrenceOptions.getChildAt(radioIndex);
+        String recurrenceText = recurrence.getText().toString();
+        System.out.println("recurrenceText: " + recurrenceText);
+
         if(!name.equals(""))
         {
             Calendar cal = CalendarUpdate.getCal();
