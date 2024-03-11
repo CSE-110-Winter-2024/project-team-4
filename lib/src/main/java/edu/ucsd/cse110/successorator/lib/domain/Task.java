@@ -17,13 +17,19 @@ public class Task implements Serializable {
     private int sortOrder;
     private String date;
     private String type;
-    private final long recurringInterval;
-    private final long startDate;
+    private long recurringInterval;
+    private Calendar startDate;
+    private boolean onDisplay;
+    private Calendar nextDate;
+    private boolean createdNextRecurring;
+    private Calendar completedDate;
 
 
 
 
-    public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder, String date, @NonNull String type, long recurringInterval, long startDate)
+    public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder, String date,
+                @NonNull String type, long recurringInterval, Calendar startDate, boolean onDisplay,
+                Calendar nextDate, boolean createdNextRecurring, Calendar completedDate)
     {
         this.id = id;
         this.name = name;
@@ -33,6 +39,10 @@ public class Task implements Serializable {
         this.type = type;
         this.recurringInterval = recurringInterval;
         this.startDate = startDate;
+        this.onDisplay = onDisplay;
+        this.nextDate = nextDate;
+        this.createdNextRecurring = createdNextRecurring;
+        this.completedDate = completedDate;
     }
 
     public void setComplete(boolean val)
@@ -63,26 +73,46 @@ public class Task implements Serializable {
     {
         return sortOrder;
     }
+    public String date()
+    {
+        return date;
+    }
 
     public @NonNull String type(){return this.type;}
 
     public long recurringInterval() { return recurringInterval;}
+    public void setRecurringInterval(long recurringInterval) { this.recurringInterval = recurringInterval;}
 
-    public long startDate() { return startDate;}
+    public Calendar startDate() { return startDate;}
+
+    public boolean onDisplay() { return onDisplay; }
+    public void setOnDisplay(boolean onDisplay) { this.onDisplay = onDisplay; }
+    public Calendar nextDate() { return nextDate; }
+    public void setNextDate(Calendar nextDate) { this.nextDate = nextDate; }
+    public boolean createdNextRecurring() { return createdNextRecurring; }
+    public void setCreatedNextRecurring(boolean createdNextRecurring) { this.createdNextRecurring = createdNextRecurring; }
+    public Calendar completedDate() { return completedDate; }
+    public void setCompletedDate(Calendar completedDate) { this.completedDate = completedDate; }
 
     public Task withId(int id)
     {
-        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, this.type, this.recurringInterval, this.startDate);
+        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, this.type,
+                this.recurringInterval, this.startDate, this.onDisplay, this.nextDate,
+                this.createdNextRecurring, this.completedDate);
         return newTask;
     }
 
     public Task withSortOrder(int sortOrder) {
-        Task newTask =  new Task(id, this.name, this.complete, sortOrder, this.date, this.type, this.recurringInterval, this.startDate);
+        Task newTask =  new Task(id, this.name, this.complete, sortOrder, this.date, this.type,
+                this.recurringInterval, this.startDate, this.onDisplay, this.nextDate,
+                this.createdNextRecurring, this.completedDate);
         return newTask;
     }
 
     public Task withType(String type){
-        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, type, this.recurringInterval, this.startDate);
+        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, type,
+                this.recurringInterval, this.startDate, this.onDisplay, this.nextDate,
+                this.createdNextRecurring, this.completedDate);
         return newTask;
     }
 
@@ -94,11 +124,14 @@ public class Task implements Serializable {
         Task task = (Task) o;
         return complete == task.complete && sortOrder == task.sortOrder && Objects.equals(id, task.id)
                 && Objects.equals(name, task.name) && Objects.equals(date, task.date) && Objects.equals(type, task.type)
-                && Objects.equals(recurringInterval, task.recurringInterval) && Objects.equals(startDate, task.startDate);
+                && Objects.equals(recurringInterval, task.recurringInterval) && Objects.equals(startDate, task.startDate)
+                && onDisplay == task.onDisplay && Objects.equals(nextDate, task.nextDate)
+                && createdNextRecurring == task.createdNextRecurring && Objects.equals(completedDate, task.completedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, complete, sortOrder, date, type, recurringInterval, startDate);
+        return Objects.hash(id, name, complete, sortOrder, date, type, recurringInterval, startDate,
+                onDisplay, nextDate, createdNextRecurring, completedDate);
     }
 }

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import org.w3c.dom.Text;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     //    private FragmentDialogCreateCardBinding view;
     private FragmentNoTasksBinding view;
+    private MainViewModel activityModel;
 
 
 
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        var modelOwner = this;
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
+
 
         var database = Room.databaseBuilder(
                 getApplicationContext(),
@@ -59,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         CalendarUpdate.initializeCal();
         Calendar cal = CalendarUpdate.getCal();
+        // loop through all tasks and call function to create recurring tasks
+        System.out.println("MainActivity onCreate");
+        activityModel.taskRepository().generateNextRecurringTasks();
+        activityModel.taskRepository().setOnDisplays();
+
         SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
         String formattedDate = customFormat.format(cal.getTime());
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
@@ -102,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onResume();
         CalendarUpdate.initializeCal();
         //Calendar cal = CalendarUpdate.getCal();
+
+        // loop through all tasks and call function to create recurring tasks
+        System.out.println("MainActivity onResume");
+        activityModel.taskRepository().generateNextRecurringTasks();
 
         TextView tdate = (TextView) findViewById(R.id.date_box);
         String currentDate = (String)tdate.getText();
@@ -156,6 +172,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void incrementCurrentDate(View view) {
         CalendarUpdate.incrementDateBy1();
         Calendar cal = CalendarUpdate.getCal();
+        // loop through all tasks and call function to create recurring tasks
+        System.out.println("MainActivity incrementCurrentDate");
+        activityModel.taskRepository().generateNextRecurringTasks();
+
         SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
 
         String formattedDate = customFormat.format(cal.getTime());

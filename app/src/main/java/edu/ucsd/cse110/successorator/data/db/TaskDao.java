@@ -9,6 +9,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Dao
@@ -27,10 +28,10 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks ORDER BY complete, sort_order")
     List<TaskEntity> findAll();
 
-    @Query("SELECT * FROM tasks WHERE id = :id")
+    @Query("SELECT * FROM tasks WHERE id = :id and on_display == true")
     LiveData<TaskEntity> findAsLiveData(int id);
 
-    @Query("SELECT * FROM tasks ORDER BY complete, sort_order")
+    @Query("SELECT * FROM tasks WHERE on_display == true ORDER BY complete, sort_order")
     LiveData<List<TaskEntity>> findAllAsLiveData();
 
     @Query("SELECT COUNT(*) FROM tasks")
@@ -55,17 +56,38 @@ public interface TaskDao {
             "WHERE id = :id ")
     void setType(int id, String type);
 
-    @Query("SELECT * FROM tasks WHERE type = 'Tomorrow'")
+    @Query("UPDATE tasks SET created_next_recurring = :status " +
+            "WHERE id = :id ")
+    void setCreatedNextRecurring(int id, boolean status);
+
+    @Query("UPDATE tasks SET on_display = :status " +
+            "WHERE id = :id ")
+    void setOnDisplay(int id, boolean status);
+
+    @Query("UPDATE tasks SET completed_date = :status " +
+            "WHERE id = :id ")
+    void setCompletedDate(int id, Calendar status);
+
+    @Query("SELECT * FROM tasks WHERE type = 'Tomorrow' and on_display == true")
     LiveData<List<TaskEntity>> getTomorrowTasks();
 
-    @Query("SELECT * FROM tasks WHERE type = 'Today'")
+    @Query("SELECT * FROM tasks WHERE type = 'Today' and on_display == true")
     LiveData<List<TaskEntity>> getTodayTasks();
 
     @Transaction
     default int append(TaskEntity taskEntity){
         var maxSortOrder = getMaxSortOrder();
         var newTask = new TaskEntity(
-                taskEntity.name, taskEntity.complete, maxSortOrder + 1, taskEntity.type, taskEntity.recurringInterval, taskEntity.startDate
+                taskEntity.name,
+                taskEntity.complete,
+                maxSortOrder + 1,
+                taskEntity.type,
+                taskEntity.recurringInterval,
+                taskEntity.startDate,
+                taskEntity.onDisplay,
+                taskEntity.nextDate,
+                taskEntity.createdNextRecurring,
+                taskEntity.completedDate
         );
 
         return Math.toIntExact(insert(newTask));
@@ -75,7 +97,16 @@ public interface TaskDao {
     default int prepend(TaskEntity taskEntity){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newTask = new TaskEntity(
-                taskEntity.name, taskEntity.complete, getMinSortOrder() - 1, taskEntity.type, taskEntity.recurringInterval, taskEntity.startDate
+                taskEntity.name,
+                taskEntity.complete,
+                getMinSortOrder() - 1,
+                taskEntity.type,
+                taskEntity.recurringInterval,
+                taskEntity.startDate,
+                taskEntity.onDisplay,
+                taskEntity.nextDate,
+                taskEntity.createdNextRecurring,
+                taskEntity.completedDate
         );
         return Math.toIntExact(insert(newTask));
     }

@@ -77,7 +77,37 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     String formattedDate = customFormat.format(cal.getTime());
                     var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
                     MainActivity mainActivity = (MainActivity) getActivity();
-                    var task = new Task(null, name, false, -1, formattedDate, mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1),cal.getTimeInMillis());
+
+                    var task = new Task(null, name, false, -1, formattedDate,
+                            mainActivity.getSpinnerStatus(), 0, cal,
+                            true, null, false, null);
+
+                    Calendar nextTaskDate = (Calendar) task.startDate().clone();
+                    switch(recurrenceText) {
+                        case "one time":
+                            task.setRecurringInterval(-1);
+                            break;
+                        case "daily":
+                            task.setRecurringInterval(TimeUnit.DAYS.toMillis(1));
+                            nextTaskDate.add(Calendar.DATE, 1);
+                            break;
+                        case "weekly":
+                            task.setRecurringInterval(TimeUnit.DAYS.toMillis(7));
+                            nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                            break;
+                        case "monthly":
+                            task.setRecurringInterval(TimeUnit.DAYS.toMillis(30));
+                            nextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
+                            break;
+                        case "yearly":
+                            task.setRecurringInterval(TimeUnit.DAYS.toMillis(365));
+                            nextTaskDate.add(Calendar.YEAR, 1);
+                            break;
+                        default:
+                            System.out.println("Unknown recurrence.");
+                    }
+                    task.setNextDate(nextTaskDate);
+
                     activityModel.append(task);
                     recurDialog.dismiss();
 
@@ -119,7 +149,9 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
             String formattedDate = customFormat.format(cal.getTime());
             var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
             MainActivity mainActivity = (MainActivity) getActivity();
-            var task = new Task(null, name, false, -1, formattedDate, mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1),cal.getTimeInMillis());
+            var task = new Task(null, name, false, -1, formattedDate,
+                    mainActivity.getSpinnerStatus(), 0, cal,
+                    true, null, false, null);
             activityModel.append(task);
             dialog.dismiss();
 

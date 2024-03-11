@@ -29,4 +29,9 @@ public interface TaskRepository {
 
     Subject<List<Task>> filterTodayTasks();
 
+    void generateNextRecurringTasks();
+
+    void setOnDisplays();
+
+    void setTaskCompletedDate(Task task);
 }

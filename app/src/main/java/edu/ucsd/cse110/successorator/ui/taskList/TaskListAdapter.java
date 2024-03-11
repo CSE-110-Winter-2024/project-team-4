@@ -2,11 +2,13 @@ package edu.ucsd.cse110.successorator.ui.taskList;
 
 import android.content.Context;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.MainActivity;
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import android.content.Context;
 import android.graphics.Paint;
@@ -79,6 +81,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 activityModel.setComplete(task.id(), true);
                 activityModel.remove(task.id());
                 activityModel.prepend(task);
+                activityModel.taskRepository().setTaskCompletedDate(task);
+
                 System.out.println("MARKED AS COMPLETE");
                 // CITATION: https://www.codingdemos.com/android-strikethrough-text/
                 binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
