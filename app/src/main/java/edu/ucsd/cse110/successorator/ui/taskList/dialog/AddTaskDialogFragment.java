@@ -6,12 +6,15 @@ import static android.content.Context.MODE_PRIVATE;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -54,6 +57,18 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         this.view = edu.ucsd.cse110.successorator.databinding.FragmentDialogCreateCardBinding.inflate(getLayoutInflater());
+        //View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_custom, null);
+
+
+// Set other properties of the AlertDialog if needed
+//
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+
+
+
+       // homeButton.setBackgroundColor(Color.parseColor("#EDDF7F"));
+
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("New Task")
@@ -76,7 +91,8 @@ public class AddTaskDialogFragment extends DialogFragment {
             String formattedDate = customFormat.format(cal.getTime());
             var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
             MainActivity mainActivity = (MainActivity) getActivity();
-            var task = new Task(null, name, false, -1, formattedDate, mainActivity.getSpinnerStatus());
+            //need to get context from UI
+            var task = new Task(null, name, false, -1, formattedDate, mainActivity.getSpinnerStatus(), "");
             activityModel.append(task);
             dialog.dismiss();
 

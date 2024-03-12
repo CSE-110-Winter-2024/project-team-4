@@ -21,7 +21,9 @@ public class Task implements Serializable {
 
     private String type;
 
-    public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder, String date, @NonNull String type)
+    private String context;
+
+    public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder, String date, @NonNull String type, @NonNull String context)
     {
         this.id = id;
         this.name = name;
@@ -29,6 +31,7 @@ public class Task implements Serializable {
         this.sortOrder = sortOrder;
         this.date = date;
         this.type = type;
+        this.context = context;
     }
 
     public void setComplete(boolean val)
@@ -62,19 +65,26 @@ public class Task implements Serializable {
 
     public @NonNull String type(){return this.type;}
 
+    public @NonNull String context(){return this.context;}
+
     public Task withId(int id)
     {
-        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, this.type);
+        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, this.type, this.context);
         return newTask;
     }
 
     public Task withSortOrder(int sortOrder) {
-        Task newTask =  new Task(id, this.name, this.complete, sortOrder, this.date, this.type);
+        Task newTask =  new Task(id, this.name, this.complete, sortOrder, this.date, this.type, this.context);
         return newTask;
     }
 
     public Task withType(String type){
-        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, type);
+        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, type, context);
+        return newTask;
+    }
+
+    public Task withContext(String context){
+        Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, type, context);
         return newTask;
     }
 
@@ -85,11 +95,11 @@ public class Task implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return complete == task.complete && sortOrder == task.sortOrder && Objects.equals(id, task.id)
-                && Objects.equals(name, task.name) && Objects.equals(date, task.date) && Objects.equals(type, task.type);
+                && Objects.equals(name, task.name) && Objects.equals(date, task.date) && Objects.equals(type, task.type) && Objects.equals(context, task.context);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, complete, sortOrder, date, type);
+        return Objects.hash(id, name, complete, sortOrder, date, type, context);
     }
 }

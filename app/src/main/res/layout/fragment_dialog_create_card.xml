@@ -5,14 +5,71 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/task_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Add your four circular buttons here -->
+        <!-- Example button -->
+        <TextView
+            android:id="@+id/homeButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/homecircle"
+            android:gravity="center"
+            android:text="H" />
+
+        <TextView
+            android:id="@+id/workButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/workcircle"
+            android:gravity="center"
+            android:text="W" />
+
+        <TextView
+            android:id="@+id/schoolButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/schoolcircle"
+            android:gravity="center"
+            android:text="S" />
+
+
+        <TextView
+            android:id="@+id/errandButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/errandcircle"
+            android:gravity="center"
+            android:text="E" />
+
+        <!-- Add other buttons similarly -->
+
+
+    </LinearLayout>
+
     <EditText
         android:id="@+id/task_input"
         android:layout_width="228dp"
         android:layout_height="53dp"
         android:layout_marginStart="17dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="185dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:imeOptions="actionDone"
         android:inputType="text"
@@ -21,5 +78,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
