@@ -74,6 +74,9 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks WHERE type = 'Today' and on_display == true")
     LiveData<List<TaskEntity>> getTodayTasks();
 
+    @Query("SELECT * FROM tasks WHERE type = 'Recurring' and on_display == true")
+    LiveData<List<TaskEntity>> getRecurringTasks();
+
     @Transaction
     default int append(TaskEntity taskEntity){
         var maxSortOrder = getMaxSortOrder();

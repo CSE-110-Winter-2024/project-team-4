@@ -47,6 +47,28 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
         this.view = edu.ucsd.cse110.successorator.databinding.FragmentDialogRecurringMenuBinding.inflate(getLayoutInflater());
         String[] choices = {"one time", "daily", "weekly", "monthly", "yearly"};
 
+        view.recurrenceOptions.setVisibility(View.INVISIBLE);
+        view.recurrenceField.setVisibility(View.GONE);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        System.out.println("SPINNER STATUS: " + mainActivity.getSpinnerStatus());
+        switch(mainActivity.getSpinnerStatus()) {
+            case "Pending":
+                view.recurrenceOptions.setVisibility(View.INVISIBLE);
+                view.starting.setVisibility(View.GONE);
+                break;
+            case "Recurring":
+                view.recurrenceOptions.setVisibility(View.VISIBLE);
+                view.recurrenceField.setVisibility(View.VISIBLE);
+                view.oneTime.setVisibility(View.GONE);
+                view.starting.setVisibility(View.VISIBLE);
+                break;
+            default:
+                view.recurrenceOptions.setVisibility(View.VISIBLE);
+                view.recurrenceField.setVisibility(View.INVISIBLE);
+                view.starting.setVisibility(View.GONE);
+                view.oneTime.setVisibility(View.VISIBLE);
+        }
+
         Button dialogSaveButton = (Button) view.saveButton;
         Dialog recurDialog = new AlertDialog.Builder(getActivity())
                 .setView(view.getRoot())
@@ -56,57 +78,60 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 Log.d("AddRecurringTaskDialogFragment", "This is a debug message");
                 var name = view.recurringInput.getText().toString();
-
-                // Retrieving dialog's selection for recurrence
-                int checkedRadio = view.recurrenceOptions.getCheckedRadioButtonId();
                 String recurrenceText = "";
-                if (checkedRadio != -1) {
-                    View selectedRecurrence = view.recurrenceOptions.findViewById(checkedRadio);
+                if (!mainActivity.getSpinnerStatus().equals("Pending")) {
+                    // Retrieving dialog's selection for recurrence
+                    int checkedRadio = view.recurrenceOptions.getCheckedRadioButtonId();
 
-                    int radioIndex = view.recurrenceOptions.indexOfChild(selectedRecurrence);
-                    RadioButton recurrence = (RadioButton) view.recurrenceOptions.getChildAt(radioIndex);
-                    recurrenceText = recurrence.getText().toString();
-                    System.out.println("recurrenceText: " + recurrenceText);
+                    if (checkedRadio != -1) {
+                        View selectedRecurrence = view.recurrenceOptions.findViewById(checkedRadio);
+
+                        int radioIndex = view.recurrenceOptions.indexOfChild(selectedRecurrence);
+                        RadioButton recurrence = (RadioButton) view.recurrenceOptions.getChildAt(radioIndex);
+                        recurrenceText = recurrence.getText().toString();
+                        System.out.println("recurrenceText: " + recurrenceText);
+                    }
                 }
-
                 // Check that the required input string and radio selection are valid
-                if(!name.equals("") && !recurrenceText.equals(""))
+                if(!name.equals("") && (!recurrenceText.equals("") || mainActivity.getSpinnerStatus().equals("Pending")))
                 {
                     Calendar cal = CalendarUpdate.getCal();
                     SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
                     String formattedDate = customFormat.format(cal.getTime());
                     var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-                    MainActivity mainActivity = (MainActivity) getActivity();
+//                    MainActivity mainActivity = (MainActivity) getActivity();
 
                     var task = new Task(null, name, false, -1, formattedDate,
                             mainActivity.getSpinnerStatus(), 0, cal,
                             true, null, false, null);
 
-                    Calendar nextTaskDate = (Calendar) task.startDate().clone();
-                    switch(recurrenceText) {
-                        case "one time":
-                            task.setRecurringInterval(-1);
-                            break;
-                        case "daily":
-                            task.setRecurringInterval(TimeUnit.DAYS.toMillis(1));
-                            nextTaskDate.add(Calendar.DATE, 1);
-                            break;
-                        case "weekly":
-                            task.setRecurringInterval(TimeUnit.DAYS.toMillis(7));
-                            nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
-                            break;
-                        case "monthly":
-                            task.setRecurringInterval(TimeUnit.DAYS.toMillis(30));
-                            nextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
-                            break;
-                        case "yearly":
-                            task.setRecurringInterval(TimeUnit.DAYS.toMillis(365));
-                            nextTaskDate.add(Calendar.YEAR, 1);
-                            break;
-                        default:
-                            System.out.println("Unknown recurrence.");
+                    if (!mainActivity.getSpinnerStatus().equals("Pending")){
+                        Calendar nextTaskDate = (Calendar) task.startDate().clone();
+                        switch (recurrenceText) {
+                            case "one-time":
+                                task.setRecurringInterval(-1);
+                                break;
+                            case "daily":
+                                task.setRecurringInterval(TimeUnit.DAYS.toMillis(1));
+                                nextTaskDate.add(Calendar.DATE, 1);
+                                break;
+                            case "weekly":
+                                task.setRecurringInterval(TimeUnit.DAYS.toMillis(7));
+                                nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                                break;
+                            case "monthly":
+                                task.setRecurringInterval(TimeUnit.DAYS.toMillis(30));
+                                nextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
+                                break;
+                            case "yearly":
+                                task.setRecurringInterval(TimeUnit.DAYS.toMillis(365));
+                                nextTaskDate.add(Calendar.YEAR, 1);
+                                break;
+                            default:
+                                System.out.println("Unknown recurrence.");
+                        }
+                        task.setNextDate(nextTaskDate);
                     }
-                    task.setNextDate(nextTaskDate);
 
                     activityModel.append(task);
                     recurDialog.dismiss();
@@ -119,6 +144,9 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     }
                     else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
                         model.getTomorrowTasks();
+                    }
+                    else if(mainActivity.getSpinnerStatus().equals("Recurring")){
+                        model.getRecurringTasks();
                     }
 
                 }

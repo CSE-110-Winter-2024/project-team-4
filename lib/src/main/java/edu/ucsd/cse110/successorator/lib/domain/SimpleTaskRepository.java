@@ -81,6 +81,10 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
         return dataSource.filterTodayTasks();
     }
 
+    public Subject<List<Task>> filterRecurringTasks(){
+        return dataSource.filterRecurringTasks();
+    }
+
     @Override
     public void generateNextRecurringTasks() {
 

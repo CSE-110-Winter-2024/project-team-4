@@ -102,6 +102,17 @@ public class RoomTaskRepository implements TaskRepository {
         return new LiveDataSubjectAdapter<>(tasksLiveData);
 
     }
+
+    public Subject<List<Task>> filterRecurringTasks(){
+        var entitiesLiveData = taskDao.getRecurringTasks();
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
+
+    }
     
     public void setTaskCompletedDate(Task task) {
         Calendar cal = CalendarUpdate.getCalMidnight();

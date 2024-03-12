@@ -95,6 +95,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 else if (spinnerStatus.equals("Tomorrow")){
                     activityModel.getTomorrowTasks();
                 }
+                else if (spinnerStatus.equals("Recurring")){
+                    activityModel.getRecurringTasks();
+                }
 
             } else {
                 task.setComplete(false);
@@ -111,6 +114,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 }
                 else if (spinnerStatus.equals("Tomorrow")){
                     activityModel.getTomorrowTasks();
+                }
+                else if (spinnerStatus.equals("Recurring")){
+                    activityModel.getRecurringTasks();
                 }
             }
 

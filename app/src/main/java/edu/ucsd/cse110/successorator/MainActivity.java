@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // loop through all tasks and call function to create recurring tasks
         System.out.println("MainActivity onResume");
         activityModel.taskRepository().generateNextRecurringTasks();
-        activityModel.taskRepository().setOnDisplays();
+//        activityModel.taskRepository().setOnDisplays();
 
         TextView tdate = (TextView) findViewById(R.id.date_box);
         String currentDate = (String)tdate.getText();
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // loop through all tasks and call function to create recurring tasks
         System.out.println("MainActivity incrementCurrentDate");
         activityModel.taskRepository().generateNextRecurringTasks();
-        activityModel.taskRepository().setOnDisplays();
+//        activityModel.taskRepository().setOnDisplays();
 
         SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
 
@@ -248,9 +248,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Spinner spinner = findViewById(R.id.fromspin);
                 Calendar cal = (Calendar) CalendarUpdate.getCal().clone();
                 TextView dateTextView = findViewById(R.id.date_box);
-                SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
+                SimpleDateFormat customFormat = new SimpleDateFormat("EEE M/d");
                 String dateString = customFormat.format(cal.getTime());
-                dateTextView.setText(dateString);
+                dateTextView.setText("Today, " + dateString);
 
                 MainViewModel model = ModelFetch.getModel();
                 model.getTodayTasks();
@@ -262,19 +262,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Calendar cala = (Calendar) CalendarUpdate.getCal().clone();
                 cala.add(Calendar.DATE, 1);
                 TextView dateTextViewa = findViewById(R.id.date_box);
-                SimpleDateFormat customFormats = new SimpleDateFormat("EEEE, M/d");
+                SimpleDateFormat customFormats = new SimpleDateFormat("EEE M/d");
                 String dateStringa = customFormats.format(cala.getTime());
-                dateTextViewa.setText(dateStringa);
+                dateTextViewa.setText("Tomorrow, " + dateStringa);
 
                 MainViewModel modela = ModelFetch.getModel();
                 modela.getTomorrowTasks();
                 break;
             case "Recurring":
                 // Do something for Recurring
+                ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Recurring");
                 break;
             case "Pending":
                 // Do something for Pending
+                ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Pending");
                 break;
         }

@@ -97,6 +97,15 @@ public class MainViewModel extends ViewModel {
         });
     }
 
+    public void getRecurringTasks() {
+        taskRepository.filterRecurringTasks().observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
+        });
+    }
+
 
 
     public void setComplete(int id, boolean status) {taskRepository.setComplete(id, status);}

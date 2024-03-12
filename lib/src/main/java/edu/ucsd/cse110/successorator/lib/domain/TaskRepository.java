@@ -29,6 +29,8 @@ public interface TaskRepository {
 
     Subject<List<Task>> filterTodayTasks();
 
+    Subject<List<Task>> filterRecurringTasks();
+
     void generateNextRecurringTasks();
 
     void setOnDisplays();
