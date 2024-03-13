@@ -179,21 +179,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         activityModel.taskRepository().generateNextRecurringTasks();
         activityModel.taskRepository().setOnDisplays();
 
-        SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
-
-        String formattedDate = customFormat.format(cal.getTime());
-        var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-        TextView dateTextView = findViewById(R.id.date_box);
-        dateTextView.setText(formattedDate);
+        SimpleDateFormat customFormat = new SimpleDateFormat("EEE, M/d");
 
         Spinner spin = findViewById(R.id.fromspin);
-        if(spin.getSelectedItemPosition() == 2){
-            Calendar cala = (Calendar) CalendarUpdate.getCal().clone();
+        TextView dateTextView = findViewById(R.id.date_box);
+        if (spin.getSelectedItem().equals("Today")){
+            String formattedDate = customFormat.format(cal.getTime());
+            var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
+            dateTextView.setText("Today, " + formattedDate);
+        } else if(spin.getSelectedItem().equals("Tomorrow")){
+            Calendar cala = (Calendar) cal.clone();
             cala.add(Calendar.DATE, 1);
-            TextView dateTextViewa = findViewById(R.id.date_box);
-            SimpleDateFormat customFormats = new SimpleDateFormat("EEEE, M/d");
-            String dateStringa = customFormats.format(cala.getTime());
-            dateTextViewa.setText(dateStringa);
+            String dateString = customFormat.format(cala.getTime());
+            dateTextView.setText("Tomorrow, " + dateString);
+        } else if (spin.getSelectedItem().equals("Pending") || spin.getSelectedItem().equals("Recurring")) {
+            dateTextView.setText("");
         }
 
         MainViewModel activityModel = ModelFetch.getModel();
