@@ -133,6 +133,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                         task.setNextDate(nextTaskDate);
                     }
 
+//                    ISSUE HERE, task id is null when calling append
                     activityModel.append(task);
                     recurDialog.dismiss();
 
@@ -159,59 +160,59 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
     }
 
 
-    private void onPositiveButtonClick(DialogInterface dialog, int which) {
-        Log.d("AddRecurringTaskDialogFragment", "This is a debug message");
-        var name = view.recurringInput.getText().toString();
+//    private void onPositiveButtonClick(DialogInterface dialog, int which) {
+//        Log.d("AddRecurringTaskDialogFragment", "This is a debug message");
+//        var name = view.recurringInput.getText().toString();
+//
+//        // Retrieving dialog's selection for recurrence
+//        View selectedRecurrence = view.recurrenceOptions.findViewById(view.recurrenceOptions.getCheckedRadioButtonId());
+//        int radioIndex = view.recurrenceOptions.indexOfChild(selectedRecurrence);
+//        RadioButton recurrence = (RadioButton) view.recurrenceOptions.getChildAt(radioIndex);
+//        String recurrenceText = recurrence.getText().toString();
+//        System.out.println("recurrenceText: " + recurrenceText);
+//
+//        if(!name.equals(""))
+//        {
+//            Calendar cal = CalendarUpdate.getCal();
+//            SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
+//            String formattedDate = customFormat.format(cal.getTime());
+//            var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
+//            MainActivity mainActivity = (MainActivity) getActivity();
+//            var task = new Task(null, name, false, -1, formattedDate,
+//                    mainActivity.getSpinnerStatus(), 0, cal,
+//                    true, null, false, null);
+//            activityModel.append(task);
+//            dialog.dismiss();
+//
+//            ((MainActivity)getActivity()).swapFragments();
+//
+//            MainViewModel model = ModelFetch.getModel();
+//            if(mainActivity.getSpinnerStatus().equals("Today")){
+//                model.getTodayTasks();
+//            }
+//            else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
+//                model.getTomorrowTasks();
+//            }
+//
+//        }
+//
+//    }
 
-        // Retrieving dialog's selection for recurrence
-        View selectedRecurrence = view.recurrenceOptions.findViewById(view.recurrenceOptions.getCheckedRadioButtonId());
-        int radioIndex = view.recurrenceOptions.indexOfChild(selectedRecurrence);
-        RadioButton recurrence = (RadioButton) view.recurrenceOptions.getChildAt(radioIndex);
-        String recurrenceText = recurrence.getText().toString();
-        System.out.println("recurrenceText: " + recurrenceText);
 
-        if(!name.equals(""))
-        {
-            Calendar cal = CalendarUpdate.getCal();
-            SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
-            String formattedDate = customFormat.format(cal.getTime());
-            var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-            MainActivity mainActivity = (MainActivity) getActivity();
-            var task = new Task(null, name, false, -1, formattedDate,
-                    mainActivity.getSpinnerStatus(), 0, cal,
-                    true, null, false, null);
-            activityModel.append(task);
-            dialog.dismiss();
-
-            ((MainActivity)getActivity()).swapFragments();
-
-            MainViewModel model = ModelFetch.getModel();
-            if(mainActivity.getSpinnerStatus().equals("Today")){
-                model.getTodayTasks();
-            }
-            else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
-                model.getTomorrowTasks();
-            }
-
-        }
-
-    }
-
-
-    private void onNegativeButtonClick(DialogInterface dialog, int which) {
-        dialog.cancel();
-    }
-
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.activityModel = modelProvider.get(MainViewModel.class);
-
-        ModelFetch.setModel(activityModel);
-
-    }
+//    private void onNegativeButtonClick(DialogInterface dialog, int which) {
+//        dialog.cancel();
+//    }
+//
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        var modelOwner = requireActivity();
+//        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+//        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+//        this.activityModel = modelProvider.get(MainViewModel.class);
+//
+//        ModelFetch.setModel(activityModel);
+//
+//    }
 
 }

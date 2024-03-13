@@ -92,7 +92,8 @@ public interface TaskDao {
                 taskEntity.createdNextRecurring,
                 taskEntity.completedDate
         );
-
+        System.out.println("TaskDao append newTask id: " + newTask.id);
+        newTask.id = taskEntity.id;
         return Math.toIntExact(insert(newTask));
     }
 
@@ -111,6 +112,9 @@ public interface TaskDao {
                 taskEntity.createdNextRecurring,
                 taskEntity.completedDate
         );
+        newTask.id = taskEntity.id;
+        System.out.println("TaskDao prepend argument id: " + taskEntity.id);
+        System.out.println("TaskDao prepend newTask id: " + newTask.id);
         return Math.toIntExact(insert(newTask));
     }
 

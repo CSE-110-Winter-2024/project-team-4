@@ -74,7 +74,7 @@ public class TaskEntity {
                 task.createdNextRecurring(), task.completedDate());
         taskEntity.id = task.id();
         System.out.println("task entity task.id():" + task.id());
-        System.out.println("task entity taskentity.id:" + taskEntity.id);
+        System.out.println("task entity taskentity .id:" + taskEntity.id);
         return taskEntity;
     }
 

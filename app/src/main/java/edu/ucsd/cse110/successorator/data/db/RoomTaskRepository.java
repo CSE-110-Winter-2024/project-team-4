@@ -184,7 +184,7 @@ public class RoomTaskRepository implements TaskRepository {
 
                     // Create a new instance of the task
                     Task recurringTask = new Task (
-                            null, // id
+                            task.id(), // id
                             task.name(), // name
                             false, // complete
                             task.sortOrder(), // sort order
