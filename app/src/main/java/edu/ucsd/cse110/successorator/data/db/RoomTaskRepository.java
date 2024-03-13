@@ -135,9 +135,15 @@ public class RoomTaskRepository implements TaskRepository {
                 int intervalDays = (int)TimeUnit.MILLISECONDS.toDays(task.recurringInterval());
                 Calendar cal = CalendarUpdate.getCal();
                 Calendar startTaskDate = task.startDate();
+                Calendar nextTaskDate = task.nextDate();
+                nextTaskDate.set(Calendar.HOUR, 0);
+                nextTaskDate.set(Calendar.MINUTE, 0);
+                nextTaskDate.set(Calendar.SECOND, 0);
+                nextTaskDate.set(Calendar.MILLISECOND, 0);
                 Calendar completedTaskDate = task.completedDate();
 
                 Calendar todayDate = CalendarUpdate.getCalMidnight();
+
 
                 System.out.println("task.id: " + task.id() + ". task.name: " + task.name());
 
@@ -150,8 +156,14 @@ public class RoomTaskRepository implements TaskRepository {
                     taskDao.setOnDisplay(task.id(), task.onDisplay());
                 }
 
-                // set onDisplay to false if it should not appear
+                // set onDisplay to false if its checked off
                 if (intervalDays > 0 && (completedTaskDate != null && completedTaskDate.getTimeInMillis() < todayDate.getTimeInMillis())) {
+                    task.setOnDisplay(false);
+                    taskDao.setOnDisplay(task.id(), task.onDisplay());
+                }
+
+                // set onDisplay to false if recurring task expired
+                if (intervalDays > 0 && nextTaskDate.getTimeInMillis() <= todayDate.getTimeInMillis()) {
                     task.setOnDisplay(false);
                     taskDao.setOnDisplay(task.id(), task.onDisplay());
                 }
