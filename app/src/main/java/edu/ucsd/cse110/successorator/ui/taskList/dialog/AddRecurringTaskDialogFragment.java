@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,10 +30,13 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
     private edu.ucsd.cse110.successorator.databinding.FragmentDialogRecurringMenuBinding view;
     private MainViewModel activityModel;
 
+    private String context = "";
+
     public AddRecurringTaskDialogFragment()
     {
 
     }
+
 
     public static AddRecurringTaskDialogFragment newInstance() {
         var fragment = new AddRecurringTaskDialogFragment();
@@ -69,17 +73,51 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                 view.oneTime.setVisibility(View.VISIBLE);
         }
 
+
+
         Button dialogSaveButton = (Button) view.saveButton;
         Dialog recurDialog = new AlertDialog.Builder(getActivity())
                 .setView(view.getRoot())
                 .create();
+
+        TextView home = (TextView) view.homeButton;
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = "H";
+            }
+        });
+
+        TextView work = (TextView) view.workButton;
+        work.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = "W";
+            }
+        });
+
+        TextView school = (TextView) view.schoolButton;
+        school.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = "S";
+            }
+        });
+
+        TextView errand = (TextView) view.errandButton;
+        errand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = "E";
+            }
+        });
         dialogSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("AddRecurringTaskDialogFragment", "This is a debug message");
                 var name = view.recurringInput.getText().toString();
                 String recurrenceText = "";
-                if (!mainActivity.getSpinnerStatus().equals("Pending")) {
+                if (!mainActivity.getSpinnerStatus().equals("Pending") && !context.equals("")){
                     // Retrieving dialog's selection for recurrence
                     int checkedRadio = view.recurrenceOptions.getCheckedRadioButtonId();
 
@@ -93,7 +131,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     }
                 }
                 // Check that the required input string and radio selection are valid
-                if(!name.equals("") && (!recurrenceText.equals("") || mainActivity.getSpinnerStatus().equals("Pending")))
+                if(!name.equals("") && (!recurrenceText.equals("") || (mainActivity.getSpinnerStatus().equals("Pending") && !context.equals(""))))
                 {
                     Calendar cal = CalendarUpdate.getCal();
                     SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
@@ -103,7 +141,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     var task = new Task(null, name, false, -1, formattedDate,
                             mainActivity.getSpinnerStatus(), 0, cal,
-                            true, null, false, null,"");
+                            true, null, false, null,context);
 
                     if (!mainActivity.getSpinnerStatus().equals("Pending")){
                         Calendar nextTaskDate = (Calendar) task.startDate().clone();
@@ -179,7 +217,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
             MainActivity mainActivity = (MainActivity) getActivity();
             var task = new Task(null, name, false, -1, formattedDate,
                     mainActivity.getSpinnerStatus(), 0, cal,
-                    true, null, false, null,"");
+                    true, null, false, null,context);
             activityModel.append(task);
             dialog.dismiss();
 

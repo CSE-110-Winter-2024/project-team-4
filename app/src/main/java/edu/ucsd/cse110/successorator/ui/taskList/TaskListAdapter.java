@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.MainActivity;
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import android.content.Context;
@@ -65,15 +66,48 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         // Populate the view with the flashcard's data.
         binding.taskNameText.setText(task.name());
+        binding.conText.setText(task.context());
+
+        switch(task.context()){
+            case "H":
+                binding.conText.setBackgroundResource(R.drawable.homecircle);
+                break;
+            case "W":
+                binding.conText.setBackgroundResource(R.drawable.workcircle);
+                break;
+            case "S":
+                binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                break;
+            case "E":
+                binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                break;
+        }
 
 
         if(task.complete()){
             binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            binding.conText.setBackgroundResource(R.drawable.circle);
         }
 
         if(!task.complete()){
             binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            switch(task.context()){
+                case "H":
+                    binding.conText.setBackgroundResource(R.drawable.homecircle);
+                    break;
+                case "W":
+                    binding.conText.setBackgroundResource(R.drawable.workcircle);
+                    break;
+                case "S":
+                    binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                    break;
+                case "E":
+                    binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                    break;
+            }
         }
+
+
 
         binding.taskNameText.setOnClickListener(v -> {
             if (!task.complete()) {
@@ -101,6 +135,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     activityModel.getRecurringTasks();
                 }
 
+                binding.conText.setBackgroundResource(R.drawable.circle);
+
             } else {
                 task.setComplete(false);
                 activityModel.setComplete(task.id(), false);
@@ -119,6 +155,21 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 }
                 else if (spinnerStatus.equals("Recurring")){
                     activityModel.getRecurringTasks();
+                }
+
+                switch(task.context()){
+                    case "H":
+                        binding.conText.setBackgroundResource(R.drawable.homecircle);
+                        break;
+                    case "W":
+                        binding.conText.setBackgroundResource(R.drawable.workcircle);
+                        break;
+                    case "S":
+                        binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                        break;
+                    case "E":
+                        binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                        break;
                 }
             }
 
