@@ -117,6 +117,10 @@ public class RoomTaskRepository implements TaskRepository {
     public void setTaskCompletedDate(Task task) {
         Calendar cal = CalendarUpdate.getCalMidnight();
         task.setCompletedDate(cal);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("state completedTaskDate:" + dateFormat.format(task.completedDate().getTime()));
+        System.out.println("RoomTaskRepository taskid: "+ task.id());
         taskDao.setCompletedDate(task.id(), task.completedDate());
     }
     
@@ -133,6 +137,8 @@ public class RoomTaskRepository implements TaskRepository {
                 Calendar completedTaskDate = task.completedDate();
 
                 Calendar todayDate = CalendarUpdate.getCalMidnight();
+
+                System.out.println("completedTaskDate:" + completedTaskDate);
 
                 // set onDisplay to true if it should appear
                 if (intervalDays > 0 && cal.getTimeInMillis() >= startTaskDate.getTimeInMillis()

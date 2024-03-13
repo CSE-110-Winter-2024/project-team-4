@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // loop through all tasks and call function to create recurring tasks
         System.out.println("MainActivity incrementCurrentDate");
         activityModel.taskRepository().generateNextRecurringTasks();
-//        activityModel.taskRepository().setOnDisplays();
+        activityModel.taskRepository().setOnDisplays();
 
         SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
 

@@ -117,7 +117,7 @@ public interface TaskDao {
     @Query("DELETE FROM tasks WHERE id = :id")
     void delete(int id);
 
-    @Query("DELETE FROM tasks WHERE complete = true AND type = 'Today'")
+    @Query("DELETE FROM tasks WHERE complete = true AND type = 'Today' AND recurring_interval=-1")
     void deleteCompleted();
 
     @Query("UPDATE tasks SET type = 'Today' WHERE type = 'Tomorrow'")

@@ -80,7 +80,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 task.setComplete(true);
                 activityModel.setComplete(task.id(), true);
                 activityModel.remove(task.id());
+                System.out.println("TaskListAdapter task.id(): " + task.id());
                 activityModel.prepend(task);
+                System.out.println("TaskListAdapter after prepend task.id(): " + task.id());
                 activityModel.taskRepository().setTaskCompletedDate(task);
 
                 System.out.println("MARKED AS COMPLETE");
