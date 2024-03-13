@@ -58,6 +58,9 @@ public class MainViewModel extends ViewModel {
     }
 
     public void append(Task task) {
+        System.out.println("MainViewModel append");
+        System.out.println("task: " + task);
+        System.out.println("task.id: " + task.id() + ". task.name: " + task.name());
         taskRepository.append(task);
     }
 

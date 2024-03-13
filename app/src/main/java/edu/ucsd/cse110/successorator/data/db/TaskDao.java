@@ -94,7 +94,9 @@ public interface TaskDao {
         );
         System.out.println("TaskDao append newTask id: " + newTask.id);
         newTask.id = taskEntity.id;
-        return Math.toIntExact(insert(newTask));
+        Integer result = Math.toIntExact(insert(newTask));
+        System.out.println("TaskDao append result = " + result);
+        return result;
     }
 
     @Transaction

@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Calendar cal = CalendarUpdate.getCal();
         // loop through all tasks and call function to create recurring tasks
         System.out.println("MainActivity onCreate");
+
         activityModel.taskRepository().generateNextRecurringTasks();
         activityModel.taskRepository().setOnDisplays();
 

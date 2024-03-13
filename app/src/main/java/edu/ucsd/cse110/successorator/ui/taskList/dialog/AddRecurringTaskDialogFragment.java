@@ -134,6 +134,9 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     }
 
 //                    ISSUE HERE, task id is null when calling append
+                    System.out.println("AddRecTaskDialogFrag onClick task = " + task);
+                    System.out.println("task.id: " + task.id() + ". task.name: " + task.name());
+
                     activityModel.append(task);
                     recurDialog.dismiss();
 
@@ -203,16 +206,19 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 //        dialog.cancel();
 //    }
 //
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        var modelOwner = requireActivity();
-//        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-//        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-//        this.activityModel = modelProvider.get(MainViewModel.class);
-//
-//        ModelFetch.setModel(activityModel);
-//
-//    }
+
+
+
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
+
+        ModelFetch.setModel(activityModel);
+
+    }
 
 }

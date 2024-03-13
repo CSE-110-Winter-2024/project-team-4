@@ -57,7 +57,8 @@ public class RoomTaskRepository implements TaskRepository {
 
     @Override
     public void append(Task task){
-        taskDao.append(TaskEntity.fromTask(task));
+        System.out.println("RoomTaskRepo append");
+        System.out.println(taskDao.append(TaskEntity.fromTask(task)));
     }
 
     @Override
@@ -138,6 +139,8 @@ public class RoomTaskRepository implements TaskRepository {
 
                 Calendar todayDate = CalendarUpdate.getCalMidnight();
 
+                System.out.println("task.id: " + task.id() + ". task.name: " + task.name());
+
                 System.out.println("completedTaskDate:" + completedTaskDate);
 
                 // set onDisplay to true if it should appear
@@ -148,7 +151,7 @@ public class RoomTaskRepository implements TaskRepository {
                 }
 
                 // set onDisplay to false if it should not appear
-                if (intervalDays > 0 && completedTaskDate.getTimeInMillis() < todayDate.getTimeInMillis()) {
+                if (intervalDays > 0 && (completedTaskDate != null && completedTaskDate.getTimeInMillis() < todayDate.getTimeInMillis())) {
                     task.setOnDisplay(false);
                     taskDao.setOnDisplay(task.id(), task.onDisplay());
                 }
@@ -184,7 +187,7 @@ public class RoomTaskRepository implements TaskRepository {
 
                     // Create a new instance of the task
                     Task recurringTask = new Task (
-                            task.id(), // id
+                            null, // id
                             task.name(), // name
                             false, // complete
                             task.sortOrder(), // sort order
