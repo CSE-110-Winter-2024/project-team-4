@@ -90,7 +90,8 @@ public interface TaskDao {
                 taskEntity.onDisplay,
                 taskEntity.nextDate,
                 taskEntity.createdNextRecurring,
-                taskEntity.completedDate
+                taskEntity.completedDate,
+                taskEntity.context
         );
 
         return Math.toIntExact(insert(newTask));
@@ -109,7 +110,8 @@ public interface TaskDao {
                 taskEntity.onDisplay,
                 taskEntity.nextDate,
                 taskEntity.createdNextRecurring,
-                taskEntity.completedDate
+                taskEntity.completedDate,
+                taskEntity.context
         );
         return Math.toIntExact(insert(newTask));
     }

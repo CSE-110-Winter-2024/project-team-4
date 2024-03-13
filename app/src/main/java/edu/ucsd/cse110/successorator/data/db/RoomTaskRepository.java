@@ -195,7 +195,7 @@ public class RoomTaskRepository implements TaskRepository {
                             false, // onDisplay
                             null, // nextDate
                             false,  // createdNextRecurring
-                            null // completedDate
+                            null, task.context() // completedDate
                             );
 
                     Calendar newNextTaskDate = (Calendar) recurringTask.startDate().clone();

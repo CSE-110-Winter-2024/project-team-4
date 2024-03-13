@@ -103,7 +103,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     var task = new Task(null, name, false, -1, formattedDate,
                             mainActivity.getSpinnerStatus(), 0, cal,
-                            true, null, false, null);
+                            true, null, false, null,"");
 
                     if (!mainActivity.getSpinnerStatus().equals("Pending")){
                         Calendar nextTaskDate = (Calendar) task.startDate().clone();
@@ -179,7 +179,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
             MainActivity mainActivity = (MainActivity) getActivity();
             var task = new Task(null, name, false, -1, formattedDate,
                     mainActivity.getSpinnerStatus(), 0, cal,
-                    true, null, false, null);
+                    true, null, false, null,"");
             activityModel.append(task);
             dialog.dismiss();
 
