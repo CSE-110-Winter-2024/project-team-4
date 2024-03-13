@@ -38,4 +38,6 @@ public interface TaskRepository {
     void setTaskCompletedDate(Task task);
 
     void generateDailyRecurringTask(Task task);
+
+    void setCreatedNextRecurring(int id, boolean b);
 }

@@ -105,5 +105,10 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
 
     }
 
+    @Override
+    public void setCreatedNextRecurring(int id, boolean b) {
+
+    }
+
 
 }

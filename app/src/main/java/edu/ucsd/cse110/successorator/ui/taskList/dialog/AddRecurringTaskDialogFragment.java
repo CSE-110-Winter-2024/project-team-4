@@ -101,9 +101,18 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
 //                    MainActivity mainActivity = (MainActivity) getActivity();
 
-                    var task = new Task(null, name, false, -1, formattedDate,
-                            mainActivity.getSpinnerStatus(), 0, cal,
-                            true, null, true, null);
+                    Task task;
+                    if (!recurrenceText.equals("daily")) {
+                         task = new Task(null, name, false, -1, formattedDate,
+                                mainActivity.getSpinnerStatus(), 0, cal,
+                                true, null, false, null);
+                    }
+                    else {
+                        task = new Task(null, name, false, -1, formattedDate,
+                                mainActivity.getSpinnerStatus(), 0, cal,
+                                true, null, true, null);
+                    }
+
 
 
                     if (!mainActivity.getSpinnerStatus().equals("Pending")){
@@ -147,6 +156,8 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     activityModel.append(task);
                     recurDialog.dismiss();
 
+
+
                     if (recurrenceText.equals("daily")) {
                         Calendar tomorrowDate = (Calendar) cal.clone();
                         tomorrowDate.add(Calendar.DATE, 1);
@@ -161,6 +172,8 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                         task2.setNextDate(nextTaskDate2);
                         activityModel.append(task2);
                     }
+
+
 
                     ((MainActivity)getActivity()).swapFragments();
 

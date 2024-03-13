@@ -77,6 +77,8 @@ public class RoomTaskRepository implements TaskRepository {
     @Override
     public void setType(int id, String type) {taskDao.setType(id, type);}
 
+    public void setCreatedNextRecurring(int id, boolean status) { taskDao.setCreatedNextRecurring(id, status);}
+
 
     public void removeCompleted(){
         taskDao.deleteCompleted();
