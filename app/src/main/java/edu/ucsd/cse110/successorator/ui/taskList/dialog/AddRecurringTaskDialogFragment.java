@@ -103,34 +103,41 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     var task = new Task(null, name, false, -1, formattedDate,
                             mainActivity.getSpinnerStatus(), 0, cal,
-                            true, null, false, null);
+                            true, null, true, null);
+
 
                     if (!mainActivity.getSpinnerStatus().equals("Pending")){
                         Calendar nextTaskDate = (Calendar) task.startDate().clone();
                         switch (recurrenceText) {
                             case "one-time":
                                 task.setRecurringInterval(-1);
+                                task.setNextDate(nextTaskDate);
                                 break;
                             case "daily":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(1));
                                 nextTaskDate.add(Calendar.DATE, 1);
+                                task.setNextDate(nextTaskDate);
+
                                 break;
                             case "weekly":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(7));
                                 nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                                task.setNextDate(nextTaskDate);
                                 break;
                             case "monthly":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(30));
                                 nextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
+                                task.setNextDate(nextTaskDate);
                                 break;
                             case "yearly":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(365));
                                 nextTaskDate.add(Calendar.YEAR, 1);
+                                task.setNextDate(nextTaskDate);
                                 break;
                             default:
                                 System.out.println("Unknown recurrence.");
                         }
-                        task.setNextDate(nextTaskDate);
+
                     }
 
 //                    ISSUE HERE, task id is null when calling append
@@ -139,6 +146,21 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     activityModel.append(task);
                     recurDialog.dismiss();
+
+                    if (recurrenceText.equals("daily")) {
+                        Calendar tomorrowDate = (Calendar) cal.clone();
+                        tomorrowDate.add(Calendar.DATE, 1);
+                        String formattedDate2 = customFormat.format(tomorrowDate.getTime());
+
+                        var task2 = new Task(null, name, false, -1, formattedDate2,
+                                mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1), tomorrowDate,
+                                false, null, false, null);
+
+                        Calendar nextTaskDate2 = (Calendar) task2.startDate().clone();
+                        nextTaskDate2.add(Calendar.DATE, 1);
+                        task2.setNextDate(nextTaskDate2);
+                        activityModel.append(task2);
+                    }
 
                     ((MainActivity)getActivity()).swapFragments();
 

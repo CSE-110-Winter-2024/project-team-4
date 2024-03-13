@@ -171,6 +171,54 @@ public class RoomTaskRepository implements TaskRepository {
         }
     }
 
+    public void generateDailyRecurringTask(Task task) {
+        Calendar nextTaskDate = task.nextDate();
+        int intervalDays = (int)TimeUnit.MILLISECONDS.toDays(task.recurringInterval());
+
+        Task recurringTask = new Task (
+                null, // id
+                task.name(), // name
+                false, // complete
+                task.sortOrder(), // sort order
+                task.date(), // date
+                task.type(), // type
+                task.recurringInterval(), // recInterval
+                nextTaskDate, // startDate
+                false, // onDisplay
+                null, // nextDate
+                false,  // createdNextRecurring
+                null // completedDate
+        );
+
+        Calendar newNextTaskDate = (Calendar) recurringTask.startDate().clone();
+
+        switch(intervalDays) {
+            case 1:
+                newNextTaskDate.add(Calendar.DATE, 1);
+                break;
+            case 7:
+                newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                break;
+            case 30:
+                newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
+                break;
+            case 365:
+                newNextTaskDate.add(Calendar.YEAR, 1); // TODO: FIX
+                break;
+            default:
+                System.out.println("Unknown recurrence.");
+        }
+        recurringTask.setNextDate(newNextTaskDate);
+
+        TaskEntity recurringTaskEntity = TaskEntity.fromTask(recurringTask);
+        taskDao.append(recurringTaskEntity);
+
+        task.setCreatedNextRecurring(true);
+        taskDao.setCreatedNextRecurring(task.id(), task.createdNextRecurring());
+
+
+    }
+
 
 
     public void generateNextRecurringTasks() {

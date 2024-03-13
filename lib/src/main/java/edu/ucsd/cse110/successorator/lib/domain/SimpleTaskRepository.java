@@ -100,5 +100,10 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
 
     }
 
+    @Override
+    public void generateDailyRecurringTask(Task task) {
+
+    }
+
 
 }
