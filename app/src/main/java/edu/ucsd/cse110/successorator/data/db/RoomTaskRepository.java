@@ -108,6 +108,7 @@ public class RoomTaskRepository implements TaskRepository {
 
     public Subject<List<Task>> filterRecurringTasks(){
         var entitiesLiveData = taskDao.getRecurringTasks();
+        System.out.println("ENTITIES LIVE DATA: " + entitiesLiveData);
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(TaskEntity::toTask)
