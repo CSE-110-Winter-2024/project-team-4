@@ -233,7 +233,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                         tomorrowDate.add(Calendar.DATE, 1);
                         String formattedDate2 = customFormat.format(tomorrowDate.getTime());
 
-                        var task2 = new Task(null, name, false, -1, formattedDate2,
+                        var task2 = new Task(null, name + ", daily", false, -1, formattedDate2,
                                 mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1), tomorrowDate,
                                 false, null, false, null);
 

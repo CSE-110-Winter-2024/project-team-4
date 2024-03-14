@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.ui.taskList;
 
+import android.app.AlertDialog;
 import android.content.Context;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import edu.ucsd.cse110.successorator.MainViewModel;
 import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,6 +134,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
 
         });
+
+
 //        MainActivity mainActivity = (MainActivity) getContext();
 //        String spinnerStatus = mainActivity.getSpinnerStatus();
 //        if(spinnerStatus.equals("Today")){
@@ -143,6 +147,32 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //        else if (spinnerStatus.equals("Recurring")){
 //            activityModel.getRecurringTasks();
 //        }
+        binding.taskNameText.setOnLongClickListener(new View.OnLongClickListener() {
+            MainActivity mainActivity = (MainActivity) getContext();
+            String spinnerStatus = mainActivity.getSpinnerStatus();
+            @Override
+            public boolean onLongClick(View v) {
+                if(spinnerStatus.equals("Recurring")){
+                    showOptionsDialog(task);
+                }
+                return true;
+            }
+
+            private void showOptionsDialog(Task task) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Options");
+                builder.setItems(new CharSequence[]{"Delete"}, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(which == 0){
+                            activityModel.remove(task.id());
+                        }
+
+                    }
+                });
+                builder.create().show();
+            }
+        });
 
         return binding.getRoot();
     }
