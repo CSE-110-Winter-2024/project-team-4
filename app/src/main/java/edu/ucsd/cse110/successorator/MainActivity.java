@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 dateTextView.setVisibility(View.VISIBLE);
                 Spinner spinner = findViewById(R.id.fromspin);
                 Calendar cal = (Calendar) CalendarUpdate.getCal().clone();
-                TextView dateTextView = findViewById(R.id.date_box);
+                //TextView dateTextView = findViewById(R.id.date_box);
                 SimpleDateFormat customFormat = new SimpleDateFormat("EEE M/d");
                 String dateString = customFormat.format(cal.getTime());
                 dateTextView.setText("Today, " + dateString);
@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Spinner spin = findViewById(R.id.fromspin);
                 Calendar cala = (Calendar) CalendarUpdate.getCal().clone();
                 cala.add(Calendar.DATE, 1);
-                TextView dateTextViewa = findViewById(R.id.date_box);
+                //TextView dateTextViewa = findViewById(R.id.date_box);
                 SimpleDateFormat customFormats = new SimpleDateFormat("EEE M/d");
                 String dateStringa = customFormats.format(cala.getTime());
                 dateTextViewa.setText("Tomorrow, " + dateStringa);
