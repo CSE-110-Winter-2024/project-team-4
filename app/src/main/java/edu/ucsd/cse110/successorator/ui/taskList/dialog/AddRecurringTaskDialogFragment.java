@@ -55,7 +55,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
 //        CalendarUpdate.initializeCal();
         Calendar cal = CalendarUpdate.getCal();
-        SimpleDateFormat weeklyFormat = new SimpleDateFormat("EEE", Locale.getDefault());
+        SimpleDateFormat weeklyFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
         SimpleDateFormat monthlyFormat = new SimpleDateFormat("F");
         SimpleDateFormat yearlyFormat = new SimpleDateFormat("M/d");
         SimpleDateFormat recurringOnFormat = new SimpleDateFormat("MM/dd/Y");
@@ -152,7 +152,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 //                    MainActivity mainActivity = (MainActivity) getActivity();
 
                     Task task;
-                    if (!recurrenceText.equals("daily")) {
+                    if (!recurrenceText.equals("daily") && !recurrenceText.equals("daily...")) {
                          task = new Task(null, name, false, -1, formattedDate,
                                 mainActivity.getSpinnerStatus(), 0, cal,
                                 true, null, false, null);
@@ -169,38 +169,48 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                         System.out.println("ENTERED nexttask switch statement");
                         Calendar nextTaskDate = (Calendar) task.startDate().clone();
                         System.out.println("recurrence");
-                        switch (recurrenceText) {
-                            case "one-time":
+                        switch (recurrenceText.substring(0,5)) {
+                            case "one-t":
                                 task.setRecurringInterval(-1);
                                 task.setNextDate(nextTaskDate);
-                                System.out.println("one time nexttaskdate " + nextTaskDate);
                                 break;
                             case "daily":
-                            case "daily...":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(1));
                                 nextTaskDate.add(Calendar.DATE, 1);
                                 task.setNextDate(nextTaskDate);
-                                System.out.println("daily nexttaskdate " + nextTaskDate);
+                                task.setName(task.name() + ", daily");
                                 break;
-                            case "weekly":
-                            case "weekly...":
+                            case "weekl":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(7));
                                 nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
                                 task.setNextDate(nextTaskDate);
-                                System.out.println("weekly nexttaskdate " + nextTaskDate);
+                                task.setName(task.name() + ", weekly on " + weeklyFormat.format(cal.getTime()));
                                 break;
-                            case "monthly":
-                            case "monthly...":
+                            case "month":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(30));
                                 nextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
                                 task.setNextDate(nextTaskDate);
-                                System.out.println("monthly nexttaskdate " + nextTaskDate);
+                                String numberSuffix = "";
+                                switch(monthlyFormat.format(cal.getTime())){
+                                    case "1":
+                                        numberSuffix = "st";
+                                        break;
+                                    case "2":
+                                        numberSuffix = "nd";
+                                        break;
+                                    case "3":
+                                        numberSuffix = "rd";
+                                        break;
+                                    default :
+                                        numberSuffix = "th";
+                                }
+                                task.setName(task.name() + ", monthly on " + monthlyFormat.format(cal.getTime()) + numberSuffix + " " + weeklyFormat.format(cal.getTime()));
                                 break;
-                            case "yearly":
-                            case "yearly...":
+                            case "yearl":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(365));
                                 nextTaskDate.add(Calendar.YEAR, 1);
                                 task.setNextDate(nextTaskDate);
+                                task.setName(task.name() + ", yearly on " + yearlyFormat.format(cal.getTime()));
                                 break;
                             default:
                                 System.out.println("Unknown recurrence.");
@@ -218,7 +228,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
 
 
-                    if (recurrenceText.equals("daily")) {
+                    if (recurrenceText.equals("daily") || recurrenceText.equals("daily...")) {
                         Calendar tomorrowDate = (Calendar) cal.clone();
                         tomorrowDate.add(Calendar.DATE, 1);
                         String formattedDate2 = customFormat.format(tomorrowDate.getTime());

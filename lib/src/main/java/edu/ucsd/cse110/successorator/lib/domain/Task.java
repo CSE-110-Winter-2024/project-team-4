@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 public class Task implements Serializable {
 
     private final @Nullable Integer id;
-    private final @NonNull String name;
+    private @NonNull String name;
     private boolean complete;
     private int sortOrder;
     private String date;
@@ -23,6 +23,8 @@ public class Task implements Serializable {
     private Calendar nextDate;
     private boolean createdNextRecurring;
     private Calendar completedDate;
+
+//    private String recurrenceType;
 
 
 
@@ -43,6 +45,7 @@ public class Task implements Serializable {
         this.nextDate = nextDate;
         this.createdNextRecurring = createdNextRecurring;
         this.completedDate = completedDate;
+//        this.recurrenceType = recurrenceType;
     }
 
     public void setComplete(boolean val)
@@ -63,6 +66,8 @@ public class Task implements Serializable {
     {
         return name;
     }
+    public void setName(String name) { this.name = name;}
+
 
     public boolean complete()
     {
@@ -93,6 +98,8 @@ public class Task implements Serializable {
     public void setCreatedNextRecurring(boolean createdNextRecurring) { this.createdNextRecurring = createdNextRecurring; }
     public Calendar completedDate() { return completedDate; }
     public void setCompletedDate(Calendar completedDate) { this.completedDate = completedDate; }
+//    public String recurrenceType() { return recurrenceType; }
+//    public void setRecurrenceType(String recurrenceType) { this.recurrenceType = recurrenceType; }
 
     public Task withId(int id)
     {

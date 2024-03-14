@@ -2,8 +2,10 @@ package edu.ucsd.cse110.successorator.ui.taskList;
 
 import android.content.Context;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.MainActivity;
@@ -64,6 +66,12 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         }
 
         // Populate the view with the flashcard's data.
+        System.out.println("setting text on binding");
+//        if (task.recurringInterval() >= 0) {
+//            binding.taskNameText.setText(task.name());
+//        } else {
+//            binding.taskNameText.setText(task.name());
+//        }
         binding.taskNameText.setText(task.name());
 
 
