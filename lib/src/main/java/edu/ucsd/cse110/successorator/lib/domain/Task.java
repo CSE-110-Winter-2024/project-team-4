@@ -23,6 +23,7 @@ public class Task implements Serializable {
     private Calendar nextDate;
     private boolean createdNextRecurring;
     private Calendar completedDate;
+    private boolean isFifthWeekOfMonth;
 
 //    private String recurrenceType;
 
@@ -31,7 +32,7 @@ public class Task implements Serializable {
 
     public Task(@Nullable Integer id, @NonNull String name, boolean complete, int sortOrder, String date,
                 @NonNull String type, long recurringInterval, Calendar startDate, boolean onDisplay,
-                Calendar nextDate, boolean createdNextRecurring, Calendar completedDate)
+                Calendar nextDate, boolean createdNextRecurring, Calendar completedDate, boolean isFifthWeekOfMonth)
     {
         this.id = id;
         this.name = name;
@@ -45,6 +46,7 @@ public class Task implements Serializable {
         this.nextDate = nextDate;
         this.createdNextRecurring = createdNextRecurring;
         this.completedDate = completedDate;
+        this.isFifthWeekOfMonth = isFifthWeekOfMonth;
 //        this.recurrenceType = recurrenceType;
     }
 
@@ -101,25 +103,28 @@ public class Task implements Serializable {
 //    public String recurrenceType() { return recurrenceType; }
 //    public void setRecurrenceType(String recurrenceType) { this.recurrenceType = recurrenceType; }
 
+    public boolean isFifthWeekOfMonth() { return isFifthWeekOfMonth; }
+    public void setIsFifthWeekOfMonth(boolean isFifthWeekOfMonth) { this.isFifthWeekOfMonth = isFifthWeekOfMonth; }
+
     public Task withId(int id)
     {
         Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, this.type,
                 this.recurringInterval, this.startDate, this.onDisplay, this.nextDate,
-                this.createdNextRecurring, this.completedDate);
+                this.createdNextRecurring, this.completedDate, this.isFifthWeekOfMonth);
         return newTask;
     }
 
     public Task withSortOrder(int sortOrder) {
         Task newTask =  new Task(id, this.name, this.complete, sortOrder, this.date, this.type,
                 this.recurringInterval, this.startDate, this.onDisplay, this.nextDate,
-                this.createdNextRecurring, this.completedDate);
+                this.createdNextRecurring, this.completedDate, this.isFifthWeekOfMonth);
         return newTask;
     }
 
     public Task withType(String type){
         Task newTask = new Task(id, this.name, this.complete, this.sortOrder, this.date, type,
                 this.recurringInterval, this.startDate, this.onDisplay, this.nextDate,
-                this.createdNextRecurring, this.completedDate);
+                this.createdNextRecurring, this.completedDate, this.isFifthWeekOfMonth);
         return newTask;
     }
 
@@ -133,12 +138,13 @@ public class Task implements Serializable {
                 && Objects.equals(name, task.name) && Objects.equals(date, task.date) && Objects.equals(type, task.type)
                 && Objects.equals(recurringInterval, task.recurringInterval) && Objects.equals(startDate, task.startDate)
                 && onDisplay == task.onDisplay && Objects.equals(nextDate, task.nextDate)
-                && createdNextRecurring == task.createdNextRecurring && Objects.equals(completedDate, task.completedDate);
+                && createdNextRecurring == task.createdNextRecurring && Objects.equals(completedDate, task.completedDate)
+                && isFifthWeekOfMonth == task.isFifthWeekOfMonth;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, name, complete, sortOrder, date, type, recurringInterval, startDate,
-                onDisplay, nextDate, createdNextRecurring, completedDate);
+                onDisplay, nextDate, createdNextRecurring, completedDate, isFifthWeekOfMonth);
     }
 }

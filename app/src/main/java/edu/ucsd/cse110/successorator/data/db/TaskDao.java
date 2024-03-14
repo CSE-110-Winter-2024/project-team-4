@@ -88,7 +88,8 @@ public interface TaskDao {
                 taskEntity.onDisplay,
                 taskEntity.nextDate,
                 taskEntity.createdNextRecurring,
-                taskEntity.completedDate
+                taskEntity.completedDate,
+                taskEntity.isFifthWeekOfMonth
         );
         System.out.println("TaskDao append newTask id: " + newTask.id);
         newTask.id = taskEntity.id;
@@ -110,7 +111,8 @@ public interface TaskDao {
                 taskEntity.onDisplay,
                 taskEntity.nextDate,
                 taskEntity.createdNextRecurring,
-                taskEntity.completedDate
+                taskEntity.completedDate,
+                taskEntity.isFifthWeekOfMonth
         );
         newTask.id = taskEntity.id;
         System.out.println("TaskDao prepend argument id: " + taskEntity.id);

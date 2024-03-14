@@ -35,9 +35,8 @@ public interface TaskRepository {
 
     void setOnDisplays();
 
-    void setTaskCompletedDate(Task task);
+    void setTaskCompletedDate(Integer id, Task task);
 
-    void generateDailyRecurringTask(Task task);
 
     void setCreatedNextRecurring(int id, boolean b);
 }

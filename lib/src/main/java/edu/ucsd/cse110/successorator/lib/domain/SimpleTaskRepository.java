@@ -96,14 +96,10 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
     }
 
     @Override
-    public void setTaskCompletedDate(Task task) {
+    public void setTaskCompletedDate(Integer id, Task task) {
 
     }
 
-    @Override
-    public void generateDailyRecurringTask(Task task) {
-
-    }
 
     @Override
     public void setCreatedNextRecurring(int id, boolean b) {

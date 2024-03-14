@@ -93,7 +93,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 System.out.println("TaskListAdapter task.id(): " + task.id());
                 activityModel.prepend(task);
                 System.out.println("TaskListAdapter after prepend task.id(): " + task.id());
-                activityModel.taskRepository().setTaskCompletedDate(task);
+                activityModel.taskRepository().setTaskCompletedDate(task.id(), task);
 
                 System.out.println("MARKED AS COMPLETE");
                 // CITATION: https://www.codingdemos.com/android-strikethrough-text/
@@ -116,6 +116,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 activityModel.setComplete(task.id(), false);
                 activityModel.remove(task.id());
                 activityModel.prepend(task);
+
+                activityModel.taskRepository().setTaskCompletedDate(task.id(),null);
                 System.out.println("MARKED AS INCOMPLETE");
                 binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 

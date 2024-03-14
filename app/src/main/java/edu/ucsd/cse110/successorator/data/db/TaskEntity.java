@@ -52,10 +52,13 @@ public class TaskEntity {
     @ColumnInfo(name = "completed_date")
     public Calendar completedDate;
 
+    @ColumnInfo(name = "is_fifth_week_of_month")
+    public boolean isFifthWeekOfMonth;
+
 
     TaskEntity(@NonNull String name, @NonNull boolean complete, @NonNull int sortOrder,
                @NonNull String type, long recurringInterval, Calendar startDate, boolean onDisplay,
-               Calendar nextDate, boolean createdNextRecurring, Calendar completedDate){
+               Calendar nextDate, boolean createdNextRecurring, Calendar completedDate, boolean isFifthWeekOfMonth){
         this.name = name;
         this.complete = complete;
         this.sortOrder = sortOrder;
@@ -70,12 +73,13 @@ public class TaskEntity {
         this.nextDate = nextDate;
         this.createdNextRecurring = createdNextRecurring;
         this.completedDate = completedDate;
+        this.isFifthWeekOfMonth = isFifthWeekOfMonth;
     }
 
     public static TaskEntity fromTask(@NonNull Task task){
         var taskEntity = new TaskEntity(task.name(), task.complete(), task.sortOrder(), task.type(),
                 task.recurringInterval(), task.startDate(), task.onDisplay(), task.nextDate(),
-                task.createdNextRecurring(), task.completedDate());
+                task.createdNextRecurring(), task.completedDate(), task.isFifthWeekOfMonth());
         taskEntity.id = task.id();
         System.out.println("task entity task.id():" + task.id());
         System.out.println("task entity taskentity .id:" + taskEntity.id);
@@ -87,7 +91,7 @@ public class TaskEntity {
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         date = dateFormat.toString();
         return new Task(id, name, complete, sortOrder, date, type, recurringInterval, startDate,
-                onDisplay, nextDate, createdNextRecurring, completedDate);
+                onDisplay, nextDate, createdNextRecurring, completedDate, isFifthWeekOfMonth);
     }
 
 

@@ -155,12 +155,12 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     if (!recurrenceText.equals("daily") && !recurrenceText.equals("daily...")) {
                          task = new Task(null, name, false, -1, formattedDate,
                                 mainActivity.getSpinnerStatus(), 0, cal,
-                                true, null, false, null);
+                                true, null, false, null, false);
                     }
                     else {
                         task = new Task(null, name, false, -1, formattedDate,
                                 mainActivity.getSpinnerStatus(), 0, cal,
-                                true, null, true, null);
+                                true, null, true, null, false);
                     }
 
 
@@ -187,8 +187,37 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                                 task.setName(task.name() + ", weekly on " + weeklyFormat.format(cal.getTime()));
                                 break;
                             case "month":
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(30));
-                                nextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
+
+                                int nextTaskDateWeekInMonth = nextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+                                // if the recurrence starts on the 5th [SMTWTFS] of the month
+                                if (nextTaskDateWeekInMonth == 5) {
+                                    task.setIsFifthWeekOfMonth(true);
+                                    Calendar mockNextMonthTaskDate = (Calendar) nextTaskDate.clone();
+                                    for (int i=0; i<4; i++) {
+                                        mockNextMonthTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                                    }
+                                    System.out.println("mockNextMonthTaskDate: " + sdf.format(mockNextMonthTaskDate.getTime()));
+                                    int maxWeeksInNextMonth = mockNextMonthTaskDate.getActualMaximum(Calendar.DAY_OF_WEEK_IN_MONTH);
+                                    System.out.println("maxWeeksInNextMonth: " + maxWeeksInNextMonth);
+                                    // there is no 5th week the next month
+                                    if (maxWeeksInNextMonth < 5) {
+                                        nextTaskDateWeekInMonth = maxWeeksInNextMonth;
+                                    }
+                                }
+                                nextTaskDate.add(Calendar.MONTH, 1);
+                                nextTaskDate.set(Calendar.DAY_OF_WEEK_IN_MONTH, nextTaskDateWeekInMonth);
+
+//                                nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+//                                while (nextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH) != nextTaskDateWeekInMonth) {
+//                                    nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+//                                }
+
+                                System.out.println("nextTaskDateWeekInMonth: " + nextTaskDateWeekInMonth);
+                                System.out.println("Next Task Date: " + sdf.format(nextTaskDate.getTime()));
+
                                 task.setNextDate(nextTaskDate);
                                 String numberSuffix = "";
                                 switch(monthlyFormat.format(cal.getTime())){
@@ -209,6 +238,11 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                             case "yearl":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(365));
                                 nextTaskDate.add(Calendar.YEAR, 1);
+                                if (nextTaskDate.get(Calendar.MONTH) == Calendar.FEBRUARY &&
+                                        nextTaskDate.get(Calendar.DAY_OF_MONTH) == 29 &&
+                                        nextTaskDate.getActualMaximum(Calendar.DAY_OF_MONTH) == 29) {
+                                    nextTaskDate.add(Calendar.DATE, 1);
+                                }
                                 task.setNextDate(nextTaskDate);
                                 task.setName(task.name() + ", yearly on " + yearlyFormat.format(cal.getTime()));
                                 break;
@@ -235,7 +269,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                         var task2 = new Task(null, name + ", daily", false, -1, formattedDate2,
                                 mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1), tomorrowDate,
-                                false, null, false, null);
+                                false, null, false, null, false);
 
                         Calendar nextTaskDate2 = (Calendar) task2.startDate().clone();
                         nextTaskDate2.add(Calendar.DATE, 1);
