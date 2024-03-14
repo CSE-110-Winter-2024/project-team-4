@@ -239,6 +239,11 @@ public class RoomTaskRepository implements TaskRepository {
                 Calendar nextTaskDate = task.nextDate();
                 System.out.println("intervalDays =  " + intervalDays);
                 System.out.println("task.createdNextRecurring = " + task.createdNextRecurring());
+
+                System.out.println("nexttaskdate" + nextTaskDate);
+                System.out.println("cal" + cal);
+                System.out.println("nexttaskdate in millis" + nextTaskDate.getTimeInMillis());
+                System.out.println("cal in millis" + cal.getTimeInMillis());
                 System.out.println(nextTaskDate.getTimeInMillis() + " <=? " + Calendar.getInstance().getTimeInMillis() + " + " + TimeUnit.DAYS.toMillis(2));
 
                 if (intervalDays > 0 && !task.createdNextRecurring()

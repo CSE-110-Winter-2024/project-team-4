@@ -176,6 +176,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Calendar cal = CalendarUpdate.getCal();
         // loop through all tasks and call function to create recurring tasks
         System.out.println("MainActivity incrementCurrentDate");
+        System.out.println("incrementcurrentdate activityModel: " + activityModel);
+        System.out.println("incrementcurrentdate taskRepository: " + activityModel.taskRepository());
+//        TODO NULL ERROR HERE?? null when calling generatenextrecurringtask
         activityModel.taskRepository().generateNextRecurringTasks();
         activityModel.taskRepository().setOnDisplays();
 

@@ -124,6 +124,17 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
 
         });
+        MainActivity mainActivity = (MainActivity) getContext();
+        String spinnerStatus = mainActivity.getSpinnerStatus();
+        if(spinnerStatus.equals("Today")){
+            activityModel.getTodayTasks();
+        }
+        else if (spinnerStatus.equals("Tomorrow")){
+            activityModel.getTomorrowTasks();
+        }
+        else if (spinnerStatus.equals("Recurring")){
+            activityModel.getRecurringTasks();
+        }
 
         return binding.getRoot();
     }

@@ -58,6 +58,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
         SimpleDateFormat weeklyFormat = new SimpleDateFormat("EEE", Locale.getDefault());
         SimpleDateFormat monthlyFormat = new SimpleDateFormat("F");
         SimpleDateFormat yearlyFormat = new SimpleDateFormat("M/d");
+        SimpleDateFormat recurringOnFormat = new SimpleDateFormat("MM/dd/Y");
 
         switch(mainActivity.getSpinnerStatus()) {
             case "Tomorrow":
@@ -91,6 +92,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                 break;
             case "Recurring":
                 view.recurrenceOptions.setVisibility(View.VISIBLE);
+                view.recurrenceField.setText(recurringOnFormat.format(cal.getTime()));
                 view.recurrenceField.setVisibility(View.VISIBLE);
                 view.oneTime.setVisibility(View.GONE);
                 view.starting.setVisibility(View.VISIBLE);
@@ -164,6 +166,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
 
                     if (!mainActivity.getSpinnerStatus().equals("Pending")){
+                        System.out.println("ENTERED nexttask switch statement");
                         Calendar nextTaskDate = (Calendar) task.startDate().clone();
                         switch (recurrenceText) {
                             case "one-time":
