@@ -79,7 +79,7 @@ public class TaskTest {
     @Test
     public void setComplete(){
         Task task = new Task(1, "name", false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task expected = new Task(1, "name", true, 1, "date", "Today");
+        Task expected = new Task(1, "name", true, 1, "date", "Today", 0, null, true, null, true, null, "H");
         task.setComplete(true);
         assertEquals(expected, task);
     }
@@ -87,7 +87,7 @@ public class TaskTest {
     @Test
     public void setType(){
         Task task = new Task(1, "name", false, 1, "date", "Pending", 0, null, true, null, true, null, "H");
-        Task expected = new Task(1, "name", false, 1, "date", "Tomorrow");
+        Task expected = new Task(1, "name", false, 1, "date", "Tomorrow", 0, null, true, null, true, null, "H");
         task.setType("Tomorrow");
         assertEquals(expected, task);
     }
