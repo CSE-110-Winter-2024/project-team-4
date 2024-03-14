@@ -167,8 +167,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner.setAdapter(adapter);
-        spinner.setSelection(1);
+//        spinner.setAdapter(adapter);
+//        spinner.setSelection(1);
 //        MainViewModel model = ModelFetch.getModel();
 //        model.getTodayTasks();
     }
@@ -181,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         System.out.println("MainActivity incrementCurrentDate");
         System.out.println("incrementcurrentdate activityModel: " + activityModel);
         System.out.println("incrementcurrentdate taskRepository: " + activityModel.taskRepository());
-//        TODO NULL ERROR HERE?? null when calling generatenextrecurringtask
         activityModel.taskRepository().generateNextRecurringTasks();
         activityModel.taskRepository().setOnDisplays();
 

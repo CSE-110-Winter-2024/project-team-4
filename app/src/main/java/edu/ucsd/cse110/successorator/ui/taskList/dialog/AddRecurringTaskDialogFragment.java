@@ -168,28 +168,36 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     if (!mainActivity.getSpinnerStatus().equals("Pending")){
                         System.out.println("ENTERED nexttask switch statement");
                         Calendar nextTaskDate = (Calendar) task.startDate().clone();
+                        System.out.println("recurrence");
                         switch (recurrenceText) {
                             case "one-time":
                                 task.setRecurringInterval(-1);
                                 task.setNextDate(nextTaskDate);
+                                System.out.println("one time nexttaskdate " + nextTaskDate);
                                 break;
                             case "daily":
+                            case "daily...":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(1));
                                 nextTaskDate.add(Calendar.DATE, 1);
                                 task.setNextDate(nextTaskDate);
-
+                                System.out.println("daily nexttaskdate " + nextTaskDate);
                                 break;
                             case "weekly":
+                            case "weekly...":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(7));
                                 nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
                                 task.setNextDate(nextTaskDate);
+                                System.out.println("weekly nexttaskdate " + nextTaskDate);
                                 break;
                             case "monthly":
+                            case "monthly...":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(30));
                                 nextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
                                 task.setNextDate(nextTaskDate);
+                                System.out.println("monthly nexttaskdate " + nextTaskDate);
                                 break;
                             case "yearly":
+                            case "yearly...":
                                 task.setRecurringInterval(TimeUnit.DAYS.toMillis(365));
                                 nextTaskDate.add(Calendar.YEAR, 1);
                                 task.setNextDate(nextTaskDate);
