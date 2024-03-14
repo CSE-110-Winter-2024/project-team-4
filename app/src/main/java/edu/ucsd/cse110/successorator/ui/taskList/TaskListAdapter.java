@@ -3,11 +3,14 @@ package edu.ucsd.cse110.successorator.ui.taskList;
 import android.app.AlertDialog;
 import android.content.Context;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.MainActivity;
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
+import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -65,42 +68,81 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
         // Populate the view with the flashcard's data.
         binding.taskNameText.setText(task.name());
+        binding.conText.setText(task.context());
+
+        switch(task.context()){
+            case "H":
+                binding.conText.setBackgroundResource(R.drawable.homecircle);
+                break;
+            case "W":
+                binding.conText.setBackgroundResource(R.drawable.workcircle);
+                break;
+            case "S":
+                binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                break;
+            case "E":
+                binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                break;
+        }
 
 
         if(task.complete()){
             binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            binding.conText.setBackgroundResource(R.drawable.circle);
         }
 
         if(!task.complete()){
             binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            switch(task.context()){
+                case "H":
+                    binding.conText.setBackgroundResource(R.drawable.homecircle);
+                    break;
+                case "W":
+                    binding.conText.setBackgroundResource(R.drawable.workcircle);
+                    break;
+                case "S":
+                    binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                    break;
+                case "E":
+                    binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                    break;
+            }
         }
+
+
 
         binding.taskNameText.setOnClickListener(v -> {
             MainActivity mainActivity = (MainActivity) getContext();
             String spinnerStatus = mainActivity.getSpinnerStatus();
 
 
-            if (!task.complete()) {
+           if (!task.complete() && !(task.type().equals("Pending"))) {
+                task.setComplete(true);
+                activityModel.setComplete(task.id(), true);
+                activityModel.remove(task.id());
+                System.out.println("TaskListAdapter task.id(): " + task.id());
+                activityModel.prepend(task);
+                System.out.println("TaskListAdapter after prepend task.id(): " + task.id());
+                activityModel.taskRepository().setTaskCompletedDate(task);
 
-                if(spinnerStatus.equals("Today") || spinnerStatus.equals("Tomorrow")){
-                    task.setComplete(true);
-                    activityModel.setComplete(task.id(), true);
-                    activityModel.remove(task.id());
-                    activityModel.prepend(task);
-                    System.out.println("MARKED AS COMPLETE");
-                    // CITATION: https://www.codingdemos.com/android-strikethrough-text/
-                    binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                System.out.println("MARKED AS COMPLETE");
+                // CITATION: https://www.codingdemos.com/android-strikethrough-text/
+                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-
-                    if(spinnerStatus.equals("Today")){
-                        activityModel.getTodayTasks();
-                    }
-                    else if (spinnerStatus.equals("Tomorrow")){
-                        activityModel.getTomorrowTasks();
-                    }
+                spinnerStatus = mainActivity.getSpinnerStatus();
+                if(spinnerStatus.equals("Today")){
+                    activityModel.getTodayTasks();
+                }
+                else if (spinnerStatus.equals("Tomorrow")){
+                    activityModel.getTomorrowTasks();
+                }
+                else if (spinnerStatus.equals("Recurring")){
+                    activityModel.getRecurringTasks();
                 }
 
-            } else {
+                binding.conText.setBackgroundResource(R.drawable.circle);
+
+            } else if (!(task.type().equals("Pending"))) {
                 task.setComplete(false);
                 activityModel.setComplete(task.id(), false);
                 activityModel.remove(task.id());
@@ -108,14 +150,32 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 System.out.println("MARKED AS INCOMPLETE");
                 binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
+                spinnerStatus = mainActivity.getSpinnerStatus();
                 if(spinnerStatus.equals("Today")){
                     activityModel.getTodayTasks();
                 }
                 else if (spinnerStatus.equals("Tomorrow")){
                     activityModel.getTomorrowTasks();
                 }
-            }
+                else if (spinnerStatus.equals("Recurring")){
+                    activityModel.getRecurringTasks();
+                }
 
+                switch(task.context()){
+                    case "H":
+                        binding.conText.setBackgroundResource(R.drawable.homecircle);
+                        break;
+                    case "W":
+                        binding.conText.setBackgroundResource(R.drawable.workcircle);
+                        break;
+                    case "S":
+                        binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                        break;
+                    case "E":
+                        binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                        break;
+                }
+            }
 
         });
 

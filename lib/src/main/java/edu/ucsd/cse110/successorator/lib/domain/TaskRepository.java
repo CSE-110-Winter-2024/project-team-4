@@ -29,6 +29,17 @@ public interface TaskRepository {
 
     Subject<List<Task>> filterTodayTasks();
 
-    Subject<List<Task>> filterPendingTasks();
+    Subject<List<Task>> filterRecurringTasks();
 
+    Subject<List<Task>> filterTasksByTypeAndContext(String type, String context);
+
+    Subject<List<Task>> sortTasksByContext();
+
+    void generateNextRecurringTasks();
+
+    void setOnDisplays();
+
+    void setTaskCompletedDate(Task task);
+  
+    Subject<List<Task>> filterPendingTasks();
 }

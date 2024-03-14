@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Task;
+import edu.ucsd.cse110.successorator.lib.domain.TaskRepo;
 import edu.ucsd.cse110.successorator.lib.domain.TaskRepository;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
@@ -76,6 +77,8 @@ public class MainViewModel extends ViewModel {
         return orderedTasks.getValue().size();
     }
 
+    public TaskRepository taskRepository() { return taskRepository; }
+
     public void getTomorrowTasks() {
         taskRepository.filterTomorrowTasks().observe(tasks -> {
             if (tasks == null) return;
@@ -87,6 +90,34 @@ public class MainViewModel extends ViewModel {
 
     public void getTodayTasks() {
         taskRepository.filterTodayTasks().observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
+        });
+
+    }
+
+    public void getTasksByTypeAndContext(String type, String context) {
+        taskRepository.filterTasksByTypeAndContext(type, context).observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
+        });
+    }
+
+    public void setOrderedTasks(){
+        taskRepository.sortTasksByContext().observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
+        });
+    }
+
+    public void getRecurringTasks() {
+        taskRepository.filterRecurringTasks().observe(tasks -> {
             if (tasks == null) return;
 
             var newOrderedTasks = new ArrayList<>(tasks);

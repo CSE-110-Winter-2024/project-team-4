@@ -9,10 +9,12 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Dao
 public interface TaskDao {
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(TaskEntity taskEntity);
@@ -27,10 +29,10 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks ORDER BY complete, sort_order")
     List<TaskEntity> findAll();
 
-    @Query("SELECT * FROM tasks WHERE id = :id")
+    @Query("SELECT * FROM tasks WHERE id = :id and on_display == true")
     LiveData<TaskEntity> findAsLiveData(int id);
 
-    @Query("SELECT * FROM tasks ORDER BY complete, sort_order")
+    @Query("SELECT * FROM tasks WHERE on_display == true ORDER BY complete, sort_order")
     LiveData<List<TaskEntity>> findAllAsLiveData();
 
     @Query("SELECT COUNT(*) FROM tasks")
@@ -55,12 +57,31 @@ public interface TaskDao {
             "WHERE id = :id")
     void setType(int id, String type);
 
-    @Query("SELECT * FROM tasks WHERE type = 'Tomorrow'")
+    @Query("UPDATE tasks SET created_next_recurring = :status " +
+            "WHERE id = :id ")
+    void setCreatedNextRecurring(int id, boolean status);
+
+    @Query("UPDATE tasks SET on_display = :status " +
+            "WHERE id = :id ")
+    void setOnDisplay(int id, boolean status);
+
+    @Query("UPDATE tasks SET completed_date = :status " +
+            "WHERE id = :id ")
+    void setCompletedDate(int id, Calendar status);
+
+    @Query("SELECT * FROM tasks WHERE type = 'Tomorrow' and on_display == true")
     LiveData<List<TaskEntity>> getTomorrowTasks();
 
-    @Query("SELECT * FROM tasks WHERE type = 'Today'")
+    @Query("SELECT * FROM tasks WHERE type = 'Today' and on_display == true")
     LiveData<List<TaskEntity>> getTodayTasks();
 
+    @Query("SELECT * FROM tasks WHERE type = 'Recurring' and on_display == true")
+    LiveData<List<TaskEntity>> getRecurringTasks();
+
+    //@Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true")
+    @Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByTypeAndContext(String type, String context);
+  
     @Query("SELECT * FROM tasks WHERE type = 'Pending'")
     LiveData<List<TaskEntity>> getPendingTasks();
 
@@ -68,7 +89,17 @@ public interface TaskDao {
     default int append(TaskEntity taskEntity){
         var maxSortOrder = getMaxSortOrder();
         var newTask = new TaskEntity(
-                taskEntity.name, taskEntity.complete, maxSortOrder + 1, taskEntity.type
+                taskEntity.name,
+                taskEntity.complete,
+                maxSortOrder + 1,
+                taskEntity.type,
+                taskEntity.recurringInterval,
+                taskEntity.startDate,
+                taskEntity.onDisplay,
+                taskEntity.nextDate,
+                taskEntity.createdNextRecurring,
+                taskEntity.completedDate,
+                taskEntity.context
         );
 
         return Math.toIntExact(insert(newTask));
@@ -78,7 +109,17 @@ public interface TaskDao {
     default int prepend(TaskEntity taskEntity){
         shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
         var newTask = new TaskEntity(
-                taskEntity.name, taskEntity.complete, getMinSortOrder() - 1, taskEntity.type
+                taskEntity.name,
+                taskEntity.complete,
+                getMinSortOrder() - 1,
+                taskEntity.type,
+                taskEntity.recurringInterval,
+                taskEntity.startDate,
+                taskEntity.onDisplay,
+                taskEntity.nextDate,
+                taskEntity.createdNextRecurring,
+                taskEntity.completedDate,
+                taskEntity.context
         );
         return Math.toIntExact(insert(newTask));
     }
@@ -86,9 +127,12 @@ public interface TaskDao {
     @Query("DELETE FROM tasks WHERE id = :id")
     void delete(int id);
 
-    @Query("DELETE FROM tasks WHERE complete = true AND type = 'Today'")
+    @Query("DELETE FROM tasks WHERE complete = true AND type = 'Today' AND recurring_interval=-1")
     void deleteCompleted();
 
     @Query("UPDATE tasks SET type = 'Today' WHERE type = 'Tomorrow'")
     void moveTomorrowTasksToToday();
+
+    @Query("SELECT * FROM tasks ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> createSortedTasksView();
 }

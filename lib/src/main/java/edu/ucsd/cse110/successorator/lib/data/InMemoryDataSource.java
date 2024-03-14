@@ -204,6 +204,20 @@ public class InMemoryDataSource {
         return somethingElse;
     }
 
+    public Subject<List<Task>> filterTasksByTypeAndContext(String type, String context){
+        List<Task> allTasks = getTasks();
+        List<Task> filteredTasks = new ArrayList<Task>();
+        for(Task task : allTasks){
+            if(task.type().equals(type) && task.context().equals(context)){
+                filteredTasks.add(task);
+            }
+        }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(filteredTasks);
+        return somethingElse;
+    }
+
     public Subject<List<Task>> filterTodayTasks(){
         List<Task> allTasks = getTasks();
         List<Task> todayTasks = new ArrayList<Task>();
@@ -218,6 +232,19 @@ public class InMemoryDataSource {
         return somethingElse;
     }
 
+    public Subject<List<Task>> filterRecurringTasks(){
+        List<Task> allTasks = getTasks();
+        List<Task> recurringTasks = new ArrayList<Task>();
+        for(Task task : allTasks){
+            if(task.type().equals("Recurring")){
+                recurringTasks.add(task);
+            } 
+        }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(recurringTasks);
+        return somethingElse;
+    }
     public Subject<List<Task>> filterPendingTasks(){
         List<Task> allTasks = getTasks();
         List<Task> pendingTasks = new ArrayList<Task>();
@@ -229,6 +256,55 @@ public class InMemoryDataSource {
         MutableSubject<List<Task>> somethingElse
                 = new SimpleSubject<>();
         somethingElse.setValue(pendingTasks);
+        return somethingElse;
+    }
+
+    public Subject<List<Task>> sortTasksByContext() {
+        List<Task> allTasks = getTasks();
+        List<Task> sortedTasks = new ArrayList<Task>();
+        for(Task task : allTasks) {
+            if(!task.complete() && task.context().equals("H")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(!task.complete() && task.context().equals("W")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(!task.complete() && task.context().equals("S")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(!task.complete() && task.context().equals("E")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(task.complete() && task.context().equals("H")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(task.complete() && task.context().equals("W")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(task.complete() && task.context().equals("S")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(task.complete() && task.context().equals("E")) {
+                sortedTasks.add(task);
+            }
+        }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(sortedTasks);
         return somethingElse;
     }
 

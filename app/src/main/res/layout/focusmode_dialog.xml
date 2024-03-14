@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:background="@color/dirty_white">
+
+        <!-- Add your four circular buttons here -->
+        <!-- Example button -->
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/circle"
+            android:gravity="center"
+            android:text="X" />
+
+        <TextView
+            android:id="@+id/home"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/homecircle"
+            android:gravity="center"
+            android:text="H" />
+
+        <TextView
+            android:id="@+id/work"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/workcircle"
+            android:gravity="center"
+            android:text="W" />
+
+        <TextView
+            android:id="@+id/school"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/schoolcircle"
+            android:gravity="center"
+            android:text="S" />
+
+
+        <TextView
+            android:id="@+id/errand"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/errandcircle"
+            android:gravity="center"
+            android:text="E" />
+
+
+        <!-- Add other buttons similarly -->
+
+
+    </LinearLayout>
+
+</RelativeLayout>
+

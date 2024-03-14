@@ -25,6 +25,20 @@
 
 <!--    ]]>-->
 
+    <ImageButton
+        android:id="@+id/menu_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="90dp"
+        android:layout_marginBottom="600dp"
+        android:src="@drawable/menu_bar"
+        android:onClick="popupMenu"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintStart_toEndOf="@+id/fromspin"
+        app:layout_constraintTop_toTopOf="@+id/fragmentContainerView" />
+
     <TextView
         android:id="@+id/date_box"
         android:layout_width="wrap_content"
@@ -32,7 +46,7 @@
         android:layout_marginTop="64dp"
         android:layout_marginBottom="190dp"
         android:text="TextView"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,13 +87,13 @@
         android:id="@+id/fromspin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:entries="@array/Options"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/date_box"
         app:layout_constraintTop_toTopOf="@+id/fragmentContainerView"
-        app:layout_constraintVertical_bias="0.002" />
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

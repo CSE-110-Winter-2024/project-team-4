@@ -22,6 +22,15 @@ public class CalendarUpdate {
         return cal;
     }
 
+    public static Calendar getCalMidnight() {
+         Calendar mockCal = (Calendar) cal.clone();
+         mockCal.set(Calendar.HOUR, 0);
+         mockCal.set(Calendar.MINUTE, 0);
+         mockCal.set(Calendar.SECOND, 0);
+         mockCal.set(Calendar.MILLISECOND, 0);
+         return mockCal;
+    }
+
     public static void resetCal(){
         cal = Calendar.getInstance();
     }
