@@ -25,6 +25,19 @@
 
 <!--    ]]>-->
 
+    <ImageButton
+        android:id="@+id/menu_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="600dp"
+        android:background="@drawable/menu_bar"
+        android:onClick="popupMenu"
+        app:layout_constraintBottom_toBottomOf="@+id/fragmentContainerView"
+        app:layout_constraintEnd_toEndOf="@+id/fragmentContainerView"
+        app:layout_constraintStart_toEndOf="@+id/fromspin"
+        app:layout_constraintTop_toTopOf="@+id/fragmentContainerView" />
+
     <TextView
         android:id="@+id/date_box"
         android:layout_width="wrap_content"

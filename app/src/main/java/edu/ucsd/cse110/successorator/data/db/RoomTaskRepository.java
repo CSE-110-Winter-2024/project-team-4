@@ -103,6 +103,16 @@ public class RoomTaskRepository implements TaskRepository {
 
     }
 
+    public Subject<List<Task>> filterTasksByTypeAndContext(String type, String context){
+        var entitiesLiveData = taskDao.getTasksByTypeAndContext(type, context);
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
+    }
+
     public Subject<List<Task>> filterRecurringTasks(){
         var entitiesLiveData = taskDao.getRecurringTasks();
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {

@@ -1,9 +1,18 @@
 package edu.ucsd.cse110.successorator;
 
+import android.media.Image;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,22 +43,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     //private Calendar cal;
 
     //    private FragmentDialogCreateCardBinding view;
-    private FragmentNoTasksBinding view;
+    //private FragmentNoTasksBinding view;
     private MainViewModel activityModel;
 
+    //RelativeLayout layout;
+
+    private String filterContext = "";
 
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+
+        //layout = findViewById(R.id.root);
+
         var modelOwner = this;
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
         this.activityModel = modelProvider.get(MainViewModel.class);
-
 
         var database = Room.databaseBuilder(
                 getApplicationContext(),
@@ -90,15 +103,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Spinner spin = findViewById(R.id.fromspin);
-                                String status = spin.getSelectedItem().toString();
-
-                                if(status.equals("Today")){
-                                    model.getTodayTasks();
-                                }
-                                else if(status.equals("Tomorrow")){
-                                    model.getTomorrowTasks();
-                                }
+                                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                             }
                         });
                     }
@@ -107,7 +112,89 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         };
         t.start();
+
+
     }
+
+    public void popupMenu(View v){
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.focusmode_dialog, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, true);
+        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+        TextView home = (TextView) popupView.findViewById(R.id.home);
+        ImageButton menu_btn = (ImageButton) findViewById(R.id.menu_btn);
+        MainViewModel model = ModelFetch.getModel();
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterContext = "H";
+                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                menu_btn.setBackgroundResource(R.drawable.homecircle);
+                popupWindow.dismiss();
+            }
+        });
+
+        TextView work = (TextView) popupView.findViewById(R.id.work);
+        work.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterContext = "W";
+                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                menu_btn.setBackgroundResource(R.drawable.workcircle);
+                popupWindow.dismiss();
+            }
+        });
+
+        TextView school = (TextView) popupView.findViewById(R.id.school);
+        school.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterContext = "S";
+                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                menu_btn.setBackgroundResource(R.drawable.schoolcircle);
+                popupWindow.dismiss();
+            }
+        });
+
+        TextView errand = (TextView) popupView.findViewById(R.id.errand);
+        errand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterContext = "E";
+                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                menu_btn.setBackgroundResource(R.drawable.errandcircle);
+                popupWindow.dismiss();
+            }
+        });
+
+        TextView cancel = (TextView) popupView.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterContext = "";
+                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                menu_btn.setBackgroundResource(R.drawable.menu_bar);
+                popupWindow.dismiss();
+            }
+        });
+
+    }
+
+//    public void CreatepopUpWindow(){
+//
+//        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//        View popupView = inflater.inflate(R.layout.focusmode_dialog, null);
+//
+//        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+//        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+//        PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
+//        layout.post(new Runnable() {
+//            public void run() {
+//                popupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+//            }
+//        });
+//    }
 
     @Override
     public void onResume() {
@@ -253,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 dateTextView.setText("Today, " + dateString);
 
                 MainViewModel model = ModelFetch.getModel();
-                model.getTodayTasks();
+                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
             case "Tomorrow":
                 // Do something for Tomorrow
@@ -267,17 +354,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 dateTextViewa.setText("Tomorrow, " + dateStringa);
 
                 MainViewModel modela = ModelFetch.getModel();
-                modela.getTomorrowTasks();
+                modela.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
             case "Recurring":
                 // Do something for Recurring
                 ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Recurring");
+                MainViewModel modelab = ModelFetch.getModel();
+                modelab.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+
                 break;
             case "Pending":
                 // Do something for Pending
                 ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Pending");
+                MainViewModel modelabc = ModelFetch.getModel();
+                modelabc.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
         }
     }

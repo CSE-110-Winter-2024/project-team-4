@@ -204,6 +204,20 @@ public class InMemoryDataSource {
         return somethingElse;
     }
 
+    public Subject<List<Task>> filterTasksByTypeAndContext(String type, String context){
+        List<Task> allTasks = getTasks();
+        List<Task> filteredTasks = new ArrayList<Task>();
+        for(Task task : allTasks){
+            if(task.type().equals(type) && task.context().equals(context)){
+                filteredTasks.add(task);
+            }
+        }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(filteredTasks);
+        return somethingElse;
+    }
+
     public Subject<List<Task>> filterTodayTasks(){
         List<Task> allTasks = getTasks();
         List<Task> todayTasks = new ArrayList<Task>();
