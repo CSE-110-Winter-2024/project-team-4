@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import edu.ucsd.cse110.successorator.MainActivity;
@@ -51,7 +52,39 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
         view.recurrenceField.setVisibility(View.GONE);
         MainActivity mainActivity = (MainActivity) getActivity();
         System.out.println("SPINNER STATUS: " + mainActivity.getSpinnerStatus());
+
+//        CalendarUpdate.initializeCal();
+        Calendar cal = CalendarUpdate.getCal();
+        SimpleDateFormat weeklyFormat = new SimpleDateFormat("EEE", Locale.getDefault());
+        SimpleDateFormat monthlyFormat = new SimpleDateFormat("F");
+        SimpleDateFormat yearlyFormat = new SimpleDateFormat("M/d");
+
         switch(mainActivity.getSpinnerStatus()) {
+            case "Tomorrow":
+                cal.add(Calendar.DATE, 1);
+            case "Today":
+                view.recurrenceOptions.setVisibility(View.VISIBLE);
+                view.recurrenceField.setVisibility(View.INVISIBLE);
+                view.starting.setVisibility(View.GONE);
+                view.oneTime.setVisibility(View.VISIBLE);
+                view.weekly.setText("weekly on " + weeklyFormat.format(cal.getTime()).substring(0,2));
+                String numberSuffix = "";
+                switch(monthlyFormat.format(cal.getTime())){
+                    case "1":
+                        numberSuffix = "st";
+                        break;
+                    case "2":
+                        numberSuffix = "nd";
+                        break;
+                    case "3":
+                        numberSuffix = "rd";
+                        break;
+                    default :
+                        numberSuffix = "th";
+                }
+                view.monthly.setText("monthly on " + monthlyFormat.format(cal.getTime()) + numberSuffix + " " + weeklyFormat.format(cal.getTime()).substring(0,2));
+                view.yearly.setText("yearly on " + yearlyFormat.format(cal.getTime()));
+                break;
             case "Pending":
                 view.recurrenceOptions.setVisibility(View.INVISIBLE);
                 view.starting.setVisibility(View.GONE);
@@ -61,6 +94,10 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                 view.recurrenceField.setVisibility(View.VISIBLE);
                 view.oneTime.setVisibility(View.GONE);
                 view.starting.setVisibility(View.VISIBLE);
+                view.daily.setText("daily...");
+                view.weekly.setText("weekly...");
+                view.monthly.setText("monthly...");
+                view.yearly.setText("yearly...");
                 break;
             default:
                 view.recurrenceOptions.setVisibility(View.VISIBLE);
