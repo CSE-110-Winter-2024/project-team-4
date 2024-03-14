@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             public void onClick(View v) {
                 filterContext = "";
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
-                menu_btn.setBackgroundResource(R.drawable.menu_bar);
+                menu_btn.setBackgroundResource(R.color.transparent);
                 popupWindow.dismiss();
             }
         });
