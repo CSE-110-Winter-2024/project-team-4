@@ -115,6 +115,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 Log.d("AddRecurringTaskDialogFragment", "This is a debug message");
                 var name = view.recurringInput.getText().toString();
+                var recurringDate = view.recurrenceField.getText().toString();
                 String recurrenceText = "";
                 if (!mainActivity.getSpinnerStatus().equals("Pending")) {
                     // Retrieving dialog's selection for recurrence
@@ -129,12 +130,22 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                         System.out.println("recurrenceText: " + recurrenceText);
                     }
                 }
+
+
                 // Check that the required input string and radio selection are valid
+                // if it's not pending it needs a radio button selection
                 if(!name.equals("") && (!recurrenceText.equals("") || mainActivity.getSpinnerStatus().equals("Pending")))
                 {
                     Calendar cal = CalendarUpdate.getCal();
                     SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
                     String formattedDate = customFormat.format(cal.getTime());
+
+                    if(mainActivity.getSpinnerStatus().equals("Recurring")) {
+                        formattedDate = recurringDate;
+                    }
+
+                    System.out.println("RECURRING DATE: " + formattedDate);
+
                     var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
 //                    MainActivity mainActivity = (MainActivity) getActivity();
 
@@ -191,6 +202,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     System.out.println("task.id: " + task.id() + ". task.name: " + task.name());
 
                     activityModel.append(task);
+                    
                     recurDialog.dismiss();
 
 
