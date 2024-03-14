@@ -59,17 +59,41 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
         SimpleDateFormat monthlyFormat = new SimpleDateFormat("F");
         SimpleDateFormat yearlyFormat = new SimpleDateFormat("M/d");
         SimpleDateFormat recurringOnFormat = new SimpleDateFormat("MM/dd/Y");
-
+        String numberSuffix = "";
         switch(mainActivity.getSpinnerStatus()) {
             case "Tomorrow":
-                cal.add(Calendar.DATE, 1);
+//                cal.add(Calendar.DATE,1);
+                Calendar cala = (Calendar) cal.clone();
+                cala.add(Calendar.DATE, 1);
+                view.recurrenceOptions.setVisibility(View.VISIBLE);
+                view.recurrenceField.setVisibility(View.INVISIBLE);
+                view.starting.setVisibility(View.GONE);
+                view.oneTime.setVisibility(View.VISIBLE);
+                view.weekly.setText("weekly on " + weeklyFormat.format(cala.getTime()).substring(0,2));
+
+                switch(monthlyFormat.format(cala.getTime())){
+                    case "1":
+                        numberSuffix = "st";
+                        break;
+                    case "2":
+                        numberSuffix = "nd";
+                        break;
+                    case "3":
+                        numberSuffix = "rd";
+                        break;
+                    default :
+                        numberSuffix = "th";
+                }
+                view.monthly.setText("monthly on " + monthlyFormat.format(cala.getTime()) + numberSuffix + " " + weeklyFormat.format(cala.getTime()).substring(0,2));
+                view.yearly.setText("yearly on " + yearlyFormat.format(cala.getTime()));
+                break;
             case "Today":
                 view.recurrenceOptions.setVisibility(View.VISIBLE);
                 view.recurrenceField.setVisibility(View.INVISIBLE);
                 view.starting.setVisibility(View.GONE);
                 view.oneTime.setVisibility(View.VISIBLE);
                 view.weekly.setText("weekly on " + weeklyFormat.format(cal.getTime()).substring(0,2));
-                String numberSuffix = "";
+//                String numberSuffix = "";
                 switch(monthlyFormat.format(cal.getTime())){
                     case "1":
                         numberSuffix = "st";
@@ -152,14 +176,18 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 //                    MainActivity mainActivity = (MainActivity) getActivity();
 
                     Task task;
+                    Calendar taskStartDate = (Calendar) cal.clone();
+                    if (mainActivity.getSpinnerStatus().equals("Tomorrow")) {
+                        taskStartDate.add(Calendar.DATE, 1);
+                    }
                     if (!recurrenceText.equals("daily") && !recurrenceText.equals("daily...")) {
                          task = new Task(null, name, false, -1, formattedDate,
-                                mainActivity.getSpinnerStatus(), 0, cal,
+                                mainActivity.getSpinnerStatus(), 0, taskStartDate,
                                 true, null, false, null, false);
                     }
                     else {
                         task = new Task(null, name, false, -1, formattedDate,
-                                mainActivity.getSpinnerStatus(), 0, cal,
+                                mainActivity.getSpinnerStatus(), 0, taskStartDate,
                                 true, null, true, null, false);
                     }
 
@@ -263,7 +291,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
 
                     if (recurrenceText.equals("daily") || recurrenceText.equals("daily...")) {
-                        Calendar tomorrowDate = (Calendar) cal.clone();
+                        Calendar tomorrowDate = (Calendar) taskStartDate.clone();
                         tomorrowDate.add(Calendar.DATE, 1);
                         String formattedDate2 = customFormat.format(tomorrowDate.getTime());
 
