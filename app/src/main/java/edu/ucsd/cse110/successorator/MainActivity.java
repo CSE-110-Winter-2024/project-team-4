@@ -92,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dateTextView.setText(formattedDate);
 
         MainViewModel model = ModelFetch.getModel();
+        model.setOrderedTasks();
         model.getTodayTasks();
+
 
         Thread t = new Thread() {
             @Override

@@ -33,6 +33,8 @@ public interface TaskRepository {
 
     Subject<List<Task>> filterTasksByTypeAndContext(String type, String context);
 
+    Subject<List<Task>> sortTasksByContext();
+
     void generateNextRecurringTasks();
 
     void setOnDisplays();

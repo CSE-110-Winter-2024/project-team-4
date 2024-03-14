@@ -104,5 +104,8 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
 
     }
 
-
+    @Override
+    public Subject<List<Task>> sortTasksByContext() {
+        return null;
+    }
 }

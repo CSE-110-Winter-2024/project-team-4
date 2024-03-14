@@ -15,6 +15,7 @@ import java.util.List;
 @Dao
 public interface TaskDao {
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(TaskEntity taskEntity);
 
@@ -77,7 +78,8 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks WHERE type = 'Recurring' and on_display == true")
     LiveData<List<TaskEntity>> getRecurringTasks();
 
-    @Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true")
+    //@Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true")
+    @Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
     LiveData<List<TaskEntity>> getTasksByTypeAndContext(String type, String context);
 
     @Transaction
@@ -127,4 +129,7 @@ public interface TaskDao {
 
     @Query("UPDATE tasks SET type = 'Today' WHERE type = 'Tomorrow'")
     void moveTomorrowTasksToToday();
+
+    @Query("SELECT * FROM tasks ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> createSortedTasksView();
 }
