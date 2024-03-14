@@ -89,17 +89,17 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 // CITATION: https://www.codingdemos.com/android-strikethrough-text/
                 binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                MainActivity mainActivity = (MainActivity) getContext();
-                String spinnerStatus = mainActivity.getSpinnerStatus();
-                if(spinnerStatus.equals("Today")){
-                    activityModel.getTodayTasks();
-                }
-                else if (spinnerStatus.equals("Tomorrow")){
-                    activityModel.getTomorrowTasks();
-                }
-                else if (spinnerStatus.equals("Recurring")){
-                    activityModel.getRecurringTasks();
-                }
+//                MainActivity mainActivity = (MainActivity) getContext();
+//                String spinnerStatus = mainActivity.getSpinnerStatus();
+//                if(spinnerStatus.equals("Today")){
+//                    activityModel.getTodayTasks();
+//                }
+//                else if (spinnerStatus.equals("Tomorrow")){
+//                    activityModel.getTomorrowTasks();
+//                }
+//                else if (spinnerStatus.equals("Recurring")){
+//                    activityModel.getRecurringTasks();
+//                }
 
             } else {
                 task.setComplete(false);
@@ -109,35 +109,38 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 System.out.println("MARKED AS INCOMPLETE");
                 binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
-                MainActivity mainActivity = (MainActivity) getContext();
-                String spinnerStatus = mainActivity.getSpinnerStatus();
-                if(spinnerStatus.equals("Today")){
-                    activityModel.getTodayTasks();
-                }
-                else if (spinnerStatus.equals("Tomorrow")){
-                    activityModel.getTomorrowTasks();
-                }
-                else if (spinnerStatus.equals("Recurring")){
-                    activityModel.getRecurringTasks();
-                }
+//                MainActivity mainActivity = (MainActivity) getContext();
+//                String spinnerStatus = mainActivity.getSpinnerStatus();
+//                if(spinnerStatus.equals("Today")){
+//                    activityModel.getTodayTasks();
+//                }
+//                else if (spinnerStatus.equals("Tomorrow")){
+//                    activityModel.getTomorrowTasks();
+//                }
+//                else if (spinnerStatus.equals("Recurring")){
+//                    activityModel.getRecurringTasks();
+//                }
             }
 
 
         });
-        MainActivity mainActivity = (MainActivity) getContext();
-        String spinnerStatus = mainActivity.getSpinnerStatus();
-        if(spinnerStatus.equals("Today")){
-            activityModel.getTodayTasks();
-        }
-        else if (spinnerStatus.equals("Tomorrow")){
-            activityModel.getTomorrowTasks();
-        }
-        else if (spinnerStatus.equals("Recurring")){
-            activityModel.getRecurringTasks();
-        }
+//        MainActivity mainActivity = (MainActivity) getContext();
+//        String spinnerStatus = mainActivity.getSpinnerStatus();
+//        if(spinnerStatus.equals("Today")){
+//            activityModel.getTodayTasks();
+//        }
+//        else if (spinnerStatus.equals("Tomorrow")){
+//            activityModel.getTomorrowTasks();
+//        }
+//        else if (spinnerStatus.equals("Recurring")){
+//            activityModel.getRecurringTasks();
+//        }
 
         return binding.getRoot();
     }
+
+
+
 
     // The below methods aren't strictly necessary, usually.
     // But get in the habit of defining them because they never hurt

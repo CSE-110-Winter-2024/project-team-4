@@ -148,7 +148,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     System.out.println("RECURRING DATE: " + formattedDate);
 
-                    var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
+//                    var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
 //                    MainActivity mainActivity = (MainActivity) getActivity();
 
                     Task task;
@@ -229,16 +229,16 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     ((MainActivity)getActivity()).swapFragments();
 
-                    MainViewModel model = ModelFetch.getModel();
-                    if(mainActivity.getSpinnerStatus().equals("Today")){
-                        model.getTodayTasks();
-                    }
-                    else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
-                        model.getTomorrowTasks();
-                    }
-                    else if(mainActivity.getSpinnerStatus().equals("Recurring")){
-                        model.getRecurringTasks();
-                    }
+//                    MainViewModel model = ModelFetch.getModel();
+//                    if(mainActivity.getSpinnerStatus().equals("Today")){
+//                        model.getTodayTasks();
+//                    }
+//                    else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
+//                        model.getTomorrowTasks();
+//                    }
+//                    else if(mainActivity.getSpinnerStatus().equals("Recurring")){
+//                        model.getRecurringTasks();
+//                    }
 
                 }
 

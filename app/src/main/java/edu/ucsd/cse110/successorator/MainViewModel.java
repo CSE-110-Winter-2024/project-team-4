@@ -107,6 +107,7 @@ public class MainViewModel extends ViewModel {
             var newOrderedTasks = new ArrayList<>(tasks);
             System.out.println("recurring tasks: " + newOrderedTasks);
             orderedTasks.setValue(newOrderedTasks);
+            System.out.println("recurring tasks orderedTasks: " + orderedTasks);
         });
     }
 

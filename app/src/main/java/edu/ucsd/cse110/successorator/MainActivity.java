@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dateTextView.setText(formattedDate);
 
         MainViewModel model = ModelFetch.getModel();
-        model.getTodayTasks();
+//        model.getTodayTasks();
 
         Thread t = new Thread() {
             @Override
@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 }
                                 else if(status.equals("Tomorrow")){
                                     model.getTomorrowTasks();
+                                }
+                                else if(status.equals("Recurring")) {
+                                    model.getRecurringTasks();
                                 }
                             }
                         });
@@ -166,8 +169,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         spinner.setAdapter(adapter);
         spinner.setSelection(1);
-        MainViewModel model = ModelFetch.getModel();
-        model.getTodayTasks();
+//        MainViewModel model = ModelFetch.getModel();
+//        model.getTodayTasks();
     }
 
 
@@ -195,7 +198,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             cala.add(Calendar.DATE, 1);
             String dateString = customFormat.format(cala.getTime());
             dateTextView.setText("Tomorrow, " + dateString);
-        } else if (spin.getSelectedItem().equals("Pending") || spin.getSelectedItem().equals("Recurring")) {
+        }
+        else if (spin.getSelectedItem().equals("Pending") || spin.getSelectedItem().equals("Recurring")) {
             dateTextView.setText("");
         }
 
@@ -243,6 +247,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String selectedItem = parent.getItemAtPosition(position).toString();
         System.out.println("MainActivity onItemSelected");
         int previous = 1;
+        MainViewModel model = ModelFetch.getModel();
+
 
         switch (selectedItem) {
             case "Today":
@@ -256,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String dateString = customFormat.format(cal.getTime());
                 dateTextView.setText("Today, " + dateString);
 
-                MainViewModel model = ModelFetch.getModel();
+//                MainViewModel model = ModelFetch.getModel();
                 model.getTodayTasks();
                 break;
             case "Tomorrow":
@@ -270,13 +276,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String dateStringa = customFormats.format(cala.getTime());
                 dateTextViewa.setText("Tomorrow, " + dateStringa);
 
-                MainViewModel modela = ModelFetch.getModel();
-                modela.getTomorrowTasks();
+//                MainViewModel modela = ModelFetch.getModel();
+                model.getTomorrowTasks();
                 break;
             case "Recurring":
                 // Do something for Recurring
                 ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Recurring");
+//                MainViewModel modelb = ModelFetch.getModel();
+                model.getRecurringTasks();
                 break;
             case "Pending":
                 // Do something for Pending
