@@ -108,4 +108,10 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
     public Subject<List<Task>> sortTasksByContext() {
         return dataSource.sortTasksByContext();
     }
+  
+    @Override
+    public Subject<List<Task>> filterPendingTasks(){
+        return dataSource.filterPendingTasks();
+    }
+
 }

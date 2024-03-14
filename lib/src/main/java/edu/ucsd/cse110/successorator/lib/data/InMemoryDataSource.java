@@ -238,11 +238,24 @@ public class InMemoryDataSource {
         for(Task task : allTasks){
             if(task.type().equals("Recurring")){
                 recurringTasks.add(task);
-            }
+            } 
         }
         MutableSubject<List<Task>> somethingElse
                 = new SimpleSubject<>();
         somethingElse.setValue(recurringTasks);
+        return somethingElse;
+    }
+    public Subject<List<Task>> filterPendingTasks(){
+        List<Task> allTasks = getTasks();
+        List<Task> pendingTasks = new ArrayList<Task>();
+        for(Task task : allTasks){
+            if(task.type().equals("Pending")){
+                pendingTasks.add(task);
+            }
+        }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(pendingTasks);
         return somethingElse;
     }
 

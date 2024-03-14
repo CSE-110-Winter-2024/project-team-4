@@ -333,7 +333,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case "Today":
                 // Do something for Today
                 System.out.println("Today");
-
+                TextView dateTextView = findViewById(R.id.date_box);
+                dateTextView.setVisibility(View.VISIBLE);
                 Spinner spinner = findViewById(R.id.fromspin);
                 Calendar cal = (Calendar) CalendarUpdate.getCal().clone();
                 TextView dateTextView = findViewById(R.id.date_box);
@@ -346,6 +347,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
             case "Tomorrow":
                 // Do something for Tomorrow
+                TextView dateTextViewa = findViewById(R.id.date_box);
+                dateTextViewa.setVisibility(View.VISIBLE);
                 System.out.println("Tomorrow");
                 Spinner spin = findViewById(R.id.fromspin);
                 Calendar cala = (Calendar) CalendarUpdate.getCal().clone();

@@ -40,4 +40,6 @@ public interface TaskRepository {
     void setOnDisplays();
 
     void setTaskCompletedDate(Task task);
+  
+    Subject<List<Task>> filterPendingTasks();
 }
