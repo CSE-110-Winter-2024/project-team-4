@@ -96,6 +96,7 @@ public class MainViewModel extends ViewModel {
             if (tasks == null) return;
 
             var newOrderedTasks = new ArrayList<>(tasks);
+            System.out.println("TODAY TASKS: " + newOrderedTasks);
             orderedTasks.setValue(newOrderedTasks);
         });
     }

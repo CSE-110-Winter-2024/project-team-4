@@ -1,7 +1,5 @@
 package edu.ucsd.cse110.successorator.data.db;
 
-import android.icu.text.Replaceable;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -71,8 +69,8 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks WHERE type = 'Tomorrow' and on_display == true")
     LiveData<List<TaskEntity>> getTomorrowTasks();
 
-    @Query("SELECT * FROM tasks WHERE type = 'Today' and on_display == true")
-    LiveData<List<TaskEntity>> getTodayTasks();
+    @Query("SELECT * FROM tasks WHERE (type = 'Today' or (type = 'Recurring' and start_date = :status)) and on_display == true")
+    LiveData<List<TaskEntity>> getTodayTasks(long status);
 
     @Query("SELECT * FROM tasks WHERE (type = 'Recurring' or recurring_interval >= 0) and on_display == true")
     LiveData<List<TaskEntity>> getRecurringTasks();

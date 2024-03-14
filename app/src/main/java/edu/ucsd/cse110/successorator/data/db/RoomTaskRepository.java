@@ -96,7 +96,9 @@ public class RoomTaskRepository implements TaskRepository {
     }
 
     public Subject<List<Task>> filterTodayTasks(){
-        var entitiesLiveData = taskDao.getTodayTasks();
+        Calendar cal = CalendarUpdate.getCalMidnight();
+//        System.out.println("FILTER TIME: " + cal.getTimeInMillis());
+        var entitiesLiveData = taskDao.getTodayTasks(cal.getTimeInMillis());
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(TaskEntity::toTask)
