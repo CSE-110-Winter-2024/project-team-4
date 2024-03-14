@@ -59,22 +59,18 @@ public class MainViewModel extends ViewModel {
 
     public void append(Task task) {
         taskRepository.append(task);
-        this.setOrderedTasks();
     }
 
     public void prepend(Task task) {
         taskRepository.prepend(task);
-        this.setOrderedTasks();
     }
 
     public void remove(int id) {
         taskRepository.remove(id);
-        this.setOrderedTasks();
     }
 
     public void removeCompleted(){
         taskRepository.removeCompleted();
-        this.setOrderedTasks();
     }
 
     public int getCount() {

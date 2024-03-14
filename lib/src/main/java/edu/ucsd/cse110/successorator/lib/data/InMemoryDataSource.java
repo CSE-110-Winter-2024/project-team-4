@@ -246,6 +246,55 @@ public class InMemoryDataSource {
         return somethingElse;
     }
 
+    public Subject<List<Task>> sortTasksByContext() {
+        List<Task> allTasks = getTasks();
+        List<Task> sortedTasks = new ArrayList<Task>();
+        for(Task task : allTasks) {
+            if(!task.complete() && task.context().equals("H")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(!task.complete() && task.context().equals("W")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(!task.complete() && task.context().equals("S")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(!task.complete() && task.context().equals("E")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(task.complete() && task.context().equals("H")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(task.complete() && task.context().equals("W")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(task.complete() && task.context().equals("S")) {
+                sortedTasks.add(task);
+            }
+        }
+        for(Task task : allTasks) {
+            if(task.complete() && task.context().equals("E")) {
+                sortedTasks.add(task);
+            }
+        }
+        MutableSubject<List<Task>> somethingElse
+                = new SimpleSubject<>();
+        somethingElse.setValue(sortedTasks);
+        return somethingElse;
+    }
+
     /**
      * Private utility method to maintain state of the fake DB: ensures that new
      * tasks inserted have an id, and updates the nextId if necessary.
