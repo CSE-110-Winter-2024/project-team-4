@@ -214,18 +214,18 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
 
                     Task task;
-
-
-                    String[] parsedDate = recurringDate.split("/");
-                    int month = Integer.parseInt(parsedDate[0]);
-                    int day = Integer.parseInt(parsedDate[1]);
-                    int year = Integer.parseInt(parsedDate[2]);
-
                     Calendar taskStartDate = (Calendar) cal.clone();
-                    taskStartDate.set(Calendar.YEAR, year);
-                    taskStartDate.set(Calendar.MONTH, month - 1);
-                    taskStartDate.set(Calendar.DAY_OF_MONTH, day);
+                    if (mainActivity.getSpinnerStatus().equals("Recurring")) {
+                        String[] parsedDate = recurringDate.split("/");
+                        int month = Integer.parseInt(parsedDate[0]);
+                        int day = Integer.parseInt(parsedDate[1]);
+                        int year = Integer.parseInt(parsedDate[2]);
 
+
+                        taskStartDate.set(Calendar.YEAR, year);
+                        taskStartDate.set(Calendar.MONTH, month - 1);
+                        taskStartDate.set(Calendar.DAY_OF_MONTH, day);
+                    }
 
                     System.out.println("cloned cal " + cal.getTimeInMillis());
                     if (mainActivity.getSpinnerStatus().equals("Tomorrow")) {
