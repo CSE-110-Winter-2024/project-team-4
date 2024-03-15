@@ -17,9 +17,15 @@ public class MainViewModelTest {
 
     @Test
     public void append() {
-        Task task = new Task(1, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task = new Task(1, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
 
         List<Task> tasks = List.of(task, task2);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -37,12 +43,22 @@ public class MainViewModelTest {
 
     @Test
     public void prepend() {
-        Task task = new Task(1, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task = new Task(1, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
 
-        Task task4 = new Task(2, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task5 = new Task(3,"name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task4 = new Task(2, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task5 = new Task(3,"name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
 
         List<Task> tasks = List.of(task4, task5);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -60,12 +76,22 @@ public class MainViewModelTest {
 
     @Test
     public void remove() {
-        Task task = new Task(1, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task = new Task(1, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
 
-        Task task4 = new Task(2, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task5 = new Task(3,"name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task4 = new Task(2, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task5 = new Task(3,"name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
 
         List<Task> tasks = List.of(task, task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -91,11 +117,19 @@ public class MainViewModelTest {
 
     @Test
     public void removeCompleted() {
-        Task task = new Task(1, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",true, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task = new Task(1, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task2 = new Task(2, "name",true, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
 
-        Task task4 = new Task(3,"name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task4 = new Task(3,"name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
 
 
 
@@ -116,8 +150,12 @@ public class MainViewModelTest {
 
     @Test
     public void setComplete(){
-        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
 
         List<Task> tasks = List.of(task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -128,8 +166,12 @@ public class MainViewModelTest {
 
         model.setComplete(2, true);
 
-        Task task5 = new Task(2, "name",true, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task6 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task5 = new Task(2, "name",true, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task6 = new Task(3,"name",false, 3, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
 
         List<Task> taskss = List.of(task5, task6);
 
@@ -138,9 +180,15 @@ public class MainViewModelTest {
 
     @Test
     public void getTodayTasks(){
-        Task task = new Task(1, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",false, 2, "date", "Tomorrow", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task = new Task(1, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false, "H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Tomorrow",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
 
         List<Task> tasks = List.of(task, task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -158,9 +206,15 @@ public class MainViewModelTest {
 
     @Test
     public void getTomorrowTasks(){
-        Task task = new Task(1, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",false, 2, "date", "Tomorrow", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task = new Task(1, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Tomorrow",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
 
         List<Task> tasks = List.of(task, task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -199,11 +253,18 @@ public class MainViewModelTest {
 
     @Test
     public void moveOver() {
-        Task task = new Task(1, "name",false, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",true, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Tomorrow", 0, null, true, null, true, null, "H");
-
-        Task task4 = new Task(3,"name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task = new Task(1, "name",false, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task2 = new Task(2, "name",true, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Tomorrow",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task4 = new Task(3,"name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
 
         List<Task> tasks = List.of(task, task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -220,13 +281,18 @@ public class MainViewModelTest {
 
     @Test
     public void setOrderedTasks() {
-        Task task = new Task(1, "name",true, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "W");
-        Task task3 = new Task(3,"name",false, 3, "date", "Tomorrow", 0, null, true, null, true, null, "E");
-
-        Task task5 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "W");
-        Task task6 = new Task(3,"name",false, 3, "date", "Tomorrow", 0, null, true, null, true, null, "E");
-        Task task4 = new Task(1, "name",true, 1, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task = new Task(1, "name",true, 1, "date", "Today",
+                0, null, true, null, true,
+                null, false,"H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today",
+                0, null, true, null, true,
+                null, false,"W");
+        Task task3 = new Task(3,"name",false, 3, "date", "Tomorrow",
+                0, null, true, null, true,
+                null, false,"E");
+        Task task5 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, false,"W");
+        Task task6 = new Task(3,"name",false, 3, "date", "Tomorrow", 0, null, true, null, true, null, false,"E");
+        Task task4 = new Task(1, "name",true, 1, "date", "Today", 0, null, true, null, true, null, false,"H");
 
         List<Task> tasks = List.of(task, task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -243,11 +309,11 @@ public class MainViewModelTest {
 
     @Test
     public void getTasksByTypeAndContext() {
-        Task task = new Task(1, "name",true, 1, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "W");
-        Task task3 = new Task(3,"name",false, 3, "date", "Tomorrow", 0, null, true, null, true, null, "E");
+        Task task = new Task(1, "name",true, 1, "date", "Today", 0, null, true, null, true, null, false,"H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, false,"W");
+        Task task3 = new Task(3,"name",false, 3, "date", "Tomorrow", 0, null, true, null, true, null, false,"E");
 
-        Task task5 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "W");
+        Task task5 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, false,"W");
 
         List<Task> tasks = List.of(task, task2, task3);
 
@@ -265,8 +331,8 @@ public class MainViewModelTest {
 
     @Test
     public void setType() {
-        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task3 = new Task(3,"name",false, 3, "date", "Pending", 0, null, true, null, true, null, "H");
+        Task task2 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, false,"H");
+        Task task3 = new Task(3,"name",false, 3, "date", "Pending", 0, null, true, null, true, null, false,"H");
 
         List<Task> tasks = List.of(task2, task3);
         InMemoryDataSource inmd = new InMemoryDataSource();
@@ -277,8 +343,8 @@ public class MainViewModelTest {
 
         model.setType(3, "Today");
 
-        Task task5 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, "H");
-        Task task6 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, "H");
+        Task task5 = new Task(2, "name",false, 2, "date", "Today", 0, null, true, null, true, null, false,"H");
+        Task task6 = new Task(3,"name",false, 3, "date", "Today", 0, null, true, null, true, null, false,"H");
 
         List<Task> taskss = List.of(task5, task6);
 
