@@ -347,8 +347,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 //                MainViewModel model = ModelFetch.getModel();
                 model.getTodayTasks();
-                MainViewModel model = ModelFetch.getModel();
-                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                MainViewModel modela = ModelFetch.getModel();
+                modela.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
             case "Tomorrow":
                 // Do something for Tomorrow
@@ -365,8 +365,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 //                MainViewModel modela = ModelFetch.getModel();
                 model.getTomorrowTasks();
-                MainViewModel modela = ModelFetch.getModel();
-                modela.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                MainViewModel modelb = ModelFetch.getModel();
+                modelb.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
             case "Recurring":
                 // Do something for Recurring
@@ -374,16 +374,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 System.out.println("Recurring");
 //                MainViewModel modelb = ModelFetch.getModel();
                 model.getRecurringTasks();
-                MainViewModel modelab = ModelFetch.getModel();
-                modelab.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                MainViewModel modelc = ModelFetch.getModel();
+                modelc.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
 
                 break;
             case "Pending":
                 // Do something for Pending
                 ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Pending");
-                MainViewModel modelabc = ModelFetch.getModel();
-                modelabc.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                MainViewModel modeld = ModelFetch.getModel();
+                modeld.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
         }
     }

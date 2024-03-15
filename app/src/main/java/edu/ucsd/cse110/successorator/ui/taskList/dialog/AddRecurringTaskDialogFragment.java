@@ -330,7 +330,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                         var task2 = new Task(null, name + ", daily", false, -1, formattedDate2,
                                 mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1), tomorrowDate,
-                                false, null, false, null, false);
+                                false, null, false, null, false, context);
 
                         Calendar nextTaskDate2 = (Calendar) task2.startDate().clone();
                         nextTaskDate2.add(Calendar.DATE, 1);
@@ -343,7 +343,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                         var task2 = new Task(null, name + ", daily", false, -1, formattedDate2,
                                 mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1), nextDate,
-                                false, null, false, null, false);
+                                false, null, false, null, false, context);
 
                         Calendar nextTaskDate2 = (Calendar) task2.startDate().clone();
                         nextTaskDate2.add(Calendar.DATE, 1);
