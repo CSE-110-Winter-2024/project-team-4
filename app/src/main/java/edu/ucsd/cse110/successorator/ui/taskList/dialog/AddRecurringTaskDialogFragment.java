@@ -63,6 +63,9 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
         SimpleDateFormat monthlyFormat = new SimpleDateFormat("F");
         SimpleDateFormat yearlyFormat = new SimpleDateFormat("M/d");
         SimpleDateFormat recurringOnFormat = new SimpleDateFormat("MM/dd/Y");
+
+
+
         String numberSuffix = "";
         switch(mainActivity.getSpinnerStatus()) {
             case "Tomorrow":
@@ -211,7 +214,19 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
 
                     Task task;
+
+                    String[] dateComponents = recurringDate.split("/");
+                    int month = Integer.parseInt(dateComponents[0]);
+                    int day = Integer.parseInt(dateComponents[1]);
+                    int year = Integer.parseInt(dateComponents[2]);
+
                     Calendar taskStartDate = (Calendar) cal.clone();
+
+                    taskStartDate.set(Calendar.YEAR, year);
+                    taskStartDate.set(Calendar.MONTH, month - 1); // Month is zero-based
+                    taskStartDate.set(Calendar.DAY_OF_MONTH, day);
+
+
                     System.out.println("cloned cal " + cal.getTimeInMillis());
                     if (mainActivity.getSpinnerStatus().equals("Tomorrow")) {
                         taskStartDate.add(Calendar.DATE, 1);
