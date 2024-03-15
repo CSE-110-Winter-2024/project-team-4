@@ -127,6 +127,8 @@ public class RoomTaskRepository implements TaskRepository {
             entitiesLiveData = taskDao.getTasksByTomorrowAndContext(tmrw.getTimeInMillis(), context);
         } else if (type.equals("Recurring")) {
             entitiesLiveData = taskDao.getTasksByRecurringAndContext(context);
+        } else if (type.equals("Pending")) {
+            entitiesLiveData = taskDao.getTasksByPendingAndContext(context);
         }
 
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {

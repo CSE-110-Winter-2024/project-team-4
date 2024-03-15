@@ -76,6 +76,9 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks WHERE (type = 'Recurring' or recurring_interval >= 0) and on_display == true")
     LiveData<List<TaskEntity>> getRecurringTasks();
 
+    @Query("SELECT * FROM tasks WHERE (type = 'Pending') and on_display == true")
+    LiveData<List<TaskEntity>> getPendingTasks();
+
     //@Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true")
     @Query("SELECT * FROM tasks WHERE (type = 'Today' or (start_date = :status)) and on_display == true and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
     LiveData<List<TaskEntity>> getTasksByTodayAndContext(long status, String context);
@@ -86,8 +89,8 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks WHERE (type = 'Recurring' or recurring_interval >= 0) and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
     LiveData<List<TaskEntity>> getTasksByRecurringAndContext(String context);
   
-    @Query("SELECT * FROM tasks WHERE type = 'Pending'")
-    LiveData<List<TaskEntity>> getPendingTasks();
+    @Query("SELECT * FROM tasks WHERE type = 'Pending'  and (:context = '' OR CONTEXT = :context) ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByPendingAndContext(String context);
 
     @Transaction
     default int append(TaskEntity taskEntity){

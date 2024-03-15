@@ -196,11 +196,13 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             }
         });
 
+        // Pending long click menu listener
         binding.taskNameText.setOnLongClickListener(new View.OnLongClickListener() {
             MainActivity mainActivity = (MainActivity) getContext();
             String spinnerStatus = mainActivity.getSpinnerStatus();
             @Override
             public boolean onLongClick(View v) {
+                System.out.println("SPINNERSTATuS " + spinnerStatus);
                 if(spinnerStatus.equals("Pending")){
                     showOptionsDialog(task);
                 }

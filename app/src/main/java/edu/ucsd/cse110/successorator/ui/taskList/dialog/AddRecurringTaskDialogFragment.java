@@ -244,7 +244,6 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     }
 
 
-
                     if (!mainActivity.getSpinnerStatus().equals("Pending")){
                         System.out.println("ENTERED nexttask switch statement");
                         Calendar nextTaskDate = (Calendar) task.startDate().clone();
