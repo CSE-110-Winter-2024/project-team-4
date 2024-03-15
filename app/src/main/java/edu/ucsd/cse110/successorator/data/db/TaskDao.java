@@ -66,10 +66,10 @@ public interface TaskDao {
             "WHERE id = :id ")
     void setCompletedDate(int id, Calendar status);
 
-    @Query("SELECT * FROM tasks WHERE type = 'Tomorrow' and on_display == true")
-    LiveData<List<TaskEntity>> getTomorrowTasks();
+    @Query("SELECT * FROM tasks WHERE ((start_date = :status))")
+    LiveData<List<TaskEntity>> getTomorrowTasks(long status);
 
-    @Query("SELECT * FROM tasks WHERE (type = 'Today' or (type = 'Recurring' and start_date = :status)) and on_display == true")
+    @Query("SELECT * FROM tasks WHERE (type = 'Today' or (start_date = :status)) and on_display == true")
     LiveData<List<TaskEntity>> getTodayTasks(long status);
 
     @Query("SELECT * FROM tasks WHERE (type = 'Recurring' or recurring_interval >= 0) and on_display == true")

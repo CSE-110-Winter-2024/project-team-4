@@ -177,9 +177,11 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     Task task;
                     Calendar taskStartDate = (Calendar) cal.clone();
+                    System.out.println("cloned cal " + cal.getTimeInMillis());
                     if (mainActivity.getSpinnerStatus().equals("Tomorrow")) {
                         taskStartDate.add(Calendar.DATE, 1);
                     }
+                    System.out.println("taskstartdate today/tmrw" + taskStartDate.getTimeInMillis());
                     if (!recurrenceText.equals("daily") && !recurrenceText.equals("daily...")) {
                          task = new Task(null, name, false, -1, formattedDate,
                                 mainActivity.getSpinnerStatus(), 0, taskStartDate,
@@ -289,14 +291,29 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     recurDialog.dismiss();
 
 
-
-                    if (recurrenceText.equals("daily") || recurrenceText.equals("daily...")) {
+                    Calendar todayMidnight = CalendarUpdate.getCalMidnight();
+                    Calendar tmrwMidnight = (Calendar) todayMidnight.clone();
+                    tmrwMidnight.add(Calendar.DATE,1);
+                    if ((recurrenceText.equals("daily") || recurrenceText.equals("daily...")) && task.startDate().equals(todayMidnight)) {
                         Calendar tomorrowDate = (Calendar) taskStartDate.clone();
                         tomorrowDate.add(Calendar.DATE, 1);
                         String formattedDate2 = customFormat.format(tomorrowDate.getTime());
 
                         var task2 = new Task(null, name + ", daily", false, -1, formattedDate2,
                                 mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1), tomorrowDate,
+                                false, null, false, null, false);
+
+                        Calendar nextTaskDate2 = (Calendar) task2.startDate().clone();
+                        nextTaskDate2.add(Calendar.DATE, 1);
+                        task2.setNextDate(nextTaskDate2);
+                        activityModel.append(task2);
+                    } else if ((recurrenceText.equals("daily") || recurrenceText.equals("daily...")) && task.startDate().equals(tmrwMidnight)) {
+                        Calendar nextDate = (Calendar) taskStartDate.clone();
+                        nextDate.add(Calendar.DATE, 1);
+                        String formattedDate2 = customFormat.format(nextDate.getTime());
+
+                        var task2 = new Task(null, name + ", daily", false, -1, formattedDate2,
+                                mainActivity.getSpinnerStatus(), TimeUnit.DAYS.toMillis(1), nextDate,
                                 false, null, false, null, false);
 
                         Calendar nextTaskDate2 = (Calendar) task2.startDate().clone();

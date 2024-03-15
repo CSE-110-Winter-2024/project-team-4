@@ -86,7 +86,11 @@ public class RoomTaskRepository implements TaskRepository {
     }
 
     public Subject<List<Task>> filterTomorrowTasks(){
-        var entitiesLiveData = taskDao.getTomorrowTasks();
+        Calendar cal = CalendarUpdate.getCalMidnight();
+        Calendar tmrw = (Calendar)cal.clone();
+        tmrw.add(Calendar.DATE,1);
+        System.out.println("Gettomorrowtasks tmrw cal" + tmrw.getTimeInMillis());
+        var entitiesLiveData = taskDao.getTomorrowTasks(tmrw.getTimeInMillis());
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(TaskEntity::toTask)
@@ -98,6 +102,7 @@ public class RoomTaskRepository implements TaskRepository {
     public Subject<List<Task>> filterTodayTasks(){
         Calendar cal = CalendarUpdate.getCalMidnight();
 //        System.out.println("FILTER TIME: " + cal.getTimeInMillis());
+        System.out.println("gettodaytasks cal " + cal.getTimeInMillis());
         var entitiesLiveData = taskDao.getTodayTasks(cal.getTimeInMillis());
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()

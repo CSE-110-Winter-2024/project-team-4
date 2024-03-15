@@ -85,41 +85,22 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
 
+        MainActivity mainActivity = (MainActivity) getContext();
+        String spinnerStatus = mainActivity.getSpinnerStatus();
         binding.taskNameText.setOnClickListener(v -> {
-            if (!task.complete()) {
-                task.setComplete(true);
-                activityModel.setComplete(task.id(), true);
-                activityModel.remove(task.id());
-                System.out.println("TaskListAdapter task.id(): " + task.id());
-                activityModel.prepend(task);
-                System.out.println("TaskListAdapter after prepend task.id(): " + task.id());
-                activityModel.taskRepository().setTaskCompletedDate(task.id(), task);
+            if (!spinnerStatus.equals("Recurring")) {
+                if (!task.complete()) {
+                    task.setComplete(true);
+                    activityModel.setComplete(task.id(), true);
+                    activityModel.remove(task.id());
+                    System.out.println("TaskListAdapter task.id(): " + task.id());
+                    activityModel.prepend(task);
+                    System.out.println("TaskListAdapter after prepend task.id(): " + task.id());
+                    activityModel.taskRepository().setTaskCompletedDate(task.id(), task);
 
-                System.out.println("MARKED AS COMPLETE");
-                // CITATION: https://www.codingdemos.com/android-strikethrough-text/
-                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-//                MainActivity mainActivity = (MainActivity) getContext();
-//                String spinnerStatus = mainActivity.getSpinnerStatus();
-//                if(spinnerStatus.equals("Today")){
-//                    activityModel.getTodayTasks();
-//                }
-//                else if (spinnerStatus.equals("Tomorrow")){
-//                    activityModel.getTomorrowTasks();
-//                }
-//                else if (spinnerStatus.equals("Recurring")){
-//                    activityModel.getRecurringTasks();
-//                }
-
-            } else {
-                task.setComplete(false);
-                activityModel.setComplete(task.id(), false);
-                activityModel.remove(task.id());
-                activityModel.prepend(task);
-
-                activityModel.taskRepository().setTaskCompletedDate(task.id(),null);
-                System.out.println("MARKED AS INCOMPLETE");
-                binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    System.out.println("MARKED AS COMPLETE");
+                    // CITATION: https://www.codingdemos.com/android-strikethrough-text/
+                    binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
 //                MainActivity mainActivity = (MainActivity) getContext();
 //                String spinnerStatus = mainActivity.getSpinnerStatus();
@@ -132,6 +113,29 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //                else if (spinnerStatus.equals("Recurring")){
 //                    activityModel.getRecurringTasks();
 //                }
+
+                } else {
+                    task.setComplete(false);
+                    activityModel.setComplete(task.id(), false);
+                    activityModel.remove(task.id());
+                    activityModel.prepend(task);
+
+                    activityModel.taskRepository().setTaskCompletedDate(task.id(), null);
+                    System.out.println("MARKED AS INCOMPLETE");
+                    binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+
+//                MainActivity mainActivity = (MainActivity) getContext();
+//                String spinnerStatus = mainActivity.getSpinnerStatus();
+//                if(spinnerStatus.equals("Today")){
+//                    activityModel.getTodayTasks();
+//                }
+//                else if (spinnerStatus.equals("Tomorrow")){
+//                    activityModel.getTomorrowTasks();
+//                }
+//                else if (spinnerStatus.equals("Recurring")){
+//                    activityModel.getRecurringTasks();
+//                }
+                }
             }
 
 
@@ -149,6 +153,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //        else if (spinnerStatus.equals("Recurring")){
 //            activityModel.getRecurringTasks();
 //        }
+        // Delete recurring task with long click on recurring view
         binding.taskNameText.setOnLongClickListener(new View.OnLongClickListener() {
             MainActivity mainActivity = (MainActivity) getContext();
             String spinnerStatus = mainActivity.getSpinnerStatus();
