@@ -69,7 +69,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         }
 
         // Populate the view with the flashcard's data.
-        System.out.println("setting text on binding");
+//        System.out.println("setting text on binding");
 //        if (task.recurringInterval() >= 0) {
 //            binding.taskNameText.setText(task.name());
 //        } else {
@@ -77,6 +77,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //        }
         binding.taskNameText.setText(task.name());
         binding.conText.setText(task.context());
+//        System.out.println("TaskListAdapter getView");
+//        System.out.println("task.context: " + task.context());
 
         switch(task.context()){
             case "H":

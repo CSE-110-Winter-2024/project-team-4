@@ -96,18 +96,21 @@ public class MainViewModel extends ViewModel {
             if (tasks == null) return;
 
             var newOrderedTasks = new ArrayList<>(tasks);
-            System.out.println("TODAY TASKS: " + newOrderedTasks);
+//            System.out.println("TODAY TASKS: " + newOrderedTasks);
             orderedTasks.setValue(newOrderedTasks);
         });
 
     }
 
     public void getTasksByTypeAndContext(String type, String context) {
+//        System.out.println("MainViewModel getTasksByTypeAndContext");
         taskRepository.filterTasksByTypeAndContext(type, context).observe(tasks -> {
             if (tasks == null) return;
 
             var newOrderedTasks = new ArrayList<>(tasks);
             orderedTasks.setValue(newOrderedTasks);
+
+//            System.out.println("orderedTasks: " + newOrderedTasks);
         });
     }
 

@@ -92,9 +92,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(formattedDate);
 
-        MainViewModel model = ModelFetch.getModel();
-        model.setOrderedTasks();
-        model.getTodayTasks();
+//        MainViewModel model = ModelFetch.getModel();
+//        model.setOrderedTasks();
+//        model.getTodayTasks();
+
 
 
         Thread t = new Thread() {
@@ -109,16 +110,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 Spinner spin = findViewById(R.id.fromspin);
                                 String status = spin.getSelectedItem().toString();
 
-                                if(status.equals("Today")){
-                                    model.getTodayTasks();
-                                }
-                                else if(status.equals("Tomorrow")){
-                                    model.getTomorrowTasks();
-                                }
-                                else if(status.equals("Recurring")) {
-                                    model.getRecurringTasks();
-                                }
-                                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+//                                if(status.equals("Today")){
+//                                    activityModel.getTodayTasks();
+//                                }
+//                                else if(status.equals("Tomorrow")){
+//                                    activityModel.getTomorrowTasks();
+//                                }
+//                                else if(status.equals("Recurring")) {
+//                                    activityModel.getRecurringTasks();
+//                                }
+//                                else if(status.equals("Pending")) {
+//                                    activityModel.getPendingTasks();
+//                                }
+                                System.out.println(status);
+                                activityModel.getTasksByTypeAndContext(status, filterContext);
                             }
                         });
                     }
@@ -132,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void popupMenu(View v){
+        System.out.println("MainActivity popupMenu");
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.focusmode_dialog, null);
         final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, true);
@@ -147,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 menu_btn.setBackgroundResource(R.drawable.homecircle);
                 popupWindow.dismiss();
+                System.out.println("set home context");
             }
         });
 
@@ -158,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 menu_btn.setBackgroundResource(R.drawable.workcircle);
                 popupWindow.dismiss();
+                System.out.println("set work context");
             }
         });
 
@@ -169,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 menu_btn.setBackgroundResource(R.drawable.schoolcircle);
                 popupWindow.dismiss();
+                System.out.println("set school context");
             }
         });
 
@@ -180,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 menu_btn.setBackgroundResource(R.drawable.errandcircle);
                 popupWindow.dismiss();
+                System.out.println("set errand context");
             }
         });
 
@@ -346,12 +356,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 dateTextView.setText("Today, " + dateString);
 
 //                MainViewModel model = ModelFetch.getModel();
-                model.getTodayTasks();
-                MainViewModel modela = ModelFetch.getModel();
-                modela.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+//                model.getTodayTasks();
+//                MainViewModel modela = ModelFetch.getModel();
+                activityModel.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
             case "Tomorrow":
                 // Do something for Tomorrow
+                System.out.println("Tomorrow");
                 TextView dateTextViewa = findViewById(R.id.date_box);
                 dateTextViewa.setVisibility(View.VISIBLE);
                 System.out.println("Tomorrow");
@@ -364,26 +375,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 dateTextViewa.setText("Tomorrow, " + dateStringa);
 
 //                MainViewModel modela = ModelFetch.getModel();
-                model.getTomorrowTasks();
-                MainViewModel modelb = ModelFetch.getModel();
-                modelb.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+//                model.getTomorrowTasks();
+//                MainViewModel modelb = ModelFetch.getModel();
+                activityModel.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
             case "Recurring":
                 // Do something for Recurring
-                ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Recurring");
+                ((TextView)findViewById(R.id.date_box)).setText("");
 //                MainViewModel modelb = ModelFetch.getModel();
-                model.getRecurringTasks();
-                MainViewModel modelc = ModelFetch.getModel();
-                modelc.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+//                model.getRecurringTasks();
+//                MainViewModel modelc = ModelFetch.getModel();
+                activityModel.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
 
                 break;
             case "Pending":
                 // Do something for Pending
+                System.out.println("Pending");
                 ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Pending");
-                MainViewModel modeld = ModelFetch.getModel();
-                modeld.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+//                MainViewModel modeld = ModelFetch.getModel();
+                activityModel.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
         }
     }

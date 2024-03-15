@@ -77,8 +77,14 @@ public interface TaskDao {
     LiveData<List<TaskEntity>> getRecurringTasks();
 
     //@Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true")
-    @Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
-    LiveData<List<TaskEntity>> getTasksByTypeAndContext(String type, String context);
+    @Query("SELECT * FROM tasks WHERE (type = 'Today' or (start_date = :status)) and on_display == true and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByTodayAndContext(long status, String context);
+
+    @Query("SELECT * FROM tasks WHERE (start_date = :status) and (:context = '' OR CONTEXT = :context)  ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByTomorrowAndContext(long status, String context);
+
+    @Query("SELECT * FROM tasks WHERE (type = 'Recurring' or recurring_interval >= 0) and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByRecurringAndContext(String context);
   
     @Query("SELECT * FROM tasks WHERE type = 'Pending'")
     LiveData<List<TaskEntity>> getPendingTasks();
