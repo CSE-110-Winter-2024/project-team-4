@@ -85,6 +85,9 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
         return dataSource.filterRecurringTasks();
     }
 
+    @Override
+    public Subject<List<Task>> filterPendingTasks(){ return dataSource.filterPendingTasks(); }
+
     public Subject<List<Task>> filterTasksByTypeAndContext(String type, String context){
         return dataSource.filterTasksByTypeAndContext(type, context);
     }
@@ -100,7 +103,13 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
     }
 
     @Override
-    public void setTaskCompletedDate(Task task) {
+    public void setTaskCompletedDate(Integer id, Task task) {
+
+    }
+
+
+    @Override
+    public void setCreatedNextRecurring(int id, boolean b) {
 
     }
 
@@ -109,9 +118,6 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
         return dataSource.sortTasksByContext();
     }
   
-    @Override
-    public Subject<List<Task>> filterPendingTasks(){
-        return dataSource.filterPendingTasks();
-    }
+
 
 }

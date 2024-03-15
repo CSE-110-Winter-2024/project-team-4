@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Calendar cal = CalendarUpdate.getCal();
         // loop through all tasks and call function to create recurring tasks
         System.out.println("MainActivity onCreate");
+
         activityModel.taskRepository().generateNextRecurringTasks();
         activityModel.taskRepository().setOnDisplays();
 
@@ -91,9 +92,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         TextView dateTextView = findViewById(R.id.date_box);
         dateTextView.setText(formattedDate);
 
-        MainViewModel model = ModelFetch.getModel();
-        model.setOrderedTasks();
-        model.getTodayTasks();
+//        MainViewModel model = ModelFetch.getModel();
+//        model.setOrderedTasks();
+//        model.getTodayTasks();
+
 
 
         Thread t = new Thread() {
@@ -105,7 +107,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                                Spinner spin = findViewById(R.id.fromspin);
+                                String status = spin.getSelectedItem().toString();
+
+//                                if(status.equals("Today")){
+//                                    activityModel.getTodayTasks();
+//                                }
+//                                else if(status.equals("Tomorrow")){
+//                                    activityModel.getTomorrowTasks();
+//                                }
+//                                else if(status.equals("Recurring")) {
+//                                    activityModel.getRecurringTasks();
+//                                }
+//                                else if(status.equals("Pending")) {
+//                                    activityModel.getPendingTasks();
+//                                }
+                                System.out.println(status);
+                                activityModel.getTasksByTypeAndContext(status, filterContext);
                             }
                         });
                     }
@@ -119,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void popupMenu(View v){
+        System.out.println("MainActivity popupMenu");
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.focusmode_dialog, null);
         final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 1000, true);
@@ -134,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 menu_btn.setBackgroundResource(R.drawable.homecircle);
                 popupWindow.dismiss();
+                System.out.println("set home context");
             }
         });
 
@@ -145,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 menu_btn.setBackgroundResource(R.drawable.workcircle);
                 popupWindow.dismiss();
+                System.out.println("set work context");
             }
         });
 
@@ -156,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 menu_btn.setBackgroundResource(R.drawable.schoolcircle);
                 popupWindow.dismiss();
+                System.out.println("set school context");
             }
         });
 
@@ -167,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 menu_btn.setBackgroundResource(R.drawable.errandcircle);
                 popupWindow.dismiss();
+                System.out.println("set errand context");
             }
         });
 
@@ -183,20 +206,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-//    public void CreatepopUpWindow(){
-//
-//        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//        View popupView = inflater.inflate(R.layout.focusmode_dialog, null);
-//
-//        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-//        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-//        PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
-//        layout.post(new Runnable() {
-//            public void run() {
-//                popupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
-//            }
-//        });
-//    }
 
     @Override
     public void onResume() {
@@ -252,10 +261,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner.setAdapter(adapter);
-        spinner.setSelection(1);
-        MainViewModel model = ModelFetch.getModel();
-        model.getTodayTasks();
+//        spinner.setAdapter(adapter);
+//        spinner.setSelection(1);
+//        MainViewModel model = ModelFetch.getModel();
+//        model.getTodayTasks();
     }
 
 
@@ -264,24 +273,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Calendar cal = CalendarUpdate.getCal();
         // loop through all tasks and call function to create recurring tasks
         System.out.println("MainActivity incrementCurrentDate");
+
         activityModel.taskRepository().generateNextRecurringTasks();
         activityModel.taskRepository().setOnDisplays();
 
-        SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
-
-        String formattedDate = customFormat.format(cal.getTime());
-        var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-        TextView dateTextView = findViewById(R.id.date_box);
-        dateTextView.setText(formattedDate);
+        SimpleDateFormat customFormat = new SimpleDateFormat("EEE, M/d");
 
         Spinner spin = findViewById(R.id.fromspin);
-        if(spin.getSelectedItemPosition() == 2){
-            Calendar cala = (Calendar) CalendarUpdate.getCal().clone();
+        TextView dateTextView = findViewById(R.id.date_box);
+        if (spin.getSelectedItem().equals("Today")){
+            String formattedDate = customFormat.format(cal.getTime());
+            var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
+            dateTextView.setText("Today, " + formattedDate);
+        } else if(spin.getSelectedItem().equals("Tomorrow")){
+            Calendar cala = (Calendar) cal.clone();
             cala.add(Calendar.DATE, 1);
-            TextView dateTextViewa = findViewById(R.id.date_box);
-            SimpleDateFormat customFormats = new SimpleDateFormat("EEEE, M/d");
-            String dateStringa = customFormats.format(cala.getTime());
-            dateTextViewa.setText(dateStringa);
+            String dateString = customFormat.format(cala.getTime());
+            dateTextView.setText("Tomorrow, " + dateString);
+        }
+        else if (spin.getSelectedItem().equals("Pending") || spin.getSelectedItem().equals("Recurring")) {
+            dateTextView.setText("");
         }
 
         MainViewModel activityModel = ModelFetch.getModel();
@@ -328,6 +339,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String selectedItem = parent.getItemAtPosition(position).toString();
         System.out.println("MainActivity onItemSelected");
         int previous = 1;
+        MainViewModel model = ModelFetch.getModel();
+
 
         switch (selectedItem) {
             case "Today":
@@ -342,11 +355,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String dateString = customFormat.format(cal.getTime());
                 dateTextView.setText("Today, " + dateString);
 
-                MainViewModel model = ModelFetch.getModel();
-                model.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+//                MainViewModel model = ModelFetch.getModel();
+//                model.getTodayTasks();
+//                MainViewModel modela = ModelFetch.getModel();
+                activityModel.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
             case "Tomorrow":
                 // Do something for Tomorrow
+                System.out.println("Tomorrow");
                 TextView dateTextViewa = findViewById(R.id.date_box);
                 dateTextViewa.setVisibility(View.VISIBLE);
                 System.out.println("Tomorrow");
@@ -358,23 +374,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String dateStringa = customFormats.format(cala.getTime());
                 dateTextViewa.setText("Tomorrow, " + dateStringa);
 
-                MainViewModel modela = ModelFetch.getModel();
-                modela.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+//                MainViewModel modela = ModelFetch.getModel();
+//                model.getTomorrowTasks();
+//                MainViewModel modelb = ModelFetch.getModel();
+                activityModel.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
             case "Recurring":
                 // Do something for Recurring
-                ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Recurring");
-                MainViewModel modelab = ModelFetch.getModel();
-                modelab.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+                ((TextView)findViewById(R.id.date_box)).setText("");
+//                MainViewModel modelb = ModelFetch.getModel();
+//                model.getRecurringTasks();
+//                MainViewModel modelc = ModelFetch.getModel();
+                activityModel.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
 
                 break;
             case "Pending":
                 // Do something for Pending
+                System.out.println("Pending");
                 ((TextView)findViewById(R.id.date_box)).setText("");
                 System.out.println("Pending");
-                MainViewModel modelabc = ModelFetch.getModel();
-                modelabc.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
+//                MainViewModel modeld = ModelFetch.getModel();
+                activityModel.getTasksByTypeAndContext(getSpinnerStatus(), filterContext);
                 break;
         }
     }

@@ -23,7 +23,7 @@ public interface TaskRepository {
 
     void setType(int id, String type);
 
-    void removeCompleted();
+    void removeCompleted(); 
 
     Subject<List<Task>>  filterTomorrowTasks();
 
@@ -39,7 +39,9 @@ public interface TaskRepository {
 
     void setOnDisplays();
 
-    void setTaskCompletedDate(Task task);
+    void setTaskCompletedDate(Integer id, Task task);
+
+    void setCreatedNextRecurring(int id, boolean b);
   
     Subject<List<Task>> filterPendingTasks();
 }

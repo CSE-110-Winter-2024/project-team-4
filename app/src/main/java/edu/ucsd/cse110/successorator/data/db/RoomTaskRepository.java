@@ -57,7 +57,8 @@ public class RoomTaskRepository implements TaskRepository {
 
     @Override
     public void append(Task task){
-        taskDao.append(TaskEntity.fromTask(task));
+        System.out.println("RoomTaskRepo append");
+        System.out.println(taskDao.append(TaskEntity.fromTask(task)));
     }
 
     @Override
@@ -76,6 +77,8 @@ public class RoomTaskRepository implements TaskRepository {
     @Override
     public void setType(int id, String type) {taskDao.setType(id, type);}
 
+    public void setCreatedNextRecurring(int id, boolean status) { taskDao.setCreatedNextRecurring(id, status);}
+
 
     public void removeCompleted(){
         taskDao.deleteCompleted();
@@ -83,7 +86,11 @@ public class RoomTaskRepository implements TaskRepository {
     }
 
     public Subject<List<Task>> filterTomorrowTasks(){
-        var entitiesLiveData = taskDao.getTomorrowTasks();
+        Calendar cal = CalendarUpdate.getCalMidnight();
+        Calendar tmrw = (Calendar)cal.clone();
+        tmrw.add(Calendar.DATE,1);
+//        System.out.println("Gettomorrowtasks tmrw cal" + tmrw.getTimeInMillis());
+        var entitiesLiveData = taskDao.getTomorrowTasks(tmrw.getTimeInMillis());
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(TaskEntity::toTask)
@@ -93,7 +100,10 @@ public class RoomTaskRepository implements TaskRepository {
     }
 
     public Subject<List<Task>> filterTodayTasks(){
-        var entitiesLiveData = taskDao.getTodayTasks();
+        Calendar cal = CalendarUpdate.getCalMidnight();
+//        System.out.println("FILTER TIME: " + cal.getTimeInMillis());
+//        System.out.println("gettodaytasks cal " + cal.getTimeInMillis());
+        var entitiesLiveData = taskDao.getTodayTasks(cal.getTimeInMillis());
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(TaskEntity::toTask)
@@ -105,7 +115,22 @@ public class RoomTaskRepository implements TaskRepository {
 
 
     public Subject<List<Task>> filterTasksByTypeAndContext(String type, String context){
-        var entitiesLiveData = taskDao.getTasksByTypeAndContext(type, context);
+//        System.out.println("RoomTaskRepo filterTasksByTypeAndContext("+ type + ", " + context+")");
+        Calendar cal = CalendarUpdate.getCalMidnight();
+
+        var entitiesLiveData = taskDao.getTasksByTodayAndContext(cal.getTimeInMillis(), context);
+        if (type.equals("Today")) {
+
+        } else if (type.equals("Tomorrow")) {
+            Calendar tmrw = (Calendar)cal.clone();
+            tmrw.add(Calendar.DATE,1);
+            entitiesLiveData = taskDao.getTasksByTomorrowAndContext(tmrw.getTimeInMillis(), context);
+        } else if (type.equals("Recurring")) {
+            entitiesLiveData = taskDao.getTasksByRecurringAndContext(context);
+        } else if (type.equals("Pending")) {
+            entitiesLiveData = taskDao.getTasksByPendingAndContext(context);
+        }
+
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(TaskEntity::toTask)
@@ -125,6 +150,7 @@ public class RoomTaskRepository implements TaskRepository {
 
     public Subject<List<Task>> filterRecurringTasks(){
         var entitiesLiveData = taskDao.getRecurringTasks();
+        System.out.println("ENTITIES LIVE DATA: " + entitiesLiveData);
         var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(TaskEntity::toTask)
@@ -144,14 +170,18 @@ public class RoomTaskRepository implements TaskRepository {
         return new LiveDataSubjectAdapter<>(tasksLiveData);
     }
     
-    public void setTaskCompletedDate(Task task) {
-        Calendar cal = CalendarUpdate.getCalMidnight();
-        task.setCompletedDate(cal);
+    public void setTaskCompletedDate(Integer id, Task task) {
+        if (task == null) {
+            taskDao.setCompletedDate(id, null);
+        } else {
+            Calendar cal = CalendarUpdate.getCalMidnight();
+            task.setCompletedDate(cal);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println("state completedTaskDate:" + dateFormat.format(task.completedDate().getTime()));
-        System.out.println("RoomTaskRepository taskid: "+ task.id());
-        taskDao.setCompletedDate(task.id(), task.completedDate());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            System.out.println("state completedTaskDate:" + dateFormat.format(task.completedDate().getTime()));
+            System.out.println("RoomTaskRepository taskid: " + task.id());
+            taskDao.setCompletedDate(id, task.completedDate());
+        }
     }
     
 
@@ -164,9 +194,17 @@ public class RoomTaskRepository implements TaskRepository {
                 int intervalDays = (int)TimeUnit.MILLISECONDS.toDays(task.recurringInterval());
                 Calendar cal = CalendarUpdate.getCal();
                 Calendar startTaskDate = task.startDate();
+                Calendar nextTaskDate = task.nextDate();
+                nextTaskDate.set(Calendar.HOUR, 0);
+                nextTaskDate.set(Calendar.MINUTE, 0);
+                nextTaskDate.set(Calendar.SECOND, 0);
+                nextTaskDate.set(Calendar.MILLISECOND, 0);
                 Calendar completedTaskDate = task.completedDate();
 
                 Calendar todayDate = CalendarUpdate.getCalMidnight();
+
+
+                System.out.println("task.id: " + task.id() + ". task.name: " + task.name());
 
                 System.out.println("completedTaskDate:" + completedTaskDate);
 
@@ -177,8 +215,14 @@ public class RoomTaskRepository implements TaskRepository {
                     taskDao.setOnDisplay(task.id(), task.onDisplay());
                 }
 
-                // set onDisplay to false if it should not appear
-                if (intervalDays > 0 && completedTaskDate.getTimeInMillis() < todayDate.getTimeInMillis()) {
+                // set onDisplay to false if its checked off
+                if (intervalDays > 0 && (completedTaskDate != null && completedTaskDate.getTimeInMillis() < todayDate.getTimeInMillis())) {
+                    task.setOnDisplay(false);
+                    taskDao.setOnDisplay(task.id(), task.onDisplay());
+                }
+
+                // set onDisplay to false if recurring task expired
+                if (intervalDays > 0 && nextTaskDate.getTimeInMillis() <= todayDate.getTimeInMillis()) {
                     task.setOnDisplay(false);
                     taskDao.setOnDisplay(task.id(), task.onDisplay());
                 }
@@ -194,67 +238,109 @@ public class RoomTaskRepository implements TaskRepository {
 
         if (taskDao.findAll() != null) {
             for (TaskEntity taskEntity: taskDao.findAll()) {
-                Task task = taskEntity.toTask();
-                System.out.println("task name: " + task.name());
+                if (!taskEntity.type.equals("Pending")) {
+                    Task task = taskEntity.toTask();
+                    System.out.println("task name: " + task.name());
 
-                int intervalDays = (int)TimeUnit.MILLISECONDS.toDays(task.recurringInterval());
-                Calendar cal = CalendarUpdate.getCal();
+                    int intervalDays = (int)TimeUnit.MILLISECONDS.toDays(task.recurringInterval());
+                    Calendar cal = CalendarUpdate.getCal();
 
-                Calendar startTaskDate = task.startDate();
-                Calendar nextTaskDate = task.nextDate();
-                System.out.println("intervalDays =  " + intervalDays);
-                System.out.println("task.createdNextRecurring = " + task.createdNextRecurring());
-                System.out.println(nextTaskDate.getTimeInMillis() + " <=? " + Calendar.getInstance().getTimeInMillis() + " + " + TimeUnit.DAYS.toMillis(2));
+                    Calendar startTaskDate = task.startDate();
+                    Calendar nextTaskDate = task.nextDate();
+                    System.out.println("intervalDays =  " + intervalDays);
+                    System.out.println("task.createdNextRecurring = " + task.createdNextRecurring());
 
-                if (intervalDays > 0 && !task.createdNextRecurring()
-                        && nextTaskDate.getTimeInMillis() <= cal.getTimeInMillis() + TimeUnit.DAYS.toMillis(2)) {
-                    System.out.println("----- INSIDE IF -----");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    System.out.println("id = " + task.id() + ". startDate = " + dateFormat.format(task.startDate().getTime()) + ". nextDate = " + dateFormat.format(task.nextDate().getTime()));
+                    System.out.println("nexttaskdate" + nextTaskDate);
+                    System.out.println("cal" + cal);
+                    System.out.println("nexttaskdate in millis" + nextTaskDate.getTimeInMillis());
+                    System.out.println("cal in millis" + cal.getTimeInMillis());
+    //                System.out.println(nextTaskDate.getTimeInMillis() + " <=? " + Calendar.getInstance().getTimeInMillis() + " + " + TimeUnit.DAYS.toMillis(2));
 
-                    // Create a new instance of the task
-                    Task recurringTask = new Task (
-                            null, // id
-                            task.name(), // name
-                            false, // complete
-                            task.sortOrder(), // sort order
-                            task.date(), // date
-                            task.type(), // type
-                            task.recurringInterval(), // recInterval
-                            nextTaskDate, // startDate
-                            false, // onDisplay
-                            null, // nextDate
-                            false,  // createdNextRecurring
-                            null, task.context() // completedDate
-                            );
+                    if (intervalDays > 0 && !task.createdNextRecurring()
+                            && nextTaskDate.getTimeInMillis() <= cal.getTimeInMillis() + TimeUnit.DAYS.toMillis(2)) {
+                        System.out.println("----- INSIDE IF -----");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        System.out.println("id = " + task.id() + ". startDate = " + dateFormat.format(task.startDate().getTime()) + ". nextDate = " + dateFormat.format(task.nextDate().getTime()));
 
-                    Calendar newNextTaskDate = (Calendar) recurringTask.startDate().clone();
-                    switch(intervalDays) {
-                        case 1:
-                            newNextTaskDate.add(Calendar.DATE, 1);
-                            break;
-                        case 7:
-                            newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
-                            break;
-                        case 30:
-                            newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 4); // TODO: FIX
-                            break;
-                        case 365:
-                            newNextTaskDate.add(Calendar.YEAR, 1); // TODO: FIX
-                            break;
-                        default:
-                            System.out.println("Unknown recurrence.");
+                        // Create a new instance of the task
+                        Task recurringTask = new Task(
+                                null, // id
+                                task.name(), // name
+                                false, // complete
+                                task.sortOrder(), // sort order
+                                task.date(), // date
+                                task.type(), // type
+                                task.recurringInterval(), // recInterval
+                                nextTaskDate, // startDate
+                                false, // onDisplay
+                                null, // nextDate
+                                false,  // createdNextRecurring
+                                null, // completedDate
+                                task.isFifthWeekOfMonth(),
+                                task.context() // completedDate
+                        );
+
+                        Calendar newNextTaskDate = (Calendar) recurringTask.startDate().clone();
+                        switch (intervalDays) {
+                            case 1:
+                                newNextTaskDate.add(Calendar.DATE, 1);
+                                break;
+                            case 7:
+                                newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                                break;
+                            case 30:
+                                // if first recurring task was the fifth week of month
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                int nextTaskDateWeekInMonth = newNextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+                                if (recurringTask.isFifthWeekOfMonth()) {
+                                    Calendar mockNextMonthTaskDate = (Calendar) nextTaskDate.clone();
+                                    for (int i = 0; i < 4; i++) {
+                                        mockNextMonthTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                                    }
+                                    System.out.println("mockNextMonthTaskDate: " + sdf.format(mockNextMonthTaskDate.getTime()));
+
+                                    int maxWeeksInNextMonth = mockNextMonthTaskDate.getActualMaximum(Calendar.DAY_OF_WEEK_IN_MONTH);
+                                    // there is no 5th week the next month
+                                    System.out.println("maxWeeksInNextMonth: " + maxWeeksInNextMonth);
+                                    if (maxWeeksInNextMonth < 5) {
+                                        nextTaskDateWeekInMonth = maxWeeksInNextMonth;
+                                    } else {
+                                        nextTaskDateWeekInMonth = 5;
+                                    }
+                                }
+
+                                newNextTaskDate.add(Calendar.MONTH, 1);
+                                newNextTaskDate.set(Calendar.DAY_OF_WEEK_IN_MONTH, nextTaskDateWeekInMonth);
+
+                                System.out.println("nextTaskDateWeekInMonth: " + nextTaskDateWeekInMonth);
+                                System.out.println("Next Task Date: " + sdf.format(nextTaskDate.getTime()));
+
+
+    //                            newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+    //                            while (newNextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH) != nextTaskDateWeekInMonth) {
+    //                                newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+    //                            }
+                                break;
+                            case 365:
+                                newNextTaskDate.add(Calendar.YEAR, 1);
+                                if (newNextTaskDate.get(Calendar.MONTH) == Calendar.FEBRUARY &&
+                                        newNextTaskDate.get(Calendar.DAY_OF_MONTH) == 29 &&
+                                        newNextTaskDate.getActualMaximum(Calendar.DAY_OF_MONTH) == 29) {
+                                    newNextTaskDate.add(Calendar.DATE, 1);
+                                }
+                                break;
+                            default:
+                                System.out.println("Unknown recurrence.");
+                        }
+                        recurringTask.setNextDate(newNextTaskDate);
+
+                        TaskEntity recurringTaskEntity = TaskEntity.fromTask(recurringTask);
+                        taskDao.append(recurringTaskEntity);
+
+                        task.setCreatedNextRecurring(true);
+                        taskDao.setCreatedNextRecurring(task.id(), task.createdNextRecurring());
                     }
-                    recurringTask.setNextDate(newNextTaskDate);
-
-                    TaskEntity recurringTaskEntity = TaskEntity.fromTask(recurringTask);
-                    taskDao.append(recurringTaskEntity);
-
-                    task.setCreatedNextRecurring(true);
-                    taskDao.setCreatedNextRecurring(task.id(), task.createdNextRecurring());
-
-            }
-        }
+            }    }
 
 
         }

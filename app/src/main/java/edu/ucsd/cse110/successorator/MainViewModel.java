@@ -58,6 +58,9 @@ public class MainViewModel extends ViewModel {
     }
 
     public void append(Task task) {
+        System.out.println("MainViewModel append");
+        System.out.println("task: " + task);
+        System.out.println("task.id: " + task.id() + ". task.name: " + task.name());
         taskRepository.append(task);
     }
 
@@ -93,17 +96,21 @@ public class MainViewModel extends ViewModel {
             if (tasks == null) return;
 
             var newOrderedTasks = new ArrayList<>(tasks);
+//            System.out.println("TODAY TASKS: " + newOrderedTasks);
             orderedTasks.setValue(newOrderedTasks);
         });
 
     }
 
     public void getTasksByTypeAndContext(String type, String context) {
+//        System.out.println("MainViewModel getTasksByTypeAndContext");
         taskRepository.filterTasksByTypeAndContext(type, context).observe(tasks -> {
             if (tasks == null) return;
 
             var newOrderedTasks = new ArrayList<>(tasks);
             orderedTasks.setValue(newOrderedTasks);
+
+//            System.out.println("orderedTasks: " + newOrderedTasks);
         });
     }
 

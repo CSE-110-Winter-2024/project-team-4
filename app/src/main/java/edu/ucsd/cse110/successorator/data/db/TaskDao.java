@@ -1,7 +1,5 @@
 package edu.ucsd.cse110.successorator.data.db;
 
-import android.icu.text.Replaceable;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -69,21 +67,30 @@ public interface TaskDao {
             "WHERE id = :id ")
     void setCompletedDate(int id, Calendar status);
 
-    @Query("SELECT * FROM tasks WHERE type = 'Tomorrow' and on_display == true")
-    LiveData<List<TaskEntity>> getTomorrowTasks();
+    @Query("SELECT * FROM tasks WHERE ((start_date = :status))")
+    LiveData<List<TaskEntity>> getTomorrowTasks(long status);
 
-    @Query("SELECT * FROM tasks WHERE type = 'Today' and on_display == true")
-    LiveData<List<TaskEntity>> getTodayTasks();
+    @Query("SELECT * FROM tasks WHERE (type = 'Today' or (start_date = :status)) and on_display == true")
+    LiveData<List<TaskEntity>> getTodayTasks(long status);
 
-    @Query("SELECT * FROM tasks WHERE type = 'Recurring' and on_display == true")
+    @Query("SELECT * FROM tasks WHERE (type = 'Recurring' or recurring_interval >= 0) and on_display == true")
     LiveData<List<TaskEntity>> getRecurringTasks();
 
-    //@Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true")
-    @Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
-    LiveData<List<TaskEntity>> getTasksByTypeAndContext(String type, String context);
-  
-    @Query("SELECT * FROM tasks WHERE type = 'Pending'")
+    @Query("SELECT * FROM tasks WHERE (type = 'Pending') and on_display == true")
     LiveData<List<TaskEntity>> getPendingTasks();
+
+    //@Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true")
+    @Query("SELECT * FROM tasks WHERE (type = 'Today' or (start_date = :status)) and on_display == true and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByTodayAndContext(long status, String context);
+
+    @Query("SELECT * FROM tasks WHERE (start_date = :status) and (:context = '' OR CONTEXT = :context)  ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByTomorrowAndContext(long status, String context);
+
+    @Query("SELECT * FROM tasks WHERE (type = 'Recurring' or recurring_interval >= 0) and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByRecurringAndContext(String context);
+  
+    @Query("SELECT * FROM tasks WHERE type = 'Pending'  and (:context = '' OR CONTEXT = :context) ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByPendingAndContext(String context);
 
     @Transaction
     default int append(TaskEntity taskEntity){
@@ -99,10 +106,14 @@ public interface TaskDao {
                 taskEntity.nextDate,
                 taskEntity.createdNextRecurring,
                 taskEntity.completedDate,
+                taskEntity.isFifthWeekOfMonth,
                 taskEntity.context
         );
-
-        return Math.toIntExact(insert(newTask));
+        System.out.println("TaskDao append newTask id: " + newTask.id);
+        newTask.id = taskEntity.id;
+        Integer result = Math.toIntExact(insert(newTask));
+        System.out.println("TaskDao append result = " + result);
+        return result;
     }
 
     @Transaction
@@ -119,8 +130,12 @@ public interface TaskDao {
                 taskEntity.nextDate,
                 taskEntity.createdNextRecurring,
                 taskEntity.completedDate,
+                taskEntity.isFifthWeekOfMonth,
                 taskEntity.context
         );
+        newTask.id = taskEntity.id;
+        System.out.println("TaskDao prepend argument id: " + taskEntity.id);
+        System.out.println("TaskDao prepend newTask id: " + newTask.id);
         return Math.toIntExact(insert(newTask));
     }
 
