@@ -215,15 +215,15 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     Task task;
 
-                    String[] dateComponents = recurringDate.split("/");
-                    int month = Integer.parseInt(dateComponents[0]);
-                    int day = Integer.parseInt(dateComponents[1]);
-                    int year = Integer.parseInt(dateComponents[2]);
+
+                    String[] parsedDate = recurringDate.split("/");
+                    int month = Integer.parseInt(parsedDate[0]);
+                    int day = Integer.parseInt(parsedDate[1]);
+                    int year = Integer.parseInt(parsedDate[2]);
 
                     Calendar taskStartDate = (Calendar) cal.clone();
-
                     taskStartDate.set(Calendar.YEAR, year);
-                    taskStartDate.set(Calendar.MONTH, month - 1); // Month is zero-based
+                    taskStartDate.set(Calendar.MONTH, month - 1);
                     taskStartDate.set(Calendar.DAY_OF_MONTH, day);
 
 
