@@ -2,4 +2,12 @@
     <string name="app_name">Successorator</string>
     <string name="placeholder">Placeholder</string>
     <string name="hello_world">Hello, World!</string>
+    <string name="InitialText">No goals for the day. Click the + to enter your most important thing</string>
+    <string-array name="Options">
+<!--        <item>Options:</item>-->
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>Pending</item>
+        <item>Recurring</item>
+    </string-array>
 </resources>
