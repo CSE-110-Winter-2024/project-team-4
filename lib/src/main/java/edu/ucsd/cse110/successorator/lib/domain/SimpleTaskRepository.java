@@ -85,6 +85,10 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
         return dataSource.filterRecurringTasks();
     }
 
+    public Subject<List<Task>> filterTasksByTypeAndContext(String type, String context){
+        return dataSource.filterTasksByTypeAndContext(type, context);
+    }
+
     @Override
     public void generateNextRecurringTasks() {
 
@@ -106,5 +110,14 @@ public class SimpleTaskRepository implements TaskRepo, TaskRepository {
 
     }
 
+    @Override
+    public Subject<List<Task>> sortTasksByContext() {
+        return dataSource.sortTasksByContext();
+    }
+  
+    @Override
+    public Subject<List<Task>> filterPendingTasks(){
+        return dataSource.filterPendingTasks();
+    }
 
 }

@@ -13,6 +13,7 @@ import java.util.List;
 @Dao
 public interface TaskDao {
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insert(TaskEntity taskEntity);
 
@@ -47,11 +48,11 @@ public interface TaskDao {
     void shiftSortOrders(int from, int to, int by);
 
     @Query("UPDATE tasks SET complete = :status " +
-            "WHERE id = :id ")
+            "WHERE id = :id")
     void setComplete(int id, boolean status);
 
     @Query("UPDATE tasks SET type = :type " +
-            "WHERE id = :id ")
+            "WHERE id = :id")
     void setType(int id, String type);
 
     @Query("UPDATE tasks SET created_next_recurring = :status " +
@@ -75,6 +76,13 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks WHERE (type = 'Recurring' or recurring_interval >= 0) and on_display == true")
     LiveData<List<TaskEntity>> getRecurringTasks();
 
+    //@Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true")
+    @Query("SELECT * FROM tasks WHERE type = :type and (:context = '' OR CONTEXT = :context) and on_display == true ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> getTasksByTypeAndContext(String type, String context);
+  
+    @Query("SELECT * FROM tasks WHERE type = 'Pending'")
+    LiveData<List<TaskEntity>> getPendingTasks();
+
     @Transaction
     default int append(TaskEntity taskEntity){
         var maxSortOrder = getMaxSortOrder();
@@ -89,7 +97,8 @@ public interface TaskDao {
                 taskEntity.nextDate,
                 taskEntity.createdNextRecurring,
                 taskEntity.completedDate,
-                taskEntity.isFifthWeekOfMonth
+                taskEntity.isFifthWeekOfMonth,
+                taskEntity.context
         );
         System.out.println("TaskDao append newTask id: " + newTask.id);
         newTask.id = taskEntity.id;
@@ -112,7 +121,8 @@ public interface TaskDao {
                 taskEntity.nextDate,
                 taskEntity.createdNextRecurring,
                 taskEntity.completedDate,
-                taskEntity.isFifthWeekOfMonth
+                taskEntity.isFifthWeekOfMonth,
+                taskEntity.context
         );
         newTask.id = taskEntity.id;
         System.out.println("TaskDao prepend argument id: " + taskEntity.id);
@@ -128,4 +138,7 @@ public interface TaskDao {
 
     @Query("UPDATE tasks SET type = 'Today' WHERE type = 'Tomorrow'")
     void moveTomorrowTasksToToday();
+
+    @Query("SELECT * FROM tasks ORDER BY complete, CASE CONTEXT WHEN 'H' THEN 1 WHEN 'W' THEN 2 WHEN 'S' THEN 3 WHEN 'E' THEN 4 END")
+    LiveData<List<TaskEntity>> createSortedTasksView();
 }

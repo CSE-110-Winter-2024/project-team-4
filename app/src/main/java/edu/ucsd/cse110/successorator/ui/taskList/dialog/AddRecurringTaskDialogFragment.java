@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,10 +31,13 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
     private edu.ucsd.cse110.successorator.databinding.FragmentDialogRecurringMenuBinding view;
     private MainViewModel activityModel;
 
+    private String context = "";
+
     public AddRecurringTaskDialogFragment()
     {
 
     }
+
 
     public static AddRecurringTaskDialogFragment newInstance() {
         var fragment = new AddRecurringTaskDialogFragment();
@@ -132,10 +136,44 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                 view.oneTime.setVisibility(View.VISIBLE);
         }
 
+
+
         Button dialogSaveButton = (Button) view.saveButton;
         Dialog recurDialog = new AlertDialog.Builder(getActivity())
                 .setView(view.getRoot())
                 .create();
+
+        TextView home = (TextView) view.homeButton;
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = "H";
+            }
+        });
+
+        TextView work = (TextView) view.workButton;
+        work.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = "W";
+            }
+        });
+
+        TextView school = (TextView) view.schoolButton;
+        school.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = "S";
+            }
+        });
+
+        TextView errand = (TextView) view.errandButton;
+        errand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context = "E";
+            }
+        });
         dialogSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +181,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                 var name = view.recurringInput.getText().toString();
                 var recurringDate = view.recurrenceField.getText().toString();
                 String recurrenceText = "";
-                if (!mainActivity.getSpinnerStatus().equals("Pending")) {
+                if (!mainActivity.getSpinnerStatus().equals("Pending") && !context.equals("")){
                     // Retrieving dialog's selection for recurrence
                     int checkedRadio = view.recurrenceOptions.getCheckedRadioButtonId();
 
@@ -159,8 +197,7 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
 
                 // Check that the required input string and radio selection are valid
-                // if it's not pending it needs a radio button selection
-                if(!name.equals("") && (!recurrenceText.equals("") || mainActivity.getSpinnerStatus().equals("Pending")))
+                if(!name.equals("") && (!recurrenceText.equals("") || (mainActivity.getSpinnerStatus().equals("Pending") && !context.equals(""))))
                 {
                     Calendar cal = CalendarUpdate.getCal();
                     SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
@@ -172,8 +209,6 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     System.out.println("RECURRING DATE: " + formattedDate);
 
-//                    var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-//                    MainActivity mainActivity = (MainActivity) getActivity();
 
                     Task task;
                     Calendar taskStartDate = (Calendar) cal.clone();
@@ -185,12 +220,12 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                     if (!recurrenceText.equals("daily") && !recurrenceText.equals("daily...")) {
                          task = new Task(null, name, false, -1, formattedDate,
                                 mainActivity.getSpinnerStatus(), 0, taskStartDate,
-                                true, null, false, null, false);
+                                true, null, false, null, false, context);
                     }
                     else {
                         task = new Task(null, name, false, -1, formattedDate,
                                 mainActivity.getSpinnerStatus(), 0, taskStartDate,
-                                true, null, true, null, false);
+                                true, null, true, null, false, context);
                     }
 
 
@@ -240,11 +275,6 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
                                 nextTaskDate.add(Calendar.MONTH, 1);
                                 nextTaskDate.set(Calendar.DAY_OF_WEEK_IN_MONTH, nextTaskDateWeekInMonth);
 
-//                                nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
-//                                while (nextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH) != nextTaskDateWeekInMonth) {
-//                                    nextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
-//                                }
-
                                 System.out.println("nextTaskDateWeekInMonth: " + nextTaskDateWeekInMonth);
                                 System.out.println("Next Task Date: " + sdf.format(nextTaskDate.getTime()));
 
@@ -282,7 +312,6 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     }
 
-//                    ISSUE HERE, task id is null when calling append
                     System.out.println("AddRecTaskDialogFrag onClick task = " + task);
                     System.out.println("task.id: " + task.id() + ". task.name: " + task.name());
 
@@ -326,17 +355,6 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
 
                     ((MainActivity)getActivity()).swapFragments();
 
-//                    MainViewModel model = ModelFetch.getModel();
-//                    if(mainActivity.getSpinnerStatus().equals("Today")){
-//                        model.getTodayTasks();
-//                    }
-//                    else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
-//                        model.getTomorrowTasks();
-//                    }
-//                    else if(mainActivity.getSpinnerStatus().equals("Recurring")){
-//                        model.getRecurringTasks();
-//                    }
-
                 }
 
             }
@@ -345,51 +363,6 @@ public class AddRecurringTaskDialogFragment extends DialogFragment {
         return recurDialog;
 
     }
-
-
-//    private void onPositiveButtonClick(DialogInterface dialog, int which) {
-//        Log.d("AddRecurringTaskDialogFragment", "This is a debug message");
-//        var name = view.recurringInput.getText().toString();
-//
-//        // Retrieving dialog's selection for recurrence
-//        View selectedRecurrence = view.recurrenceOptions.findViewById(view.recurrenceOptions.getCheckedRadioButtonId());
-//        int radioIndex = view.recurrenceOptions.indexOfChild(selectedRecurrence);
-//        RadioButton recurrence = (RadioButton) view.recurrenceOptions.getChildAt(radioIndex);
-//        String recurrenceText = recurrence.getText().toString();
-//        System.out.println("recurrenceText: " + recurrenceText);
-//
-//        if(!name.equals(""))
-//        {
-//            Calendar cal = CalendarUpdate.getCal();
-//            SimpleDateFormat customFormat = new SimpleDateFormat("EEEE, M/d");
-//            String formattedDate = customFormat.format(cal.getTime());
-//            var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
-//            MainActivity mainActivity = (MainActivity) getActivity();
-//            var task = new Task(null, name, false, -1, formattedDate,
-//                    mainActivity.getSpinnerStatus(), 0, cal,
-//                    true, null, false, null);
-//            activityModel.append(task);
-//            dialog.dismiss();
-//
-//            ((MainActivity)getActivity()).swapFragments();
-//
-//            MainViewModel model = ModelFetch.getModel();
-//            if(mainActivity.getSpinnerStatus().equals("Today")){
-//                model.getTodayTasks();
-//            }
-//            else if(mainActivity.getSpinnerStatus().equals("Tomorrow")){
-//                model.getTomorrowTasks();
-//            }
-//
-//        }
-//
-//    }
-
-
-//    private void onNegativeButtonClick(DialogInterface dialog, int which) {
-//        dialog.cancel();
-//    }
-//
 
 
 

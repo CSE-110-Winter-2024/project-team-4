@@ -55,10 +55,13 @@ public class TaskEntity {
     @ColumnInfo(name = "is_fifth_week_of_month")
     public boolean isFifthWeekOfMonth;
 
+    @ColumnInfo(name = "context")
+    public String context;
+
 
     TaskEntity(@NonNull String name, @NonNull boolean complete, @NonNull int sortOrder,
                @NonNull String type, long recurringInterval, Calendar startDate, boolean onDisplay,
-               Calendar nextDate, boolean createdNextRecurring, Calendar completedDate, boolean isFifthWeekOfMonth){
+               Calendar nextDate, boolean createdNextRecurring, Calendar completedDate, boolean isFifthWeekOfMonth, String context){
         this.name = name;
         this.complete = complete;
         this.sortOrder = sortOrder;
@@ -74,12 +77,13 @@ public class TaskEntity {
         this.createdNextRecurring = createdNextRecurring;
         this.completedDate = completedDate;
         this.isFifthWeekOfMonth = isFifthWeekOfMonth;
+        this.context = context;
     }
 
     public static TaskEntity fromTask(@NonNull Task task){
         var taskEntity = new TaskEntity(task.name(), task.complete(), task.sortOrder(), task.type(),
                 task.recurringInterval(), task.startDate(), task.onDisplay(), task.nextDate(),
-                task.createdNextRecurring(), task.completedDate(), task.isFifthWeekOfMonth());
+                task.createdNextRecurring(), task.completedDate(), task.isFifthWeekOfMonth(), task.context());
         taskEntity.id = task.id();
         System.out.println("task entity task.id():" + task.id());
         System.out.println("task entity taskentity .id:" + taskEntity.id);
@@ -91,7 +95,7 @@ public class TaskEntity {
         var dateFormat = DateFormat.getDateInstance(DateFormat.FULL).format(cal.getTime());
         date = dateFormat.toString();
         return new Task(id, name, complete, sortOrder, date, type, recurringInterval, startDate,
-                onDisplay, nextDate, createdNextRecurring, completedDate, isFifthWeekOfMonth);
+                onDisplay, nextDate, createdNextRecurring, completedDate, isFifthWeekOfMonth, context);
     }
 
 

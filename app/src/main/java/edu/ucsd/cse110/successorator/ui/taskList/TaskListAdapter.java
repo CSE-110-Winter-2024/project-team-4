@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 import edu.ucsd.cse110.successorator.MainActivity;
 import edu.ucsd.cse110.successorator.MainViewModel;
+import edu.ucsd.cse110.successorator.R;
 import edu.ucsd.cse110.successorator.lib.domain.CalendarUpdate;
 import edu.ucsd.cse110.successorator.lib.domain.Task;
 import android.content.Context;
@@ -75,20 +76,52 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //            binding.taskNameText.setText(task.name());
 //        }
         binding.taskNameText.setText(task.name());
+        binding.conText.setText(task.context());
+
+        switch(task.context()){
+            case "H":
+                binding.conText.setBackgroundResource(R.drawable.homecircle);
+                break;
+            case "W":
+                binding.conText.setBackgroundResource(R.drawable.workcircle);
+                break;
+            case "S":
+                binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                break;
+            case "E":
+                binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                break;
+        }
 
 
         if(task.complete()){
             binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            binding.conText.setBackgroundResource(R.drawable.circle);
         }
 
         if(!task.complete()){
             binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            switch(task.context()){
+                case "H":
+                    binding.conText.setBackgroundResource(R.drawable.homecircle);
+                    break;
+                case "W":
+                    binding.conText.setBackgroundResource(R.drawable.workcircle);
+                    break;
+                case "S":
+                    binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                    break;
+                case "E":
+                    binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                    break;
+            }
         }
+
 
         MainActivity mainActivity = (MainActivity) getContext();
         String spinnerStatus = mainActivity.getSpinnerStatus();
         binding.taskNameText.setOnClickListener(v -> {
-            if (!spinnerStatus.equals("Recurring")) {
+            if (!spinnerStatus.equals("Recurring") && !spinnerStatus.equals("Pending")) {
                 if (!task.complete()) {
                     task.setComplete(true);
                     activityModel.setComplete(task.id(), true);
@@ -98,9 +131,12 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     System.out.println("TaskListAdapter after prepend task.id(): " + task.id());
                     activityModel.taskRepository().setTaskCompletedDate(task.id(), task);
 
+
+
                     System.out.println("MARKED AS COMPLETE");
                     // CITATION: https://www.codingdemos.com/android-strikethrough-text/
                     binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
 
 //                MainActivity mainActivity = (MainActivity) getContext();
 //                String spinnerStatus = mainActivity.getSpinnerStatus();
@@ -135,10 +171,75 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 //                else if (spinnerStatus.equals("Recurring")){
 //                    activityModel.getRecurringTasks();
 //                }
+
+
+                    binding.conText.setBackgroundResource(R.drawable.circle);
+
+                
+                    switch(task.context()){
+                        case "H":
+                            binding.conText.setBackgroundResource(R.drawable.homecircle);
+                            break;
+                        case "W":
+                            binding.conText.setBackgroundResource(R.drawable.workcircle);
+                            break;
+                        case "S":
+                            binding.conText.setBackgroundResource(R.drawable.schoolcircle);
+                            break;
+                        case "E":
+                            binding.conText.setBackgroundResource(R.drawable.errandcircle);
+                            break;
+                    }
                 }
             }
+        });
 
+        binding.taskNameText.setOnLongClickListener(new View.OnLongClickListener() {
+            MainActivity mainActivity = (MainActivity) getContext();
+            String spinnerStatus = mainActivity.getSpinnerStatus();
+            @Override
+            public boolean onLongClick(View v) {
+                if(spinnerStatus.equals("Pending")){
+                    showOptionsDialog(task);
+                }
+                return true;
+            }
 
+            private void showOptionsDialog(Task task) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Options");
+                builder.setItems(new CharSequence[]{"Move to Today", "Move to Tomorrow", "Delete", "Finish"}, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(which == 0){
+                            activityModel.setType(task.id(), "Today");
+                            task.setType("Today");
+                            activityModel.remove(task.id());
+                            activityModel.prepend(task);
+                        }
+                        else if(which == 1){
+                            activityModel.setType(task.id(), "Tomorrow");
+                            task.setType("Tomorrow");
+                            activityModel.remove(task.id());
+                            activityModel.prepend(task);
+                        }
+                        else if(which == 2){
+                            activityModel.remove(task.id());
+                        }
+                        else if(which == 3){
+                            activityModel.setType(task.id(), "Today");
+                            task.setComplete(true);
+                            task.setType("Today");
+                            activityModel.setComplete(task.id(), true);
+                            activityModel.remove(task.id());
+                            activityModel.prepend(task);
+                            System.out.println("MARKED AS COMPLETE");
+                            binding.taskNameText.setPaintFlags(binding.taskNameText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        }
+                    }
+                });
+                builder.create().show();
+            }
         });
 
 

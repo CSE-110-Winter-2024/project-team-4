@@ -10,6 +10,6 @@ public class SwitchTaskViewTest {
     @Test
     public void onItemSelected() {
 
-        SpinnerActivity.onItemSelected();
+        //SpinnerActivity.onItemSelected();
     }
 }

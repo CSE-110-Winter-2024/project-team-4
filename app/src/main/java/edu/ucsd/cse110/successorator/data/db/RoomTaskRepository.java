@@ -113,6 +113,26 @@ public class RoomTaskRepository implements TaskRepository {
 
     }
 
+
+    public Subject<List<Task>> filterTasksByTypeAndContext(String type, String context){
+        var entitiesLiveData = taskDao.getTasksByTypeAndContext(type, context);
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
+    }
+    public Subject<List<Task>> filterPendingTasks(){
+        var entitiesLiveData = taskDao.getPendingTasks();
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
+    }
+
     public Subject<List<Task>> filterRecurringTasks(){
         var entitiesLiveData = taskDao.getRecurringTasks();
         System.out.println("ENTITIES LIVE DATA: " + entitiesLiveData);
@@ -123,6 +143,16 @@ public class RoomTaskRepository implements TaskRepository {
         });
         return new LiveDataSubjectAdapter<>(tasksLiveData);
 
+    }
+
+    public Subject<List<Task>> sortTasksByContext(){
+        var entitiesLiveData = taskDao.createSortedTasksView();
+        var tasksLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(TaskEntity::toTask)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(tasksLiveData);
     }
     
     public void setTaskCompletedDate(Integer id, Task task) {
@@ -230,7 +260,8 @@ public class RoomTaskRepository implements TaskRepository {
                             null, // nextDate
                             false,  // createdNextRecurring
                             null, // completedDate
-                            task.isFifthWeekOfMonth()
+                            task.isFifthWeekOfMonth(),
+                            task.context() // completedDate
                             );
 
                     Calendar newNextTaskDate = (Calendar) recurringTask.startDate().clone();
@@ -299,7 +330,5 @@ public class RoomTaskRepository implements TaskRepository {
 
         }
     }
-
-
 
 }

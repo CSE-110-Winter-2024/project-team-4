@@ -99,6 +99,25 @@ public class MainViewModel extends ViewModel {
             System.out.println("TODAY TASKS: " + newOrderedTasks);
             orderedTasks.setValue(newOrderedTasks);
         });
+
+    }
+
+    public void getTasksByTypeAndContext(String type, String context) {
+        taskRepository.filterTasksByTypeAndContext(type, context).observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
+        });
+    }
+
+    public void setOrderedTasks(){
+        taskRepository.sortTasksByContext().observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
+        });
     }
 
     public void getRecurringTasks() {
@@ -109,6 +128,15 @@ public class MainViewModel extends ViewModel {
             System.out.println("recurring tasks: " + newOrderedTasks);
             orderedTasks.setValue(newOrderedTasks);
             System.out.println("recurring tasks orderedTasks: " + orderedTasks);
+        });
+    }
+
+    public void getPendingTasks() {
+        taskRepository.filterPendingTasks().observe(tasks -> {
+            if (tasks == null) return;
+
+            var newOrderedTasks = new ArrayList<>(tasks);
+            orderedTasks.setValue(newOrderedTasks);
         });
     }
 
