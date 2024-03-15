@@ -238,109 +238,109 @@ public class RoomTaskRepository implements TaskRepository {
 
         if (taskDao.findAll() != null) {
             for (TaskEntity taskEntity: taskDao.findAll()) {
-                Task task = taskEntity.toTask();
-                System.out.println("task name: " + task.name());
+                if (!taskEntity.type.equals("Pending")) {
+                    Task task = taskEntity.toTask();
+                    System.out.println("task name: " + task.name());
 
-                int intervalDays = (int)TimeUnit.MILLISECONDS.toDays(task.recurringInterval());
-                Calendar cal = CalendarUpdate.getCal();
+                    int intervalDays = (int)TimeUnit.MILLISECONDS.toDays(task.recurringInterval());
+                    Calendar cal = CalendarUpdate.getCal();
 
-                Calendar startTaskDate = task.startDate();
-                Calendar nextTaskDate = task.nextDate();
-                System.out.println("intervalDays =  " + intervalDays);
-                System.out.println("task.createdNextRecurring = " + task.createdNextRecurring());
+                    Calendar startTaskDate = task.startDate();
+                    Calendar nextTaskDate = task.nextDate();
+                    System.out.println("intervalDays =  " + intervalDays);
+                    System.out.println("task.createdNextRecurring = " + task.createdNextRecurring());
 
-                System.out.println("nexttaskdate" + nextTaskDate);
-                System.out.println("cal" + cal);
-                System.out.println("nexttaskdate in millis" + nextTaskDate.getTimeInMillis());
-                System.out.println("cal in millis" + cal.getTimeInMillis());
-                System.out.println(nextTaskDate.getTimeInMillis() + " <=? " + Calendar.getInstance().getTimeInMillis() + " + " + TimeUnit.DAYS.toMillis(2));
+                    System.out.println("nexttaskdate" + nextTaskDate);
+                    System.out.println("cal" + cal);
+                    System.out.println("nexttaskdate in millis" + nextTaskDate.getTimeInMillis());
+                    System.out.println("cal in millis" + cal.getTimeInMillis());
+    //                System.out.println(nextTaskDate.getTimeInMillis() + " <=? " + Calendar.getInstance().getTimeInMillis() + " + " + TimeUnit.DAYS.toMillis(2));
 
-                if (intervalDays > 0 && !task.createdNextRecurring()
-                        && nextTaskDate.getTimeInMillis() <= cal.getTimeInMillis() + TimeUnit.DAYS.toMillis(2)) {
-                    System.out.println("----- INSIDE IF -----");
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    System.out.println("id = " + task.id() + ". startDate = " + dateFormat.format(task.startDate().getTime()) + ". nextDate = " + dateFormat.format(task.nextDate().getTime()));
+                    if (intervalDays > 0 && !task.createdNextRecurring()
+                            && nextTaskDate.getTimeInMillis() <= cal.getTimeInMillis() + TimeUnit.DAYS.toMillis(2)) {
+                        System.out.println("----- INSIDE IF -----");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        System.out.println("id = " + task.id() + ". startDate = " + dateFormat.format(task.startDate().getTime()) + ". nextDate = " + dateFormat.format(task.nextDate().getTime()));
 
-                    // Create a new instance of the task
-                    Task recurringTask = new Task (
-                            null, // id
-                            task.name(), // name
-                            false, // complete
-                            task.sortOrder(), // sort order
-                            task.date(), // date
-                            task.type(), // type
-                            task.recurringInterval(), // recInterval
-                            nextTaskDate, // startDate
-                            false, // onDisplay
-                            null, // nextDate
-                            false,  // createdNextRecurring
-                            null, // completedDate
-                            task.isFifthWeekOfMonth(),
-                            task.context() // completedDate
-                            );
+                        // Create a new instance of the task
+                        Task recurringTask = new Task(
+                                null, // id
+                                task.name(), // name
+                                false, // complete
+                                task.sortOrder(), // sort order
+                                task.date(), // date
+                                task.type(), // type
+                                task.recurringInterval(), // recInterval
+                                nextTaskDate, // startDate
+                                false, // onDisplay
+                                null, // nextDate
+                                false,  // createdNextRecurring
+                                null, // completedDate
+                                task.isFifthWeekOfMonth(),
+                                task.context() // completedDate
+                        );
 
-                    Calendar newNextTaskDate = (Calendar) recurringTask.startDate().clone();
-                    switch(intervalDays) {
-                        case 1:
-                            newNextTaskDate.add(Calendar.DATE, 1);
-                            break;
-                        case 7:
-                            newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
-                            break;
-                        case 30:
-                            // if first recurring task was the fifth week of month
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            int nextTaskDateWeekInMonth = newNextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-                            if (recurringTask.isFifthWeekOfMonth()) {
-                                Calendar mockNextMonthTaskDate = (Calendar) nextTaskDate.clone();
-                                for (int i=0; i<4; i++) {
-                                    mockNextMonthTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
-                                }
-                                System.out.println("mockNextMonthTaskDate: " + sdf.format(mockNextMonthTaskDate.getTime()));
-
-                                int maxWeeksInNextMonth = mockNextMonthTaskDate.getActualMaximum(Calendar.DAY_OF_WEEK_IN_MONTH);
-                                // there is no 5th week the next month
-                                System.out.println("maxWeeksInNextMonth: " + maxWeeksInNextMonth);
-                                if (maxWeeksInNextMonth < 5) {
-                                    nextTaskDateWeekInMonth = maxWeeksInNextMonth;
-                                } else {
-                                    nextTaskDateWeekInMonth = 5;
-                                }
-                            }
-
-                            newNextTaskDate.add(Calendar.MONTH, 1);
-                            newNextTaskDate.set(Calendar.DAY_OF_WEEK_IN_MONTH, nextTaskDateWeekInMonth);
-
-                            System.out.println("nextTaskDateWeekInMonth: " + nextTaskDateWeekInMonth);
-                            System.out.println("Next Task Date: " + sdf.format(nextTaskDate.getTime()));
-
-
-//                            newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
-//                            while (newNextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH) != nextTaskDateWeekInMonth) {
-//                                newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
-//                            }
-                            break;
-                        case 365:
-                            newNextTaskDate.add(Calendar.YEAR, 1);
-                            if (newNextTaskDate.get(Calendar.MONTH) == Calendar.FEBRUARY &&
-                                    newNextTaskDate.get(Calendar.DAY_OF_MONTH) == 29 &&
-                                    newNextTaskDate.getActualMaximum(Calendar.DAY_OF_MONTH) == 29) {
+                        Calendar newNextTaskDate = (Calendar) recurringTask.startDate().clone();
+                        switch (intervalDays) {
+                            case 1:
                                 newNextTaskDate.add(Calendar.DATE, 1);
-                            }
-                            break;
-                        default:
-                            System.out.println("Unknown recurrence.");
+                                break;
+                            case 7:
+                                newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                                break;
+                            case 30:
+                                // if first recurring task was the fifth week of month
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                int nextTaskDateWeekInMonth = newNextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+                                if (recurringTask.isFifthWeekOfMonth()) {
+                                    Calendar mockNextMonthTaskDate = (Calendar) nextTaskDate.clone();
+                                    for (int i = 0; i < 4; i++) {
+                                        mockNextMonthTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+                                    }
+                                    System.out.println("mockNextMonthTaskDate: " + sdf.format(mockNextMonthTaskDate.getTime()));
+
+                                    int maxWeeksInNextMonth = mockNextMonthTaskDate.getActualMaximum(Calendar.DAY_OF_WEEK_IN_MONTH);
+                                    // there is no 5th week the next month
+                                    System.out.println("maxWeeksInNextMonth: " + maxWeeksInNextMonth);
+                                    if (maxWeeksInNextMonth < 5) {
+                                        nextTaskDateWeekInMonth = maxWeeksInNextMonth;
+                                    } else {
+                                        nextTaskDateWeekInMonth = 5;
+                                    }
+                                }
+
+                                newNextTaskDate.add(Calendar.MONTH, 1);
+                                newNextTaskDate.set(Calendar.DAY_OF_WEEK_IN_MONTH, nextTaskDateWeekInMonth);
+
+                                System.out.println("nextTaskDateWeekInMonth: " + nextTaskDateWeekInMonth);
+                                System.out.println("Next Task Date: " + sdf.format(nextTaskDate.getTime()));
+
+
+    //                            newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+    //                            while (newNextTaskDate.get(Calendar.DAY_OF_WEEK_IN_MONTH) != nextTaskDateWeekInMonth) {
+    //                                newNextTaskDate.add(Calendar.WEEK_OF_YEAR, 1);
+    //                            }
+                                break;
+                            case 365:
+                                newNextTaskDate.add(Calendar.YEAR, 1);
+                                if (newNextTaskDate.get(Calendar.MONTH) == Calendar.FEBRUARY &&
+                                        newNextTaskDate.get(Calendar.DAY_OF_MONTH) == 29 &&
+                                        newNextTaskDate.getActualMaximum(Calendar.DAY_OF_MONTH) == 29) {
+                                    newNextTaskDate.add(Calendar.DATE, 1);
+                                }
+                                break;
+                            default:
+                                System.out.println("Unknown recurrence.");
+                        }
+                        recurringTask.setNextDate(newNextTaskDate);
+
+                        TaskEntity recurringTaskEntity = TaskEntity.fromTask(recurringTask);
+                        taskDao.append(recurringTaskEntity);
+
+                        task.setCreatedNextRecurring(true);
+                        taskDao.setCreatedNextRecurring(task.id(), task.createdNextRecurring());
                     }
-                    recurringTask.setNextDate(newNextTaskDate);
-
-                    TaskEntity recurringTaskEntity = TaskEntity.fromTask(recurringTask);
-                    taskDao.append(recurringTaskEntity);
-
-                    task.setCreatedNextRecurring(true);
-                    taskDao.setCreatedNextRecurring(task.id(), task.createdNextRecurring());
-
-            }
-        }
+            }    }
 
 
         }

@@ -202,14 +202,15 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             String spinnerStatus = mainActivity.getSpinnerStatus();
             @Override
             public boolean onLongClick(View v) {
-                System.out.println("SPINNERSTATuS " + spinnerStatus);
                 if(spinnerStatus.equals("Pending")){
-                    showOptionsDialog(task);
+                    showPendingOptionsDialog(task);
+                } else if (spinnerStatus.equals("Recurring")) {
+                    showRecurringOptionsDialog(task);
                 }
                 return true;
             }
 
-            private void showOptionsDialog(Task task) {
+            private void showPendingOptionsDialog(Task task) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Options");
                 builder.setItems(new CharSequence[]{"Move to Today", "Move to Tomorrow", "Delete", "Finish"}, new DialogInterface.OnClickListener(){
@@ -244,33 +245,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 });
                 builder.create().show();
             }
-        });
 
-
-//        MainActivity mainActivity = (MainActivity) getContext();
-//        String spinnerStatus = mainActivity.getSpinnerStatus();
-//        if(spinnerStatus.equals("Today")){
-//            activityModel.getTodayTasks();
-//        }
-//        else if (spinnerStatus.equals("Tomorrow")){
-//            activityModel.getTomorrowTasks();
-//        }
-//        else if (spinnerStatus.equals("Recurring")){
-//            activityModel.getRecurringTasks();
-//        }
-        // Delete recurring task with long click on recurring view
-        binding.taskNameText.setOnLongClickListener(new View.OnLongClickListener() {
-            MainActivity mainActivity = (MainActivity) getContext();
-            String spinnerStatus = mainActivity.getSpinnerStatus();
-            @Override
-            public boolean onLongClick(View v) {
-                if(spinnerStatus.equals("Recurring")){
-                    showOptionsDialog(task);
-                }
-                return true;
-            }
-
-            private void showOptionsDialog(Task task) {
+            private void showRecurringOptionsDialog(Task task) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Options");
                 builder.setItems(new CharSequence[]{"Delete"}, new DialogInterface.OnClickListener(){
@@ -285,6 +261,46 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 builder.create().show();
             }
         });
+
+
+//        MainActivity mainActivity = (MainActivity) getContext();
+//        String spinnerStatus = mainActivity.getSpinnerStatus();
+//        if(spinnerStatus.equals("Today")){
+//            activityModel.getTodayTasks();
+//        }
+//        else if (spinnerStatus.equals("Tomorrow")){
+//            activityModel.getTomorrowTasks();
+//        }
+//        else if (spinnerStatus.equals("Recurring")){
+//            activityModel.getRecurringTasks();
+//        }
+//         Delete recurring task with long click on recurring view
+//        binding.taskNameText.setOnLongClickListener(new View.OnLongClickListener() {
+//            MainActivity mainActivity = (MainActivity) getContext();
+//            String spinnerStatus = mainActivity.getSpinnerStatus();
+//            @Override
+//            public boolean onLongClick(View v) {
+//                if(spinnerStatus.equals("Recurring")){
+//                    showOptionsDialog(task);
+//                }
+//                return true;
+//            }
+//
+//            private void showOptionsDialog(Task task) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                builder.setTitle("Options");
+//                builder.setItems(new CharSequence[]{"Delete"}, new DialogInterface.OnClickListener(){
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        if(which == 0){
+//                            activityModel.remove(task.id());
+//                        }
+//
+//                    }
+//                });
+//                builder.create().show();
+//            }
+//        });
 
         return binding.getRoot();
     }
